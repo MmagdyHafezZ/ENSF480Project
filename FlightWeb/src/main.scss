@@ -1,0 +1,397 @@
+@import url('https://fonts.googleapis.com/css2?family=Spartan:wght@400;500;700&display=swap');
+// START OF DEFAULT STYLES ################
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Spartan', sans-serif;
+}
+
+   
+:root{
+    --PrimaryColor: hsl(225, 50%, 48%);
+    --SecondaryColor: hsl(180, 17%, 95%);
+    --colorOne: hsl(15, 74%, 70%);
+    --colorTwo: hsl(28, 100%, 82%);
+    --HoverColor: hsl(225, 56%, 59%);
+    --whiteColor: hsl(0, 0%, 100%);
+    --blackColor: hsl(0, 0%, 12%);
+    --textColor: hsl(240, 1%, 48%);
+    --borderColor: hsl(0, 0%, 83%);
+    --whiteColorDeam: hsl(0, 0%, 93%);
+    --greyBg: hsl(0%, 0%, 96%);
+    --greyText: rgb(145, 145, 145);
+    --inputColor: hsl(330, 12%, 97%); 
+    --boxShadow: box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05)
+    0px 4px 6px -2px;
+    --transition: .4s ease-in-out;
+}
+
+body{
+    background-color: var(--whiteColor);
+}
+a{
+    text-decoration: none;
+}
+li{
+    list-style: none;
+    cursor: pointer;
+}
+.section{
+    padding: 4rem 0 2rem;
+}
+.container{
+    padding-left: 1.5 rem;
+    padding-right: 1.5 rem;
+}
+.icon{
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}
+
+.grid{
+    display: grid;
+    align-items: center;
+}
+.none{
+    display: none;
+}
+.btn{
+    padding: .7rem 1.5rem;
+    background: var(--PrimaryColor);
+    border: none;
+    outline: none;
+    border-radius: 3rem;
+    cursor: pointer;
+    color: var(--whiteColor);
+    &hover{
+        background: var(--HoverColor);
+    }
+    a{
+        color: var(--whiteColor);
+        font-weight: 500;
+    }
+}
+img,video{
+    width: 100%;
+    height: auto;
+}
+
+input{
+    font-size: 100%;
+    color: var(--greyText);
+}
+p{
+    font-size: 13px;
+    color: var(--greyText);
+    line-height: 22px;
+}
+h4{
+    padding: 1rem 0;
+    font-weight: 700;
+    color: var(--blackColor);
+
+}
+h1{
+    font-size: 40px;
+    padding: 1rem 0;
+    color: var(--blackColor)
+
+}
+h2{
+    font-size: 25px;
+    padding: 1rem 0;
+    color: var(--blackColor)
+}
+// .Logo{
+//     height: 3rem;
+//     background-size: contain;
+//     cursor: pointer;
+//     border-radius: 50px;
+// }
+
+// END OF DEFAULT STYLES ===================
+
+
+// navBar styles ===========>
+.navBar{
+    position: fixed;
+    flex-direction: column;
+    width: 100%;
+    z-index: 1000;
+    .navBarOne, .navBarTwo {
+        justify-content: space-between;
+        padding: 1rem ;
+        width: 100%;
+    }
+    .navBarOne{
+        background: var(--SecondaryColor);
+        .icon:hover{
+            color: var(--PrimaryColor);
+        }
+        .atb {
+            gap:1rem;
+
+            span{
+                color: var(--blackColor);
+                font-size: 13px;
+                cursor: pointer;
+                &:hover{
+                    color: var(--PrimaryColor);
+                    font-size: 700;
+                }
+            }
+            
+        }
+    }
+
+    .navBarTwo{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        top: 3rem;
+        position: fixed;
+        padding: 1.5rem 1rem;
+        transition: .3s ease-in-out;
+        .logoDiv{
+            .Logo{
+                width: 20%;
+                background: transparent;
+
+            }
+        }
+        .navBarMenu{
+            align-items: center;
+            gap: 1rem;
+            .menu{
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                .listItem{
+                    color: var(--blackColor);
+                    font-size: 20px;
+                    padding: 2rem;
+                    cursor: pointer;
+                    &:hover{
+                        color: var(--PrimaryColor);
+                        font-weight: 700;
+                    }
+                }
+            }
+            .btnOne{
+                display: none;
+            }
+            .btnTwo{
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                .icon{
+                    color: var(--blackColor);
+                    font-size: 20px;
+                    cursor: pointer;
+                    &:hover{
+                        color: var(--PrimaryColor);
+                    }
+                }
+            }
+        }
+
+        @media screen and (max-width: 768px){
+            .navBarMenu{
+                position: absolute;
+                background: var(--SecondaryColor);
+                padding: 1.5rem;
+                border-radius: 10px;
+                top: 5rem;
+                right: -50%;
+                width: 60%;
+                transform: translateX(80%);
+                z-index: 2000;
+                box-shadow: rgb(0,0,0,0.1) 0px 10px 15px -3px, rgb(0,0,0,0.05) 0px 4px 6px -2px;
+                border: 3px solid var(--whiteColor);
+                transition: .4s ease-in-out;
+                .menu{
+                    flex-direction: column;
+                    gap: .5rem;
+                    text-align: center;
+
+                    .listItem{
+                        padding: .5rem 0;
+                        cursor: pointer;
+                        color: var(--blackColor);
+                        &:hover{
+                            color: var(--PrimaryColor);
+                            font-weight: 700;
+                        }
+                    }
+                }
+                .btnOne{
+                    display: block;
+                    justify-content: center;
+                    margin: auto;
+                    margin-top: 1rem;
+                }
+            }
+            .btnTwo{
+                display: none;
+            }
+
+        }
+        .toggleIcon{
+            .icon{
+                font-size: 30px;
+                color: var(--blackColor);
+            }
+
+        }
+        .showNavBar{
+            right: 50%;
+            transition: .5 ease-in-out;
+
+        }
+    }
+    .navbar_With_Bg{
+        background-color: var(--SecondaryColor);
+        padding: .5rem 1rem;
+        box-shadow: rgb(0, 0, 0, 0.1) 0px 10px 15px -3px, rgb(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    }
+}
+
+// home styles ===========>
+.home{
+    padding-top: 10rem;
+    text-align: center;
+    gap: 2rem;
+    flex-direction: column;
+    .mainText{
+        color: var(--blackColor);
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 2.5rem;
+    }
+    .homeImages{
+        width: 30vw;
+        margin: 1rem auto 0;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        border-radius: 5rem;
+
+        .videoDiv{
+            width:40vw;
+            .video{
+                border-radius: 10rem;
+
+            }
+        }
+        .plane{
+            position: absolute;
+            width: 90%;
+            top: -20%;       
+        }
+        @media screen and (max-width: 768px){
+            width: 100%;
+            .plane{
+                width: 50vw;
+                top: -30%;
+            }
+            
+        }
+    }
+}
+
+//Search styles ===========>
+.search{
+    .sectionContainer{
+        width: 100%;    
+        padding: 1.5rem;
+        border: 2px solid var(--greyBg);
+        border-radius: 16px;
+        row-gap: 2rem;
+    }
+    
+    .btns{
+        background: var(--SecondaryColor);
+        padding: .5rem;
+        border-radius: 1rem;
+        flex-direction: column;
+        width: 20%;
+        margin: auto;
+
+        @media screen and (max-width: 768px){
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 1rem 0;
+        }
+
+        .singleBtn{
+            padding: .8rem 1.5rem;
+            font-size: 13px;
+            border-radius: 3rem;
+            width: 80%;
+            text-align: center;
+            &:hover{
+                background: var(--PrimaryColor);
+                color: var(--whiteColor);
+                transition: .4s ease;
+            }
+
+        }
+        .active{
+            background: var(--PrimaryColor) ;
+            color: var(--whiteColor);
+            font-weight: 500;
+        }
+    }
+    .searchInputs{
+        width: 100%;
+        justify-content: center;
+        gap: 1.5rem;
+
+        @media screen and (max-width: 768px){
+            flex-direction: column;
+            
+        }
+        
+        .singleInput{
+            .iconDiv{
+                padding: 16px 10px;
+                border-radius: 3rem;
+                background: var(--SecondaryColor);
+                margin-right: 1rem;
+
+                .icon{
+                    color: var(--blackColor);
+                    opacity: .7;
+                }
+            }
+            .texts{
+                h4{
+                    padding-top: 0;
+                    padding-bottom: .7rem;
+                    color: var(--blackColor);
+                    font-weight: 700;
+                }
+
+                input{
+                    width: 95%;
+                    border: none;
+                    outline: none;
+                    background: transparent;
+
+                    &::placeholder{
+                        font-size: 12px;
+                        opacity: .5;
+                    }
+                }
+            }
+        }
+    }
+
+}
