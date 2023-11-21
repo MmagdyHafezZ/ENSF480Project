@@ -37,6 +37,7 @@
   /* box-shadow: 10px 10px 10px #d1d9e6, -10px -10px 10px #f9f9f9; */
   border-radius: 12px;
   overflow: hidden;
+  position: fixed;
 }
 @media (max-width: 1200px) {
   .main {
