@@ -10,19 +10,16 @@ const Navbar = () => {
   const [active, setActive] = useState("navBarMenu");
   const [noBg, addBg] = useState("navBarTwo");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn")
-  );
 
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
   };
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
   const showNavBar = () => {
@@ -38,11 +35,12 @@ const Navbar = () => {
   const addBgColor = () => {
     if (window.scrollY >= 10) {
       addBg("navBarTwo navbar_With_Bg");
-    } else {
+    }else{
       addBg("navBarTwo");
     }
-  };
+  }
   window.addEventListener("scroll", addBgColor);
+
 
   return (
     <>
@@ -62,28 +60,8 @@ const Navbar = () => {
             </li>
           </div>
           <div className="atb flex">
-            {isLoggedIn ? (
-              <>
-                <span
-                  onClick={() => {
-                    localStorage.setItem("isLoggedIn", false);
-                    window.location.href = "/signin";
-                  }}
-                >
-                  Sign out
-                </span>
-              </>
-            ) : (
-              <>
-                <span
-                  onClick={() => {
-                    window.location.href = "/signin";
-                  }}
-                >
-                  Sign in{" "}
-                </span>
-              </>
-            )}
+            <span>Sign in </span>
+            <span>Sign out </span>
           </div>
         </div>
 
@@ -109,16 +87,17 @@ const Navbar = () => {
                 Destinations
               </li>
               <button onClick={hideNavBar} className="btn flex btnOne">
-                Contact
-              </button>
+              Contact
+            </button>
             </ul>
+
           </div>
 
           {screenWidth <= 768 && (
-            <div onClick={showNavBar} className="toggleIcon">
-              <CgMenuGridO className="icon" />
-            </div>
-          )}
+          <div onClick={showNavBar} className="toggleIcon">
+            <CgMenuGridO className="icon" />
+          </div>
+        )}
         </div>
       </div>
     </>
