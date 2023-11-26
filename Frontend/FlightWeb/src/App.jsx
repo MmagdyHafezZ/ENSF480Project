@@ -1,22 +1,16 @@
-import React from 'react'
-import Home from './Components/Home/Home.jsx'
-import Navbar from './Components/Navbar/Navbar'
-import Search from './Components/Search/Search'
-import Support from './Components/Support/Support'
-import Info from './Components/Info/Info'
-import Footer from './Components/Footer/Footer'
+import React from "react";
+import Home from "./pages/Home/Home.jsx";
+import { Route, Routes } from "react-router-dom";
+import Navbar from "./Components/Navbar/Navbar.jsx";
 
 const App = () => {
   return (
     <>
       <Navbar />
-      <Home/>
-      <Search/>
-      {/* <Support/>
-      <Info/>
-      <Footer/> */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </>
-
-  )
-}
-export default App
+  );
+};
+export default App;

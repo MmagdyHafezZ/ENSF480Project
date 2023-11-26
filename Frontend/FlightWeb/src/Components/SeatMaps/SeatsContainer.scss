@@ -1,0 +1,37 @@
+.seat-map-wrapper {
+    background-color: var(--SecondaryColor);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(154, 154, 154);
+    border-radius: 2rem;
+    overflow-y: auto;
+    width: 45rem;
+    height: 100%;
+    padding: 1rem;
+    // background-color: red;
+
+  
+    .seat-map-container {
+        // position: absolute;
+        display: flex;
+        justify-content: center;
+        background-color: rgb(216, 216, 216);
+        border-radius: 1rem;
+        box-shadow: 0 10px 12px rgba(0, 0, 0, 0.5);
+        width: 40rem;
+        padding: 1rem;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        // min-height: 100%; 
+
+    }
+  }
+  
+
+  .large-plane{
+    background-color: red;
+  }

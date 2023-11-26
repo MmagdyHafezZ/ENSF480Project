@@ -1,0 +1,13 @@
+{
+    "Boeing 737-8 MAX": {
+        "Info" : "The 737-8, a twin-engine, single-aisle aircraft, is set to join our fleet from 2021. This modern plane accommodates 189 passengers and boasts a range of 3,550 nautical miles (6,570 km). It features Advanced Technology Winglets, which extend the wing span, enhancing fuel efficiency. The 737-8 is powered by LEAP-1B engines with carbon fiber fan blades, optimizing efficiency. Additionally, the engines' chevrons help to diminish noise. These aircraft are notable for their 14% reduction in fuel and CO2 emissions compared to other 737 models. This reduction in per-passenger emissions is a significant stride towards Flair's goal of becoming the most sustainable and environmentally conscious airline in Canada." ,
+      "Engine": "CFM International LEAP-1B, 69.4 in (176 cm) fan diameter, 26,786–29,317 lbf (119–130 kN) thrust",
+      "Length": "129 ft 6 in (39.47 m)",
+      "Wingspan": "117 ft 10 in (35.92 m), 1,370 sq ft (127 m²) area",
+      "Height": "40 ft 4 in (12.29 m)",
+      "Range": "3,550 nautical miles (6,500 km; 4,000 mi)",
+      "Seating Capacity":  "178 (12 business class, 166 economy)"
+    }
+  }
+  
+

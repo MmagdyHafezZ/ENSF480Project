@@ -27,12 +27,6 @@
 
 body {
   background-color: var(--whiteColor);
-  transition: 0.4s ease-in-out;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-}
-body::-webkit-scrollbar {
-  width: 0.5rem;
 }
 
 a {
@@ -112,7 +106,7 @@ h4 {
 }
 
 h1 {
-  font-size: 40px;
+  font-size: 50px;
   padding: 1rem 0;
   color: var(--blackColor);
 }
@@ -163,7 +157,6 @@ h2 {
 }
 .navBar .navBarTwo .logoDiv .Logo {
   width: 20%;
-  background: transparent;
 }
 .navBar .navBarTwo .navBarMenu {
   align-items: center;
