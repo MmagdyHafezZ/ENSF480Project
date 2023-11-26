@@ -1,0 +1,9 @@
+spring.datasource.url is your database URL.
+
+spring.datasource.username and spring.datasource.password are your database credentials.
+
+spring.jpa.hibernate.ddl-auto can be set to update, create, create-drop, validate, or none. For development, update is commonly used.
+
+spring.jpa.show-sql is set to true to show SQL statements in the console (useful for debugging).
+
+spring.jpa.properties.hibernate.dialect is set to the Hibernate dialect for MySQL. Change this if you're using a different database.
