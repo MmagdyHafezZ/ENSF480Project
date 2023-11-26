@@ -1,0 +1,11 @@
+{
+  "Embraer E175-E2": {
+      "Info": "The Embraer E175-E2, part of the E-Jet E2 family, is designed for efficiency and performance. It features two Pratt & Whitney Pure Power Geared Turbofan engines, known for their fuel efficiency and reduced noise. The aircraft can carry up to 90 passengers and offers a range of up to 2,017 nautical miles. The E175-E2's advanced aerodynamics and optimized dimensions provide enhanced performance for regional routes, with a maximum cruise speed of Mach 0.82 and a service ceiling of 41,000 feet.",
+      "Engine": "Two Pratt & Whitney Pure Power Geared Turbofan engines, maximum thrust of 14,200 lb, fan diameter of 136 cm, engine push-to-weight ratio of 5.41",
+      "Length": "Extended by 60 cm from the E175, allowing for the addition of one seat row",
+      "Wingspan": "Not specified",
+      "Height": "Not specified",
+      "Range": "2,017 nautical miles for the AR version",
+      "Seating Capacity": "Up to 90 seats in various configurations"
+  }
+}

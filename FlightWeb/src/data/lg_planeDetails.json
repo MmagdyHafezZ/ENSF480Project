@@ -1,0 +1,12 @@
+{
+    "Airbus A350-900": {
+      "Info": "The Airbus A350-900, a twin-engine, wide-body aircraft, is Airbus' answer to modern and efficient long-haul travel. It typically carries 325 passengers across a range of 8,100 nautical miles. Made largely of carbon-fiber-reinforced polymers, it offers a lighter frame, leading to fuel efficiency and lower operating costs compared to its counterparts. Designed to compete with Boeing's 777 and 787, it also replaces older models like the A340.",
+      "Engine": "Rolls-Royce Trent XWB, 84,200 lbf (374.5 kN) thrust",
+      "Length": "66.8 m (219 ft)",
+      "Wingspan": "64.75 m (212.43 ft), 442 m² (4,760 sq ft) area",
+      "Height": "17.05 m (55.9 ft)",
+      "Range": "8,100 nautical miles (15,000 km; 9,300 mi)",
+      "Seating Capacity": "325 (typical in a three-class configuration)"
+    }
+  }
+  
