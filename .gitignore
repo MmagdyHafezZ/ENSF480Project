@@ -4,6 +4,9 @@
 # Office Docs open (super annoying)
 ~$*.docx
 
+# Mac stuff
+.DS_Store
+
 # Compiled class file
 *.class
 
