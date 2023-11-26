@@ -1,4 +1,8 @@
+# .vscode Stuff
 .vscode/
+
+# Office Docs open (super annoying)
+~$*.docx
 
 # Compiled class file
 *.class
