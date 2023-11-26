@@ -29,6 +29,12 @@
 
 body{
     background-color: var(--whiteColor);
+    transition: .4s ease-in-out;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    &::-webkit-scrollbar{
+        width: 0.5rem;
+    }
 }
 a{
     text-decoration: none;
