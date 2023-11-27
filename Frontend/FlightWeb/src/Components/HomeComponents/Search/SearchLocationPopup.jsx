@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useUserDataContext } from "../../../context/UserDataContext.jsx";
 
@@ -13,14 +13,26 @@ const SearchLocationPopup = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  const dummyData = [
-    { name: "New York", iataCode: "JFK" },
-    { name: "Los Angeles", iataCode: "LAX" },
-    { name: "London", iataCode: "LHR" },
-    { name: "Paris", iataCode: "CDG" },
-    { name: "Tokyo", iataCode: "HND" },
-    // Add more cities and codes as needed
-  ];
+  useEffect(() => {
+    axios.get('http://localhost:8080/getAirport')
+      .then(response => {
+        setSearchResults(response.data),
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error("Error fetching data: ", error);
+      });
+    }, []);
+
+  // const dummyData = [
+  //   { name: "New York", iataCode: "JFK" },
+  //   { name: "Los Angeles", iataCode: "LAX" },
+  //   { name: "London", iataCode: "LHR" },
+  //   { name: "Paris", iataCode: "CDG" },
+  //   { name: "Tokyo", iataCode: "HND" },
+  //   // Add more cities and codes as needed
+  // ];
+
   function handleSelectLocation(location) {
     console.log(location);
     setData((prevData) => ({
@@ -33,12 +45,13 @@ const SearchLocationPopup = ({
   const handleSearch = (query) => {
     setSearchQuery(query);
     if (query) {
-      const filteredResults = dummyData.filter(
+      const filteredResults = searchResults.filter(
         (item) =>
-          item.name.toLowerCase().includes(query.toLowerCase()) ||
-          item.iataCode.toLowerCase().includes(query.toLowerCase())
+          item.city.toLowerCase().includes(query.toLowerCase()) ||
+          item.iata.toLowerCase().includes(query.toLowerCase())
       );
       setSearchResults(filteredResults);
+      console.log()
     } else {
       setSearchResults([]);
     }
@@ -63,8 +76,16 @@ const SearchLocationPopup = ({
         />
         <ul>
           {searchResults.map((result, index) => (
-            <li key={index} onClick={() => handleSelectLocation(result)}>
-              {result.name} - {result.iataCode}
+            <li
+              key={index}
+              onClick={() => {
+                handleSearchCity(result);
+                // setLocation(e);
+                // setPopup((prev) => !prev);
+              }}
+            >
+              {result.city} - {result.iata}
+
             </li>
           ))}
         </ul>
