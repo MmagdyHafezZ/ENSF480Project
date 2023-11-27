@@ -9,12 +9,13 @@ export function useUserDataContext() {
 // Create a provider component
 export const UserDataProvider = ({ children }) => {
   const [userFlightData, setUserFlightData] = useState({
-    leaving: "",
-    going: "",
-    travellers: "",
+    leaving: { name: "", iata: "" },
+    going: { name: "", iata: "" },
+    travellers: 0,
     depart: "",
     return: "",
   });
+
   const values = {
     userFlightData,
     setUserFlightData,

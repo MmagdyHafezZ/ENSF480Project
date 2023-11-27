@@ -1,15 +1,18 @@
 import React from "react";
 import { startTransition } from "react";
 import SearchLocationPopup from "./SearchLocationPopup.jsx";
-
+import { useUserDataContext } from "../../../context/UserDataContext.jsx";
 const LocationInput = ({
   label,
-  location,
-  setLocation,
   popupState,
   togglePopup,
   refProp,
+  type,
+  value,
+  setData,
 }) => {
+  const { userFlightData, setUserFlightData } = useUserDataContext();
+  // console.log(userFlightData[type] && userFlightData[type]);
   return (
     <span
       onClick={() => {
@@ -19,18 +22,20 @@ const LocationInput = ({
       }}
       className="location-input"
     >
-      <div className={`location-input-placeholder ${location && "chose-city"}`}>
+      <div
+        className={`location-input-placeholder ${value[type] && "chose-city"}`}
+      >
         {label}
       </div>
-      {location && <div className="chosen-location">{location.name}</div>}
+      {value[type] && <div className="chosen-location">{value[type].name}</div>}
 
       {popupState && (
         <div ref={refProp}>
           <SearchLocationPopup
             placeholder={label}
-            setLocation={(selectedLocation) => {
-              setLocation(selectedLocation);
-            }}
+            type={type}
+            value={value}
+            setData={setData}
             setPopup={() => {
               togglePopup(); // Toggle the associated popup when closing
             }}

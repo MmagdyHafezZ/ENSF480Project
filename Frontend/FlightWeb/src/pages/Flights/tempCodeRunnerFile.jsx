@@ -1,0 +1,1 @@
+Object.keys(userFlightData).some((key) => userFlightData[key])
