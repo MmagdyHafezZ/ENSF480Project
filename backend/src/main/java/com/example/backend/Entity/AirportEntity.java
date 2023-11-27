@@ -2,15 +2,15 @@ package com.example.backend.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+// import jakarta.persistence.GeneratedValue;
+// import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * AirportData
+ * AirportEntity
  */
 @Entity
 @Data
@@ -19,17 +19,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AirportEntity {
 
-    @Id
-    @Column(name = "Code")
-    @GeneratedValue
+    // @Id
+    @Column(name = "iata")
+    // @GeneratedValue
     private String iata;
 
-    @Column(name = "City")
+    @Column(name = "city")
     private String city;
 
-    @Column(name = "State")
+    @Column(name = "state")
     private String state;
 
-    @Column(name = "Country")
+    @Column(name = "country")
     private String country;
 }
