@@ -76,9 +76,22 @@ padding: 1rem;
                 align-items: flex-end;
                 padding-right: 3rem;
                 border-left: 0.25px solid black;
+                gap: 0.5rem;
                 .flight-price{
                     font-weight: 600;
                     font-size: 1.5rem;
+                }
+                .view-details-button{
+                    background-color: transparent !important;
+                    padding: 0.5rem;
+                    border: 0.5px solid #006ce4;
+                    font-weight: 500;
+                    color: #006ce4;
+                    border-radius: 0.5rem;
+                    cursor: pointer !important;
+                    &:hover{
+                        background-color: #9ba6b2;
+                    }
                 }
 
             }

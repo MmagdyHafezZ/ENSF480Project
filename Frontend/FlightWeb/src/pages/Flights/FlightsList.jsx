@@ -90,6 +90,7 @@ const FlightsList = () => {
             <div className="flight-details__price">
               <div className="flight-price">{details.price}</div>
               <span>Round Trip</span>
+              <button className="view-details-button">View Details</button>
             </div>
           </div>
         );
