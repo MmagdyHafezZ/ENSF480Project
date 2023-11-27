@@ -107,7 +107,27 @@ const Navbar = () => {
                 Seats
               </Link>
               <li onClick={hideNavBar} className="listItem">
-                Destinations
+                {isLoggedIn ? (
+                  <>
+                    <span
+                      onClick={() => {
+                        window.location.href = "/profile";
+                      }}
+                    >
+                      Profile
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span
+                      onClick={() => {
+                        window.location.href = "/signin";
+                      }}
+                    >
+                      Profile
+                    </span>
+                  </>
+                )}
               </li>
               <button onClick={hideNavBar} className="btn flex btnOne">
                 Contact
