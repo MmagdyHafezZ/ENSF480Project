@@ -1,0 +1,197 @@
+.choose-locations{
+    position: relative;
+    gap: 1rem;
+
+    width: 100%;
+    // align-items: center;
+    justify-content: space-between;
+    .location-input{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        padding: 0.5rem 1rem;
+        padding-right: 2rem;
+        // background-color: !important;
+        width: 12.5rem;
+        height: 3rem;
+        border: 1px solid black !important;
+        flex: 1;
+        .location-input-placeholder{
+            // background-color: red;
+            &.chose-city{
+                font-size: 0.75rem;
+            }
+        }
+        .chosen-location{
+            font-size: 1rem;
+        }
+        .search-location-popup{
+
+            left: -0.25rem;
+            width: 25rem;
+            height: 25rem;
+            z-index: 10;
+            position: absolute;
+            top:-0.25rem;
+            background-color: white;
+            // background-color: red;
+            
+            border-radius: 1rem;
+            box-shadow: 0px 2px 0.3rem 1px rgba(0,0,0,0.5);
+            .search-location-popup__container{
+
+                border-bottom: 1px solid black;
+            }
+            input[type="text"]::placeholder{
+                // background-color: red;
+                font-size: 2rem;
+                color: black!important;
+            }
+            .location-popup-placeholder{
+                // background-color: red!important;
+                padding: 1.5rem;
+                font-size: 1.5rem;
+
+            }
+
+        }
+    }
+    .location-arrow-icon-container{
+        position: absolute;
+        left: 50%; 
+        // top: 50%; 
+  transform: translateX(-50%); /* Center the icon exactly */
+          z-index: 2;
+
+
+
+        .location-arrow-icon{
+            display: block;
+            width: 2rem;
+            height:2rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            // background-color: red;
+            background-color: white;
+            cursor: pointer;
+            outline: 1px solid black;
+            transition: transform 0.3s ease;
+            &.flip-arrow{
+        
+                transform: rotate(180deg);
+              }
+
+        }
+        .location-arrow-icon:hover{
+            background-color: rgb(210, 210, 210);
+        }
+    }
+
+}
+.main-search-container{
+    // background-color: red;
+    outline: 1px solid black;
+    border-radius: 1rem;
+    // background-color: var(--SecondaryColor);
+    padding: 4rem 1rem;
+    // justify-content: space-evenly;
+    justify-content: center;
+    // margin: 1rem;
+
+    &>:nth-child(1){
+        flex-grow: 1;
+    }
+    &>:nth-child(2), &>:nth-child(3)  {
+
+
+    }
+}
+.search{
+    padding: 1rem 4rem;
+}
+
+
+.search-pop{
+    position: absolute;
+    top: 10rem;
+    left: 5rem;
+    width: 50rem;
+    background-color: grey;
+
+}
+.singleInput{
+
+    .texts{
+ width: 100%;
+        .searching-input{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: 0.5rem 1rem;
+            padding-right: 2rem;
+            width: 12.5rem;
+            height: 3rem;
+            border: 1px solid black !important;
+            // width: 100%;
+        
+            .searching-input-placeholder{
+                &.input-chosen{
+                    font-size: 0.75rem;
+                }
+            }
+            .chosen-input{
+                font-size: 1rem;
+            }
+        
+        .searching-popup{
+            left: -0.25rem;
+            width: 25rem;
+            // height: 10rem;
+            z-index: 10;
+            position: absolute;
+            top:-0.25rem;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0px 2px 0.3rem 1px rgba(0,0,0,0.5);
+            padding: 1.5rem;
+            .select-travellers-container{
+                justify-content: space-between;
+                .select-travellers-container__btns{
+                    gap: 1.5rem;
+                    .select-travellers-container__btns__button{
+                        border:1px solid black;
+                        height:2rem;
+                        width: 2rem;
+                        display: grid;
+                        place-items: center;
+                        border-radius: 50%;
+                        cursor: pointer;
+        
+                    }
+                    .select-travellers-container__btns__button:hover{
+                        background-color: var(--HoverColor);
+                        color: white;
+                    }
+                    .number-of-travellers{
+                        // background-color: red;
+                        width: 3rem;
+                        text-align: center;
+                        padding: 1rem
+                    }
+                }
+            }
+        }
+        }
+        
+    }
+}
+.search-flight-button{
+    // background-color: green!important;
+    &:disabled{
+        cursor:not-allowed;
+        background-color: #888888;
+        color: #aaaaaa;
+    }
+}
