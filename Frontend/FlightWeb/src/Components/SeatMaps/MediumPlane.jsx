@@ -187,7 +187,7 @@ const MediumPlane = ({ isBooking }) => {
 
   return (
     <>
-      <div className="seatMap">{generateSeats(37, 6)}</div>
+      <div className="seatMap">{generateSeats(28, 6)}</div>
     </>
   );
 };
