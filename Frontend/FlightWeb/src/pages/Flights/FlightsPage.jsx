@@ -21,8 +21,10 @@ const FlightsPage = () => {
           const formattedDate = date.toISOString().split("T")[0]; // Converts to yyyy-mm-dd format
           params.set(key, formattedDate);
         } else {
-          console.log("IT IS OBJECt", data[key]);
+          console.log("IT IS OBJECt", data);
+          console.log("key", key);
           Object.keys(data[key]).forEach((subKey) => {
+            console.log(data[key]);
             params.set(`${key}.${subKey}`, data[key][subKey]);
           });
         }
@@ -61,11 +63,11 @@ const FlightsPage = () => {
       const restoredData = {
         leaving: {
           name: params["leaving.name"] || "",
-          iata: params["leaving.iata"] || "",
+          iata: params["leaving.iataCode"] || "",
         },
         going: {
           name: params["going.name"] || "",
-          iata: params["going.iata"] || "",
+          iata: params["going.iataCode"] || "",
         },
         travellers: params["travellers"] || 0,
         depart: params["depart"] ? new Date(params["depart"]) : "", // Converts back to Date object

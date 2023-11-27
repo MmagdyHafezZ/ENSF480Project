@@ -54,7 +54,7 @@ const FlightsList = () => {
     // Add more flight objects with their respective details and unique IDs
   ];
 
-  const handleViewDetailsClick = () => {
+  const handleViewDetailsClick = (id) => {
     const params = new URLSearchParams();
 
     // Convert userFlightData to URLSearchParams
@@ -63,13 +63,20 @@ const FlightsList = () => {
         typeof userFlightData[key] === "object" &&
         userFlightData[key] !== null
       ) {
-        Object.keys(userFlightData[key]).forEach((subKey) => {
-          params.set(`${key}.${subKey}`, userFlightData[key][subKey]);
-        });
+        if (key === "depart" || key === "return") {
+          const date = new Date(userFlightData[key]);
+          const formattedDate = date.toISOString().split("T")[0]; // Converts to yyyy-mm-dd format
+          params.set(key, formattedDate);
+        } else {
+          Object.keys(userFlightData[key]).forEach((subKey) => {
+            params.set(`${key}.${subKey}`, userFlightData[key][subKey]);
+          });
+        }
       } else {
         params.set(key, userFlightData[key]);
       }
     });
+    params.set("flight_id", id);
 
     navigate(`/tickets?${params.toString()}`);
   };
@@ -118,7 +125,9 @@ const FlightsList = () => {
               <div className="flight-price">{details.price}</div>
               <span>Round Trip</span>
               <button
-                onClick={handleViewDetailsClick}
+                onClick={() => {
+                  handleViewDetailsClick(id);
+                }}
                 className="view-details-button"
               >
                 View Details

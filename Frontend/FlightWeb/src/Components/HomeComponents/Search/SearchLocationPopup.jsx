@@ -22,6 +22,7 @@ const SearchLocationPopup = ({
     // Add more cities and codes as needed
   ];
   function handleSelectLocation(location) {
+    console.log(location);
     setData((prevData) => ({
       ...prevData,
       [type]: location, // 'type' can be 'leaving' or 'going'
