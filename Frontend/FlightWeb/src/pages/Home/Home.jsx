@@ -18,8 +18,6 @@ const Home = () => {
           <img src={aeroplane} className="plane" alt="plane" />
         </div>
       </div>
-      <Search />
-      <Hero />
     </>
   );
 };
