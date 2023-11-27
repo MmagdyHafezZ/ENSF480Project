@@ -1,0 +1,26 @@
+[
+  {
+    "country": "Philippines",
+    "img": "./images/philippines.jpeg"
+  },
+  {
+    "country": "Vancouver",
+    "img": "./images/vancouver.jpeg"
+  },
+  {
+    "country": "Bosnia",
+    "img": "./images/bosnia.jpeg"
+  },
+  {
+    "country": "Seattle",
+    "img": "./images/seattle.jpeg"
+  },
+  {
+    "country": "Seattle",
+    "img": "./images/seattle.jpeg"
+  },
+  {
+    "country": "Seattle",
+    "img": "./images/seattle.jpeg"
+  }
+]
