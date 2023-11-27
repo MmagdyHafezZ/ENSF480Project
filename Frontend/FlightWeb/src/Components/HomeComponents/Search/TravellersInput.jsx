@@ -1,14 +1,15 @@
 import React from "react";
 import { startTransition } from "react";
 import TravellerSelectPopup from "./TravellerSelectPopup.jsx";
-
+import { useUserDataContext } from "../../../context/UserDataContext.jsx";
 const TravellersInput = ({
   label,
-  travelerCount,
-  setTravelerCount,
+
   popupState,
   togglePopup,
   refProp,
+  setData,
+  value,
 }) => {
   return (
     <div
@@ -21,26 +22,24 @@ const TravellersInput = ({
     >
       <div
         className={`searching-input-placeholder ${
-          travelerCount && "input-chosen"
+          value.travellers && "input-chosen"
         }`}
       >
         {label}
       </div>
-      {travelerCount === 0 ? (
+      {value.travellers === 0 ? (
         <></>
       ) : (
-        <div className="chosen-input">{travelerCount} travellers</div>
+        <div className="chosen-input">{value.travellers}</div>
       )}
       {popupState && (
         <div ref={refProp}>
           <TravellerSelectPopup
-            setTravellers={(selectedTravelers) => {
-              setTravelerCount(selectedTravelers);
-            }}
+            value={value}
+            setData={setData}
             setPopup={() => {
               togglePopup(); // Toggle the associated popup when closing
             }}
-            travellers={travelerCount}
           />
         </div>
       )}

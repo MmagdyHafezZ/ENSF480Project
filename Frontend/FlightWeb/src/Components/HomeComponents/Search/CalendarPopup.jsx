@@ -1,19 +1,17 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-const CalendarPopup = ({ value, onChange, togglePopup, label }) => {
+const CalendarPopup = ({ value, onChange, togglePopup, label, setData }) => {
   const handlePopupClick = (event) => {
     event.stopPropagation(); // This stops the click event from reaching the parent
   };
   const handleDateChange = (dates) => {
-    // Check if 'dates' is an array (range selection)
-    if (Array.isArray(dates)) {
-      const [start, end] = dates;
-      onChange({ depart: start, return: end });
-    } else {
-      // If 'dates' is not an array, it's a single date selection
-      onChange({ ...value, depart: dates });
-    }
+    const [start, end] = Array.isArray(dates) ? dates : [dates, value.return];
+    setData((prevData) => ({
+      ...prevData,
+      depart: start,
+      return: end,
+    }));
   };
   return (
     <div onClick={handlePopupClick} className="searching-popup">
