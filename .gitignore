@@ -1,6 +1,11 @@
 # .vscode Stuff
 **/.vscode/
 
+**/node_modules/
+
+**/package-lock.json
+**/package.json
+
 # Office Docs open (super annoying)
 **/~$*.docx
 
