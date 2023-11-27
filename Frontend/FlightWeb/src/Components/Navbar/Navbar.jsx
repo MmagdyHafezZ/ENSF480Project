@@ -5,6 +5,7 @@ import { BsPhoneVibrate } from "react-icons/bs";
 import { AiOutlineGlobal } from "react-icons/ai";
 import { CgMenuGridO } from "react-icons/cg";
 import Logo from "../../assets/Logo.png";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [active, setActive] = useState("navBarMenu");
@@ -16,10 +17,10 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
   const showNavBar = () => {
@@ -35,12 +36,11 @@ const Navbar = () => {
   const addBgColor = () => {
     if (window.scrollY >= 10) {
       addBg("navBarTwo navbar_With_Bg");
-    }else{
+    } else {
       addBg("navBarTwo");
     }
-  }
+  };
   window.addEventListener("scroll", addBgColor);
-
 
   return (
     <>
@@ -71,33 +71,32 @@ const Navbar = () => {
           </div>
           <div className={active}>
             <ul className="menu flex">
-              <li onClick={hideNavBar} className="listItem">
+              <Link to="/home" onClick={hideNavBar} className="listItem">
                 Home
-              </li>
+              </Link>
               <li onClick={hideNavBar} className="listItem">
                 About
               </li>
               <li onClick={hideNavBar} className="listItem">
                 Offers
               </li>
-              <li onClick={hideNavBar} className="listItem">
+              <Link to="/seats" onClick={hideNavBar} className="listItem">
                 Seats
-              </li>
+              </Link>
               <li onClick={hideNavBar} className="listItem">
                 Destinations
               </li>
               <button onClick={hideNavBar} className="btn flex btnOne">
-              Contact
-            </button>
+                Contact
+              </button>
             </ul>
-
           </div>
 
           {screenWidth <= 768 && (
-          <div onClick={showNavBar} className="toggleIcon">
-            <CgMenuGridO className="icon" />
-          </div>
-        )}
+            <div onClick={showNavBar} className="toggleIcon">
+              <CgMenuGridO className="icon" />
+            </div>
+          )}
         </div>
       </div>
     </>
