@@ -1,5 +1,6 @@
 import json
 
+# get airport data into a .txt then put into database
 def process_airports(input_file, output_file):
     with open(input_file, 'r') as file:
         data = json.load(file)
@@ -18,6 +19,6 @@ def process_airports(input_file, output_file):
                 processed_iata.add(iata)
 
 if __name__ == "__main__":
-    process_airports('airports.json', 'output.txt')
+    # process_airports('airports.json', 'output.txt')
 
     
