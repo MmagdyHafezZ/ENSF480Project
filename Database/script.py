@@ -1,8 +1,5 @@
 import json
 
-
-
-
 def process_airports(input_file, output_file):
     with open(input_file, 'r') as file:
         data = json.load(file)
