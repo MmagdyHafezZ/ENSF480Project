@@ -23,8 +23,9 @@ public class AirportController {
     //     return airportService.saveAirportData(airportEntity);
     // }
 
-    @GetMapping("/getAirport")
+    @GetMapping(path = "/getAirport")
     public List<AirportEntity> getAirportEntities(){
+        System.out.println(airportService.getAirportData());
         return airportService.getAirportData();
     }
     
