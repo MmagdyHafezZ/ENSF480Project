@@ -17,7 +17,6 @@ def process_airports(input_file, output_file):
                 file.write(f"('{iata}', '{city}', '{state}', '{country}'),\n")
 
 if __name__ == "__main__":
-    # Set to keep track of written IATA codes
     process_airports('airports.json', 'output.txt')
 
     
