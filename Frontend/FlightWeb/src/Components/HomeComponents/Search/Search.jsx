@@ -17,9 +17,12 @@ import TravellerSelectPopup from "./TravellerSelectPopup.jsx";
 import TravellersInput from "./TravellersInput.jsx";
 import CalendarInput from "./CalendarInput.jsx";
 import { formatDate } from "../../../utils/formatDate.js";
-import { useUserDataContext } from "../../../context/userDataContext.jsx";
+import { useUserDataContext } from "../../../context/UserDataContext.jsx";
 const Search = () => {
   const { userFlightData, setUserFlightData } = useUserDataContext();
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") || false
+  );
 
   const [popupStates, setPopupStates] = useState({
     leavingTo: false,
@@ -217,7 +220,7 @@ const Search = () => {
           <button
             onClick={() => {
               updateUserFlightData();
-              setSearchingPopup((prev) => !prev);
+              setSearchingPopup(true);
             }}
             className="search-flight-button btn btnBlock flex"
             disabled={!isAllDataFilled()}
