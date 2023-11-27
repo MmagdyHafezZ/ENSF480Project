@@ -2,14 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./main.css";
-import { BrowserRouter } from "react-router-dom";
-import { UserDataProvider } from "./context/userDataContext.jsx";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import Sign from "./Components/Sign/Sign.jsx";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  <GoogleOAuthProvider clientId="561701800707-oiljspvu920o0pfkavpfiedsu7sbrfgj.apps.googleusercontent.com">
     <BrowserRouter>
-      <UserDataProvider>
-        <App />
-      </UserDataProvider>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/signin" element={<Sign />} />
+      </Routes>
     </BrowserRouter>
-  </React.StrictMode>
+  </GoogleOAuthProvider>
 );
