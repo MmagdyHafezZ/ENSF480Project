@@ -1,18 +1,22 @@
-import React from "react";
-import Home from "./pages/Home/Home.jsx";
-import { Route, Routes } from "react-router-dom";
-import Navbar from "./Components/Navbar/Navbar.jsx";
-import SeatsPage from "./pages/SeatsPage/SeatsPage.jsx";
-// import Sign from "./pages/Sign/Sign.jsx";
+import React from 'react'
+import Home from './Components/Home/Home.jsx'
+import Navbar from './Components/Navbar/Navbar'
+import Search from './Components/Search/Search'
+import Support from './Components/Support/Support'
+import Info from './Components/Info/Info'
+import Footer from './Components/Footer/Footer'
+
 const App = () => {
   return (
     <>
       <Navbar />
-      <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/seats" element={<SeatsPage />} />
-      </Routes>
+      <Home/>
+      <Search/>
+      {/* <Support/>
+      <Info/>
+      <Footer/> */}
     </>
-  );
-};
-export default App;
+
+  )
+}
+export default App
