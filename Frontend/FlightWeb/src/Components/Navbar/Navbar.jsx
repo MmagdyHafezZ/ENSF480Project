@@ -11,6 +11,9 @@ const Navbar = () => {
   const [active, setActive] = useState("navBarMenu");
   const [noBg, addBg] = useState("navBarTwo");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn")
+  );
 
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
@@ -60,8 +63,28 @@ const Navbar = () => {
             </li>
           </div>
           <div className="atb flex">
-            <span>Sign in </span>
-            <span>Sign out </span>
+            {isLoggedIn ? (
+              <>
+                <span
+                  onClick={() => {
+                    localStorage.setItem("isLoggedIn", false);
+                    window.location.href = "/signin";
+                  }}
+                >
+                  Sign out
+                </span>
+              </>
+            ) : (
+              <>
+                <span
+                  onClick={() => {
+                    window.location.href = "/signin";
+                  }}
+                >
+                  Sign in{" "}
+                </span>
+              </>
+            )}
           </div>
         </div>
 
@@ -71,7 +94,7 @@ const Navbar = () => {
           </div>
           <div className={active}>
             <ul className="menu flex">
-              <Link to="/home" onClick={hideNavBar} className="listItem">
+              <Link to="/" onClick={hideNavBar} className="listItem">
                 Home
               </Link>
               <li onClick={hideNavBar} className="listItem">
