@@ -18,11 +18,13 @@ import TravellersInput from "./TravellersInput.jsx";
 import CalendarInput from "./CalendarInput.jsx";
 import { formatDate } from "../../../utils/formatDate.js";
 import { useUserDataContext } from "../../../context/UserDataContext.jsx";
+import { useNavigate } from "react-router-dom";
 const Search = () => {
   const { userFlightData, setUserFlightData } = useUserDataContext();
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") || false
   );
+  const navigate = useNavigate();
 
   const [popupStates, setPopupStates] = useState({
     leavingTo: false,
@@ -104,14 +106,9 @@ const Search = () => {
       return: formatDate(travelDates.return),
     });
   };
-  const isAllDataFilled = () => {
-    return Object.values({ ...locations, travellers, ...travelDates }).every(
-      (value) => value !== "" && value !== null && value !== undefined
-    );
-  };
+
   const isAllDummyFilled = () => {
     // Check if all fields in userFlightData are not empty
-    console.log(userFlightData);
     return Object.values(userFlightData).every(
       (value) => value !== "" && value !== null
     );
@@ -142,13 +139,9 @@ const Search = () => {
               <div className="flex choose-locations">
                 <LocationInput
                   label="Leaving From"
-                  location={locations.leaving}
-                  setLocation={(location) => {
-                    setLocations((prevLocations) => ({
-                      ...prevLocations,
-                      leaving: location,
-                    }));
-                  }}
+                  type="leaving"
+                  value={userFlightData}
+                  setData={setUserFlightData}
                   popupState={popupStates.leavingTo}
                   togglePopup={() => togglePopup("leavingTo")}
                   refProp={refs.leaving}
@@ -165,13 +158,9 @@ const Search = () => {
                 </div>
                 <LocationInput
                   label="Going To"
-                  location={locations.going}
-                  setLocation={(location) => {
-                    setLocations((prevLocations) => ({
-                      ...prevLocations,
-                      going: location,
-                    }));
-                  }}
+                  type="going"
+                  value={userFlightData}
+                  setData={setUserFlightData}
                   popupState={popupStates.goingTo}
                   togglePopup={() => togglePopup("goingTo")}
                   refProp={refs.going}
@@ -189,11 +178,9 @@ const Search = () => {
               <h4>Travelers</h4>
               <TravellersInput
                 label="Add Travellers"
-                travelerCount={travellers}
-                setTravelerCount={(selectedTravelers) => {
-                  setTravellers(selectedTravelers);
-                }}
                 popupState={popupStates.travellers}
+                value={userFlightData}
+                setData={setUserFlightData}
                 togglePopup={() => togglePopup("travellers")}
                 refProp={refs.travellers}
               />
@@ -209,8 +196,8 @@ const Search = () => {
               <h4>Depart and Return</h4>
               <CalendarInput
                 label="Dates"
-                value={travelDates}
-                onChange={setTravelDates}
+                value={userFlightData}
+                setData={setUserFlightData}
                 popupState={popupStates.calendar}
                 togglePopup={() => togglePopup("calendar")}
                 refProp={refs.calendar}
@@ -219,29 +206,15 @@ const Search = () => {
           </div>
           <button
             onClick={() => {
-              updateUserFlightData();
-              setSearchingPopup(true);
+              // updateUserFlightData();
+              console.log(userFlightData);
+              navigate("/flights");
             }}
             className="search-flight-button btn btnBlock flex"
-            disabled={!isAllDataFilled()}
+            disabled={!isAllDummyFilled()}
           >
             Search Flight
           </button>
-          {searchingPopup && isAllDummyFilled() && (
-            <div className="search-pop">
-              <div>
-                Leaving: {userFlightData.leaving.name},{" "}
-                {userFlightData.leaving.iataCode}
-              </div>
-              <div>
-                Going To: {userFlightData.going.name},{" "}
-                {userFlightData.going.iataCode}
-              </div>
-              <div>Travellers: {userFlightData.travellers}</div>
-              <div>Depart: {userFlightData.depart}</div>
-              <div>Return: {userFlightData.return}</div>
-            </div>
-          )}
         </div>
       </div>
     </div>

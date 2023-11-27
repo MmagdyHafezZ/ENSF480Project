@@ -1,24 +1,21 @@
 import React, { startTransition } from "react";
 import CalendarPopup from "./CalendarPopup";
+import { useUserDataContext } from "../../../context/UserDataContext.jsx";
+import { format } from "date-fns";
 const CalendarInput = ({
   label,
-  value,
   onChange,
   popupState,
   togglePopup,
   refProp,
+  value,
+  setData,
 }) => {
   const formatDate = (date) => {
     if (!date) return "";
 
-    let day = date.getDate().toString();
-    let month = (date.getMonth() + 1).toString(); // Month is 0-indexed
-    let year = date.getFullYear().toString().substr(-2); // Get last two digits
-
-    day = day.length < 2 ? "0" + day : day;
-    month = month.length < 2 ? "0" + month : month;
-
-    return `${month}/${day}`;
+    // Format the date in mm/yy format
+    return format(new Date(date), "MM/yy");
   };
 
   return (
@@ -35,8 +32,8 @@ const CalendarInput = ({
       </div>
       {value.return != "" ? (
         <div className="chosen-input">
-          {value.depart ? formatDate(value.depart) : ""}-
-          {value.return ? formatDate(value.return) : ""}
+          {" "}
+          {formatDate(value.depart)} - {formatDate(value.return)}
         </div>
       ) : (
         <></>
@@ -45,6 +42,7 @@ const CalendarInput = ({
         <div ref={refProp}>
           <CalendarPopup
             value={value}
+            setData={setData}
             onChange={onChange}
             togglePopup={togglePopup}
             label={label}

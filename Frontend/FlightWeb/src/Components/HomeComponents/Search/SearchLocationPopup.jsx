@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useUserDataContext } from "../../../context/UserDataContext.jsx";
 
-const SearchLocationPopup = ({ placeholder, setLocation, setPopup }) => {
+const SearchLocationPopup = ({
+  placeholder,
+  setLocation,
+  setPopup,
+  type,
+  value,
+  setData,
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
@@ -24,6 +32,15 @@ const SearchLocationPopup = ({ placeholder, setLocation, setPopup }) => {
   //   { name: "Tokyo", iataCode: "HND" },
   //   // Add more cities and codes as needed
   // ];
+
+  function handleSelectLocation(location) {
+    console.log(location);
+    setData((prevData) => ({
+      ...prevData,
+      [type]: location, // 'type' can be 'leaving' or 'going'
+    }));
+    setPopup((prev) => !prev);
+  }
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -68,6 +85,7 @@ const SearchLocationPopup = ({ placeholder, setLocation, setPopup }) => {
               }}
             >
               {result.city} - {result.iata}
+
             </li>
           ))}
         </ul>
