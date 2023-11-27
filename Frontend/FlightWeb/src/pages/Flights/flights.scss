@@ -83,15 +83,16 @@ padding: 1rem;
                 }
                 
                 .view-details-button{
-                    background-color: transparent !important;
+                    background-color: transparent;
                     padding: 0.5rem;
                     border: 0.5px solid #006ce4;
                     font-weight: 500;
                     color: #006ce4;
                     border-radius: 0.5rem;
                     cursor: pointer !important;
+                    transition: background-color 0.3s ease, color 0.3s ease; 
                     &:hover{
-                        background-color: #9ba6b2;
+                        background-color: #dde5ee;
                     }
                 }
 

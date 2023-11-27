@@ -85,7 +85,7 @@ const FlightsPage = () => {
           {/* <div className="flights-main__left">Left</div> */}
           <div className="flights-list__container">
             {/* List of Flights Here */}
-            <FlightsList />
+            <FlightsList searchParams={searchParams} />
           </div>
           <div className="flights-main__right">Right</div>
         </div>

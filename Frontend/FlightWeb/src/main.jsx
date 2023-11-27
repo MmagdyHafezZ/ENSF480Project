@@ -9,6 +9,7 @@ import SeatsPage from "./pages/SeatsPage/SeatsPage.jsx";
 import ProfilePage from "./Components/Profile/Profile.jsx";
 import { UserDataProvider } from "./context/UserDataContext.jsx";
 import FlightsPage from "./pages/Flights/FlightsPage.jsx";
+import TicketDetails from "./pages/TicketDetails/TicketDetails.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="561701800707-oiljspvu920o0pfkavpfiedsu7sbrfgj.apps.googleusercontent.com">
     <BrowserRouter>
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/seats" element={<SeatsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/flights" element={<FlightsPage />} />
+          <Route path="/tickets" element={<TicketDetails />} />
         </Routes>
       </UserDataProvider>
     </BrowserRouter>
