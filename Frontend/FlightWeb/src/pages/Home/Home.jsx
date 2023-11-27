@@ -1,7 +1,8 @@
 import React from "react";
 import video from "../../assets/video.mp4";
 import aeroplane from "../../assets/takeoff3.png";
-import Search from "../../Components/Search/Search";
+import Search from "../../Components/HomeComponents/Search/Search";
+import Hero from "../../Components/HomeComponents/Hero/Hero";
 
 const Home = () => {
   return (
@@ -18,6 +19,7 @@ const Home = () => {
         </div>
       </div>
       <Search />
+      <Hero />
     </>
   );
 };

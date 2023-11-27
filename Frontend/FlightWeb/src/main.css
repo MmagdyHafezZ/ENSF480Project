@@ -20,9 +20,9 @@
   --greyBg: hsl(0%, 0%, 96%);
   --greyText: rgb(145, 145, 145);
   --inputColor: hsl(330, 12%, 97%);
-  --boxShadow: box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05)
-  0px 4px 6px -2px;
-  --transition: .4s ease-in-out;
+  --boxShadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  --transition: 0.4s ease-in-out;
 }
 
 body {
@@ -83,7 +83,8 @@ li {
   font-weight: 500;
 }
 
-img, video {
+img,
+video {
   width: 100%;
   height: auto;
 }
@@ -123,7 +124,8 @@ h2 {
   width: 100%;
   z-index: 1000;
 }
-.navBar .navBarOne, .navBar .navBarTwo {
+.navBar .navBarOne,
+.navBar .navBarTwo {
   justify-content: space-between;
   padding: 1rem;
   width: 100%;
@@ -204,7 +206,8 @@ h2 {
     width: 60%;
     transform: translateX(80%);
     z-index: 2000;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
     border: 3px solid var(--whiteColor);
     transition: 0.4s ease-in-out;
   }
@@ -243,7 +246,8 @@ h2 {
 .navBar .navbar_With_Bg {
   background-color: var(--SecondaryColor);
   padding: 0.5rem 1rem;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 }
 
 .home {
@@ -329,7 +333,7 @@ h2 {
 }
 .search .searchInputs {
   width: 100%;
-  justify-content: center;
+  justify-content: space-between;
   gap: 1.5rem;
 }
 @media screen and (max-width: 768px) {
@@ -366,4 +370,4 @@ h2 {
 .search .searchInputs .singleInput .texts input::placeholder {
   font-size: 12px;
   opacity: 0.5;
-}/*# sourceMappingURL=main.css.map */
+} /*# sourceMappingURL=main.css.map */
