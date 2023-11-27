@@ -4,6 +4,7 @@ import { useUserDataContext } from "../../context/UserDataContext";
 import Navbar from "../../Components/Navbar/Navbar";
 import Search from "../../Components/HomeComponents/Search/Search";
 import "./flights.scss";
+import FlightsList from "./FlightsList";
 
 const FlightsPage = () => {
   const { userFlightData, setUserFlightData } = useUserDataContext();
@@ -78,8 +79,16 @@ const FlightsPage = () => {
   return (
     <>
       <Navbar />
-      <div className="flights-container flex container">
+      <div className="flights-wrapper flex container">
         <Search />
+        <div className="flights-main-container flex">
+          {/* <div className="flights-main__left">Left</div> */}
+          <div className="flights-list__container">
+            {/* List of Flights Here */}
+            <FlightsList />
+          </div>
+          <div className="flights-main__right">Right</div>
+        </div>
       </div>
     </>
   );
