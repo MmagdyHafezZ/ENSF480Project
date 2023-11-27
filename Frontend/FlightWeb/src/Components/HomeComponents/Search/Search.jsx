@@ -16,8 +16,8 @@ import "./Search.scss";
 import TravellerSelectPopup from "./TravellerSelectPopup.jsx";
 import TravellersInput from "./TravellersInput.jsx";
 import CalendarInput from "./CalendarInput.jsx";
-import { formatDate } from "../../utils/formatDate.js";
-import { useUserDataContext } from "../../context/userDataContext.jsx";
+import { formatDate } from "../../../utils/formatDate.js";
+import { useUserDataContext } from "../../../context/userDataContext.jsx";
 const Search = () => {
   const { userFlightData, setUserFlightData } = useUserDataContext();
 
@@ -116,7 +116,7 @@ const Search = () => {
   return (
     <div className="search container section">
       <div className="sectionContainer grid">
-        <div className="btns flex">
+        {/* <div className="btns flex">
           <div className="singleBtn">
             <span>Economy</span>
           </div>
@@ -126,9 +126,9 @@ const Search = () => {
           <div className="singleBtn">
             <span>First Class</span>
           </div>
-        </div>
+        </div> */}
 
-        <div className="searchInputs flex">
+        <div className="main-search-container searchInputs flex">
           {/* Single Input */}
           <div className="singleInput flex">
             <div className="iconDiv">
@@ -185,7 +185,7 @@ const Search = () => {
             <div className="texts">
               <h4>Travelers</h4>
               <TravellersInput
-                label="Add Dudes"
+                label="Add Travellers"
                 travelerCount={travellers}
                 setTravelerCount={(selectedTravelers) => {
                   setTravellers(selectedTravelers);
