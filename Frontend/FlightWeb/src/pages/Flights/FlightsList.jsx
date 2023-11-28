@@ -7,53 +7,190 @@ const FlightsList = () => {
   const { userFlightData } = useUserDataContext();
   const flightsData = [
     {
-      id: "1", // Unique identifier
+      id: "1",
       details: {
         airline: "Air Canada",
-        departingTime: "4:30pm",
-        arrivingTime: "7:30pm",
-        departureLocation: "Calgary, AB",
-        arrivalLocation: "Vancouver, BC",
-        leavingTime: "2:30pm",
-        arriveBackTime: "5:30pm",
-        leavingLocation: "Vancouver, BC",
-        arriveBackLocation: "Calgary, AB",
+        departingTime: "2023-11-29T16:30:00", // 4:30pm in 24-hour format
+        arrivingTime: "2023-11-29T19:30:00", // 7:30pm in 24-hour format
+        departureLocation: "Calgary",
+        arrivalLocation: "Vancouver",
+        leavingTime: "2023-11-30T14:30:00", // 2:30pm next day
+        arriveBackTime: "2023-11-30T17:30:00", // 5:30pm next day
+        leavingLocation: "Vancouver",
+        arriveBackLocation: "Calgary",
         price: "89$",
+        seatCapacity: 32,
       },
     },
     {
-      id: "2", // Unique identifier
+      id: "2",
       details: {
         airline: "United Airlines",
-        departingTime: "6:00pm",
-        arrivingTime: "9:00pm",
+        departingTime: "2023-11-29T18:00:00", // 6:00pm in 24-hour format
+        arrivingTime: "2023-11-29T21:00:00", // 9:00pm in 24-hour format
         departureLocation: "Los Angeles, CA",
         arrivalLocation: "New York, NY",
-        leavingTime: "2:30pm",
-        arriveBackTime: "5:30pm",
-        leavingLocation: "Vancouver, BC",
-        arriveBackLocation: "Calgary, AB",
+        leavingTime: "2023-11-30T14:30:00", // 2:30pm on the return date
+        arriveBackTime: "2023-11-30T17:30:00", // 5:30pm on the return date
+        leavingLocation: "New York, NY",
+        arriveBackLocation: "Los Angeles, CA",
         price: "120$",
+        seatCapacity: 12,
       },
     },
     {
-      id: "3", // Unique identifier
+      id: "3",
       details: {
         airline: "British Airways",
-        departingTime: "10:00am",
-        arrivingTime: "2:00pm",
+        departingTime: "2023-11-29T10:00:00", // 10:00am in 24-hour format
+        arrivingTime: "2023-11-29T14:00:00", // 2:00pm in 24-hour format
         departureLocation: "London, UK",
         arrivalLocation: "Paris, FR",
-        leavingTime: "2:30pm",
-        arriveBackTime: "5:30pm",
-        leavingLocation: "Vancouver, BC",
-        arriveBackLocation: "Calgary, AB",
+        leavingTime: "2023-11-30T14:30:00", // 2:30pm on the return date
+        arriveBackTime: "2023-11-30T17:30:00", // 5:30pm on the return date
+        leavingLocation: "Paris, FR",
+        arriveBackLocation: "London, UK",
         price: "75£",
+        seatCapacity: 68,
+      },
+    },
+    {
+      id: "4",
+      details: {
+        airline: "WestJet",
+        departingTime: "2023-11-29T08:00:00",
+        arrivingTime: "2023-11-29T09:15:00",
+        departureLocation: "Calgary",
+        arrivalLocation: "Fort McMurray",
+        leavingTime: "2023-11-30T10:00:00", // Added fictional time
+        arriveBackTime: "2023-11-30T11:15:00", // Added fictional time
+        leavingLocation: "Fort McMurray", // Added return location
+        arriveBackLocation: "Calgary", // Added return location
+        price: "110$",
+        seatCapacity: 53,
+      },
+    },
+    {
+      id: "5",
+      details: {
+        airline: "Air Canada",
+        departingTime: "2023-11-29T12:30:00",
+        arrivingTime: "2023-11-29T13:45:00",
+        departureLocation: "Calgary",
+        arrivalLocation: "Fort McMurray",
+        leavingTime: "2023-11-30T14:00:00", // Added fictional time
+        arriveBackTime: "2023-11-30T15:15:00", // Added fictional time
+        leavingLocation: "Fort McMurray", // Added return location
+        arriveBackLocation: "Calgary", // Added return location
+        price: "120$",
+        seatCapacity: 23,
+      },
+    },
+    {
+      id: "6",
+      details: {
+        airline: "WestJet",
+        departingTime: "2023-11-28T18:00:00",
+        arrivingTime: "2023-11-28T19:15:00",
+        departureLocation: "Calgary",
+        arrivalLocation: "Fort McMurray",
+        leavingTime: "2023-11-30T19:00:00", // Added fictional time
+        arriveBackTime: "2023-11-30T20:15:00", // Added fictional time
+        leavingLocation: "Fort McMurray", // Added return location
+        arriveBackLocation: "Calgary", // Added return location
+        price: "115$",
+        seatCapacity: 32,
+      },
+    },
+    {
+      id: "7",
+      details: {
+        airline: "Air Canada",
+        departingTime: "2023-11-30T21:00:00",
+        arrivingTime: "2023-11-30T22:15:00",
+        departureLocation: "Calgary",
+        arrivalLocation: "Fort McMurray",
+        leavingTime: "2023-12-4T22:00:00", // Added fictional time
+        arriveBackTime: "2023-12-4T23:15:00", // Added fictional time
+        leavingLocation: "Fort McMurray", // Added return location
+        arriveBackLocation: "Calgary", // Added return location
+        price: "130$",
+        seatCapacity: 19,
+      },
+    },
+    {
+      id: "8",
+      details: {
+        airline: "WestJet",
+        departingTime: "2023-11-29T07:00:00", // 7:00am in 24-hour format
+        arrivingTime: "2023-11-29T07:50:00", // 7:50am in 24-hour format
+        departureLocation: "Calgary",
+        arrivalLocation: "Vancouver",
+        leavingTime: "2023-11-30T11:00:00", // Added fictional time
+        arriveBackTime: "2023-11-30T11:50:00", // Added fictional time
+        leavingLocation: "Vancouver", // Added return location
+        arriveBackLocation: "Calgary", // Added return location
+        price: "99$",
+        seatCapacity: 42,
+      },
+    },
+    {
+      id: "9",
+      details: {
+        airline: "Air Canada",
+        departingTime: "2023-12-4T00:00:00",
+        arrivingTime: "2023-12-4T00:00:00",
+        departureLocation: "Calgary",
+        arrivalLocation: "Vancouver",
+        leavingTime: "2023-12-8T00:00:00", // Added fictional time
+        arriveBackTime: "2023-12-8T00:00:00", // Added fictional time
+        leavingLocation: "Vancouver", // Added return location
+        arriveBackLocation: "Calgary", // Added return location
+        price: "105$",
+        seatCapacity: 43,
+      },
+    },
+    {
+      id: "10",
+      details: {
+        airline: "WestJet",
+        departingTime: "2023-11-28T13:00:00",
+        arrivingTime: "2023-11-28T13:50:00",
+        departureLocation: "Calgary",
+        arrivalLocation: "Vancouver",
+        leavingTime: "2023-12-2T14:00:00", // Added fictional time
+        arriveBackTime: "2023-12-2T14:50:00", // Added fictional time
+        leavingLocation: "Vancouver", // Added return location
+        arriveBackLocation: "Calgary", // Added return location
+        price: "110$",
+        seatCapacity: 12,
+      },
+    },
+    {
+      id: "11",
+      details: {
+        airline: "Air Canada",
+        departingTime: "2023-11-29T18:30:00",
+        arrivingTime: "2023-11-29T19:20:00",
+        departureLocation: "Calgary",
+        arrivalLocation: "Vancouver",
+        leavingTime: "2023-11-30T19:00:00", // Added fictional time
+        arriveBackTime: "2023-11-30T19:50:00", // Added fictional time
+        leavingLocation: "Vancouver", // Added return location
+        arriveBackLocation: "Calgary", // Added return location
+        price: "115$",
+        seatCapacity: 15,
       },
     },
     // Add more flight objects with their respective details and unique IDs
   ];
-
+  const convertToLocalDateISOString = (dateString) => {
+    const date = new Date(dateString);
+    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - userTimezoneOffset)
+      .toISOString()
+      .split("T")[0];
+  };
   const handleViewDetailsClick = (id) => {
     const params = new URLSearchParams();
 
@@ -65,7 +202,9 @@ const FlightsList = () => {
       ) {
         if (key === "depart" || key === "return") {
           const date = new Date(userFlightData[key]);
-          const formattedDate = date.toISOString().split("T")[0]; // Converts to yyyy-mm-dd format
+          const formattedDate = convertToLocalDateISOString(
+            userFlightData[key]
+          );
           params.set(key, formattedDate);
         } else {
           Object.keys(userFlightData[key]).forEach((subKey) => {
@@ -80,9 +219,50 @@ const FlightsList = () => {
 
     navigate(`/tickets?${params.toString()}`);
   };
+  const formatDateOnly = (dateString) => {
+    const date = new Date(dateString);
+    const options = { month: "long", day: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  };
+
+  // Function to format only the time to "Hour:Minute AM/PM"
+  const formatTimeOnly = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const filteredFlights =
+    userFlightData.depart && userFlightData.return
+      ? flightsData.filter((flight) => {
+          const departureDate = flight.details.departingTime.split("T")[0];
+
+          const returnDate = flight.details.arriveBackTime.split("T")[0];
+          const userDepartDate = convertToLocalDateISOString(
+            userFlightData.depart
+          );
+          const userReturnDate = convertToLocalDateISOString(
+            userFlightData.return
+          );
+          // console.log(userFlightData.leaving.name);
+          // console.log(departureDate, "-", returnDate);
+          // console.log("1", userDepartDate, "-", userReturnDate);
+          console.log(userFlightData);
+          // console.log(userDepartDate, userReturnDate);
+          return (
+            flight.details.departureLocation === userFlightData.leaving.name &&
+            flight.details.arrivalLocation === userFlightData.going.name &&
+            flight.details.seatCapacity >= userFlightData.travellers &&
+            departureDate === userDepartDate &&
+            returnDate === userReturnDate
+          );
+        })
+      : [];
   return (
     <>
-      {flightsData.map((flight) => {
+      {filteredFlights.map((flight) => {
         const { id, details } = flight;
         return (
           <div key={id} className="flight-details-container">
@@ -95,7 +275,10 @@ const FlightsList = () => {
                 <div className="flights-info-right">
                   <div className="flight-time-window">
                     <span>
-                      {details.departingTime} - {details.arrivingTime}
+                      {formatTimeOnly(details.departingTime)} -{" "}
+                      {formatTimeOnly(details.arrivingTime)}
+                      {formatDateOnly(details.departingTime)} -{" "}
+                      {formatDateOnly(details.arrivingTime)}
                     </span>
                   </div>
                   <div className="flight-depart-return">
@@ -111,7 +294,10 @@ const FlightsList = () => {
                 <div className="flights-info-right">
                   <div className="flight-time-window">
                     <span>
-                      {details.leavingTime} - {details.arriveBackTime}
+                      {formatTimeOnly(details.leavingTime)} -{" "}
+                      {formatTimeOnly(details.arriveBackTime)}
+                      {formatDateOnly(details.leavingTime)} -{" "}
+                      {formatDateOnly(details.arriveBackTime)}
                     </span>
                   </div>
                   <div className="flight-depart-return">
