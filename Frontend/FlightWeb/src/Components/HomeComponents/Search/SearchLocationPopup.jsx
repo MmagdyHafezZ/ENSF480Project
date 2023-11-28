@@ -14,15 +14,15 @@ const SearchLocationPopup = ({
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/getAirport')
-      .then(response => {
-        setSearchResults(response.data),
-        console.log(response.data)
+    axios
+      .get("http://localhost:8080/getAirport")
+      .then((response) => {
+        setSearchResults(response.data), console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-    }, []);
+  }, []);
 
   // const dummyData = [
   //   { name: "New York", iataCode: "JFK" },
@@ -51,7 +51,7 @@ const SearchLocationPopup = ({
           item.iata.toLowerCase().includes(query.toLowerCase())
       );
       setSearchResults(filteredResults);
-      console.log()
+      console.log();
     } else {
       setSearchResults([]);
     }
@@ -85,7 +85,6 @@ const SearchLocationPopup = ({
               }}
             >
               {result.city} - {result.iata}
-
             </li>
           ))}
         </ul>

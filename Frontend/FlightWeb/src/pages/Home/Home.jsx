@@ -5,23 +5,20 @@ import Search from "../../Components/HomeComponents/Search/Search";
 import Hero from "../../Components/HomeComponents/Hero/Hero";
 
 const Home = () => {
-	return (
-		<>
-			<div className="home flex container">
-				<div className="mainText">
-					<h1>Create Ever-Lasting Memories With US</h1>
-				</div>
-				<div className="homeImages flex">
-					<div className="videoDiv">
-						<video autoPlay muted className="video"></video>
-					</div>
-					<img src={aeroplane} className="plane" alt="plane" />
-				</div>
-			</div>
-			<Search />
-			<Hero />
-		</>
-	);
-
+  return (
+    <>
+      <div className="home flex container">
+        <div className="mainText">
+          <h1>Create Ever-Lasting Memories With US</h1>
+        </div>
+        <div className="homeImages flex">
+          <div className="videoDiv">
+            <video src={video} autoPlay muted className="video"></video>
+          </div>
+          <img src={aeroplane} className="plane" alt="plane" />
+        </div>
+      </div>
+    </>
+  );
 };
 export default Home;
