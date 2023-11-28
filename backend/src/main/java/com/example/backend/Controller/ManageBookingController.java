@@ -28,17 +28,22 @@ public class ManageBookingController {
         return manageBookingService.getManageBookingData();
     }
 
+    @GetMapping(path = "/getBooking/{id}")
+    public ManageBookingEntity getSingleBooking(@PathVariable Long id){
+        return manageBookingService.singleGet(id);
+    }
+
     @PostMapping(path = "/postBooking")
     public ManageBookingEntity postBooking(@RequestBody ManageBookingEntity manageBookingEntity){
         return manageBookingService.postManageBookingEntity(manageBookingEntity);
     }
 
-    @PutMapping(path = "/putBooking")
+    @PutMapping(path = "/putBooking/{id}")
     public ManageBookingEntity putBooking(@PathVariable Long id, @RequestBody ManageBookingEntity manageBookingEntity){
         return manageBookingService.updateManageBookingEntity(id, manageBookingEntity);
     }
 
-    @DeleteMapping(path = "/deleteBooking")
+    @DeleteMapping(path = "/deleteBooking/{id}")
     public void deleteBooking(@PathVariable Long id){
         manageBookingService.deleteManageBookingEntity(id);
     }

@@ -22,6 +22,11 @@ public class ManageBookingService {
         return manageBookingRepository.findAll();
     }
 
+    // GET Single
+    public ManageBookingEntity singleGet(Long id){
+        return manageBookingRepository.findById(id).get();
+    }
+
     // POST
     public ManageBookingEntity postManageBookingEntity(ManageBookingEntity manageBookingEntity){
         return manageBookingRepository.save(manageBookingEntity);
@@ -33,6 +38,7 @@ public class ManageBookingService {
         updateData.setPassenger(existingData.getPassenger());
         updateData.setFlight(existingData.getFlight());
         updateData.setConfirm(existingData.getConfirm());
+        updateData.setSeat(existingData.getSeat());
         
         return manageBookingRepository.save(updateData);
     }

@@ -31,6 +31,9 @@ public class ManageBookingEntity {
     @Column(name = "confirm")
     private String confirm;
 
+    @Column(name = "seat")
+    private String seat;
+
     public void setID(Long id){
         this.id = id;
     }
@@ -62,5 +65,14 @@ public class ManageBookingEntity {
     public String getConfirm(){
         return confirm;
     }
+
+    public void setSeat(String seat){
+        this.seat = seat;
+    }
+
+    public String getSeat(){
+        return seat;
+    }
+
 
 }

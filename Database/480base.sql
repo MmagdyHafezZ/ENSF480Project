@@ -10,13 +10,16 @@ CREATE TABLE airportdata (
 );
 
 CREATE TABLE managebooking (
+	id			BIGINT AUTO_INCREMENT 			PRIMARY KEY,
     passenger	VARCHAR(100),
     flight		VARCHAR(100),
     confirm		VARCHAR(100)
 );
 
-INSERT INTO managebooking (passenger, flight, confirm) VALUES
-('John Doe', 'NY to LA', 'Confirmed');
+DROP TABLE managebooking;
+
+INSERT INTO managebooking (id, passenger, flight, confirm) VALUES
+(1, 'John Doe', 'NY to LA', 'Confirmed');
 
 
 INSERT INTO airportData (iata, city, state, country) VALUES 
