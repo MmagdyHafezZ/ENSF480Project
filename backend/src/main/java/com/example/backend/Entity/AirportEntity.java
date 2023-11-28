@@ -2,7 +2,6 @@ package com.example.backend.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-// import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,6 @@ public class AirportEntity {
 
     @Id
     @Column(name = "iata")
-    // @GeneratedValue
     private String iata;
 
     @Column(name = "city")
@@ -32,4 +30,5 @@ public class AirportEntity {
 
     @Column(name = "country")
     private String country;
+
 }
