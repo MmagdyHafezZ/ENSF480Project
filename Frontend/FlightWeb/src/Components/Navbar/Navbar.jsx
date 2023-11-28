@@ -26,6 +26,23 @@ const Navbar = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  useEffect(() => {
+    const handleScroll = () => {
+      const navBarTwo = document.querySelector(".navBarTwo");
+      if (window.scrollY > 100) {
+        // Adjust '100' based on when you want to change the style
+        navBarTwo.classList.add("scrolled");
+      } else {
+        navBarTwo.classList.remove("scrolled");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   const showNavBar = () => {
     if (active === "navBarMenu") {
       setActive("navBarMenu showNavBar");

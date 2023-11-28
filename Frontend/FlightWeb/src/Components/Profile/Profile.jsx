@@ -23,6 +23,7 @@ import {
   ExpandLess as ExpandLessIcon,
 } from "@mui/icons-material";
 import SettingsIcon from "@mui/icons-material/Settings";
+import Navbar from "../Navbar/Navbar";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState({
@@ -101,215 +102,233 @@ const ProfilePage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} style={{ padding: "20px", marginTop: "20px" }}>
-        <Grid container spacing={3} alignItems="center" justifyContent="center">
-          <Grid item xs={12} style={{ textAlign: "center" }}>
-            <Avatar
-              alt="Profile Picture"
-              src={userData.profilePictureUrl}
-              sx={{ width: 100, height: 100 }}
-              style={{ margin: "auto" }}
-            />
-          </Grid>
-          <Grid item xs={12} style={{ textAlign: "center" }}>
-            <Typography variant="h4">{userData.name}</Typography>
-            <Typography variant="subtitle1">{userData.role}</Typography>
-            <Typography variant="subtitle1" style={{ marginTop: "10px" }}>
-              {userData.membershipStatus}
-            </Typography>
+    <>
+      <Navbar />
+      <Container maxWidth="sm" style={{ position: "relative", top: "100px" }}>
+        <Paper elevation={3} style={{ padding: "20px", marginTop: "20px" }}>
+          <Grid
+            container
+            spacing={3}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              <Avatar
+                alt="Profile Picture"
+                src={userData.profilePictureUrl}
+                sx={{ width: 100, height: 100 }}
+                style={{ margin: "auto" }}
+              />
+            </Grid>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              <Typography variant="h4">{userData.name}</Typography>
+              <Typography variant="subtitle1">{userData.role}</Typography>
+              <Typography variant="subtitle1" style={{ marginTop: "10px" }}>
+                {userData.membershipStatus}
+              </Typography>
 
-            <Typography variant="subtitle1" style={{ marginTop: "20px" }}>
-              Loyalty Points: 1200
-            </Typography>
-          </Grid>
-          <Grid item xs={12} style={{ textAlign: "center" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleEditProfileClick}
-            >
-              Edit Profile
-            </Button>
-
-            {/* Settings Icon */}
-            <IconButton onClick={toggleSettings} style={{ float: "right" }}>
-              <SettingsIcon />
-            </IconButton>
-            {isEditFormOpen && (
-              <Paper style={{ padding: "20px", marginTop: "20px" }}>
-                <Typography variant="h6">Edit Profile</Typography>
-                <form noValidate autoComplete="off">
-                  <Grid container spacing={2} style={{ marginTop: "10px" }}>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label="Name"
-                        value={userData.name}
-                        onChange={(e) =>
-                          setUserData({ ...userData, name: e.target.value })
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label="Role"
-                        value={userData.role}
-                        onChange={(e) =>
-                          setUserData({ ...userData, role: e.target.value })
-                        }
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      label="Email"
-                      value={userData.email}
-                      onChange={(e) =>
-                        setUserData({ ...userData, email: e.target.value })
-                      }
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      label="Phone"
-                      value={userData.phone}
-                      onChange={(e) =>
-                        setUserData({ ...userData, phone: e.target.value })
-                      }
-                    />
-                  </Grid>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ marginTop: "20px" }}
-                    onClick={saveProfile}
-                  >
-                    Save Changes
-                  </Button>
-                </form>
-              </Paper>
-            )}
-
-            {/* Settings Options */}
-            {isSettingsOpen && (
-              <div style={{ marginTop: "20px" }}>
-                <Typography variant="h6">Settings and Preferences</Typography>
-                <List>
-                  <ListItem>
-                    <ListItemText primary="Email Notifications" />
-                    <Switch
-                      checked={emailNotifications}
-                      onChange={handleEmailNotificationChange}
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText primary="Seat Preference" />
-                    <Typography component="div">
-                      <Button
-                        variant={
-                          seatPreference === "Aisle" ? "contained" : "outlined"
-                        }
-                        onClick={() => setSeatPreference("Aisle")}
-                      >
-                        Aisle
-                      </Button>
-                      <Button
-                        variant={
-                          seatPreference === "Window" ? "contained" : "outlined"
-                        }
-                        onClick={() => setSeatPreference("Window")}
-                      >
-                        Window
-                      </Button>
-                    </Typography>
-                  </ListItem>
-                  {/* Additional settings can be added here */}
-                </List>
-              </div>
-            )}
-          </Grid>
-          {/* Contact Information Accordion */}
-          <Grid item xs={12}>
-            <Accordion
-              expanded={isContactInfoExpanded}
-              onChange={handleContactInfoToggle}
-              style={{ width: "100%", marginTop: "20px" }}
-            >
-              <AccordionSummary
-                expandIcon={
-                  isContactInfoExpanded ? (
-                    <ExpandLessIcon />
-                  ) : (
-                    <ExpandMoreIcon />
-                  )
-                }
+              <Typography variant="subtitle1" style={{ marginTop: "20px" }}>
+                Loyalty Points: 1200
+              </Typography>
+            </Grid>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleEditProfileClick}
               >
-                <Typography>Contact Information</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>Email: {userData.email}</Typography>
-                <Typography>Phone: {userData.phone}</Typography>
-              </AccordionDetails>
-            </Accordion>
+                Edit Profile
+              </Button>
+
+              {/* Settings Icon */}
+              <IconButton onClick={toggleSettings} style={{ float: "right" }}>
+                <SettingsIcon />
+              </IconButton>
+              {isEditFormOpen && (
+                <Paper style={{ padding: "20px", marginTop: "20px" }}>
+                  <Typography variant="h6">Edit Profile</Typography>
+                  <form noValidate autoComplete="off">
+                    <Grid container spacing={2} style={{ marginTop: "10px" }}>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label="Name"
+                          value={userData.name}
+                          onChange={(e) =>
+                            setUserData({ ...userData, name: e.target.value })
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label="Role"
+                          value={userData.role}
+                          onChange={(e) =>
+                            setUserData({ ...userData, role: e.target.value })
+                          }
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Email"
+                        value={userData.email}
+                        onChange={(e) =>
+                          setUserData({ ...userData, email: e.target.value })
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Phone"
+                        value={userData.phone}
+                        onChange={(e) =>
+                          setUserData({ ...userData, phone: e.target.value })
+                        }
+                      />
+                    </Grid>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{ marginTop: "20px" }}
+                      onClick={saveProfile}
+                    >
+                      Save Changes
+                    </Button>
+                  </form>
+                </Paper>
+              )}
+
+              {/* Settings Options */}
+              {isSettingsOpen && (
+                <div style={{ marginTop: "20px" }}>
+                  <Typography variant="h6">Settings and Preferences</Typography>
+                  <List>
+                    <ListItem>
+                      <ListItemText primary="Email Notifications" />
+                      <Switch
+                        checked={emailNotifications}
+                        onChange={handleEmailNotificationChange}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText primary="Seat Preference" />
+                      <Typography component="div">
+                        <Button
+                          variant={
+                            seatPreference === "Aisle"
+                              ? "contained"
+                              : "outlined"
+                          }
+                          onClick={() => setSeatPreference("Aisle")}
+                        >
+                          Aisle
+                        </Button>
+                        <Button
+                          variant={
+                            seatPreference === "Window"
+                              ? "contained"
+                              : "outlined"
+                          }
+                          onClick={() => setSeatPreference("Window")}
+                        >
+                          Window
+                        </Button>
+                      </Typography>
+                    </ListItem>
+                    {/* Additional settings can be added here */}
+                  </List>
+                </div>
+              )}
+            </Grid>
+            {/* Contact Information Accordion */}
+            <Grid item xs={12}>
+              <Accordion
+                expanded={isContactInfoExpanded}
+                onChange={handleContactInfoToggle}
+                style={{ width: "100%", marginTop: "20px" }}
+              >
+                <AccordionSummary
+                  expandIcon={
+                    isContactInfoExpanded ? (
+                      <ExpandLessIcon />
+                    ) : (
+                      <ExpandMoreIcon />
+                    )
+                  }
+                >
+                  <Typography>Contact Information</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>Email: {userData.email}</Typography>
+                  <Typography>Phone: {userData.phone}</Typography>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6">Recent Bookings:</Typography>
+              <List>
+                {userData.recentBookings.map((booking, index) => (
+                  <React.Fragment key={index}>
+                    <ListItem>
+                      <ListItemText
+                        primary={booking.flight}
+                        secondary={`Date: ${booking.date}`}
+                      />
+                    </ListItem>
+                    {index < userData.recentBookings.length - 1 && <Divider />}
+                  </React.Fragment>
+                ))}
+              </List>
+            </Grid>
+            <Grid item xs={12}>
+              {/* Upcoming Flights Section */}
+              <Typography variant="h6" style={{ marginTop: "20px" }}>
+                Upcoming Flights:
+              </Typography>
+              <List>
+                {upcomingFlights.map((flight, index) => (
+                  <React.Fragment key={index}>
+                    <ListItem>
+                      <ListItemText
+                        primary={flight.flight}
+                        secondary={`Date: ${flight.date}`}
+                      />
+                    </ListItem>
+                    {index < upcomingFlights.length - 1 && <Divider />}
+                  </React.Fragment>
+                ))}
+              </List>
+            </Grid>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              <Button
+                variant="outlined"
+                style={{ margin: "5px" }}
+                color="primary"
+                onClick={() => {
+                  window.location.href = "/reservations";
+                }}
+              >
+                View All Reservations
+              </Button>
+              <Button
+                variant="outlined"
+                style={{ margin: "5px" }}
+                color="primary"
+                onClick={() => {
+                  window.location.href = "/membership";
+                }}
+              >
+                View Membership Benefits
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h6">Recent Bookings:</Typography>
-            <List>
-              {userData.recentBookings.map((booking, index) => (
-                <React.Fragment key={index}>
-                  <ListItem>
-                    <ListItemText
-                      primary={booking.flight}
-                      secondary={`Date: ${booking.date}`}
-                    />
-                  </ListItem>
-                  {index < userData.recentBookings.length - 1 && <Divider />}
-                </React.Fragment>
-              ))}
-            </List>
-          </Grid>
-          <Grid item xs={12}>
-            {/* Upcoming Flights Section */}
-            <Typography variant="h6" style={{ marginTop: "20px" }}>
-              Upcoming Flights:
-            </Typography>
-            <List>
-              {upcomingFlights.map((flight, index) => (
-                <React.Fragment key={index}>
-                  <ListItem>
-                    <ListItemText
-                      primary={flight.flight}
-                      secondary={`Date: ${flight.date}`}
-                    />
-                  </ListItem>
-                  {index < upcomingFlights.length - 1 && <Divider />}
-                </React.Fragment>
-              ))}
-            </List>
-          </Grid>
-          <Grid item xs={12} style={{ textAlign: "center" }}>
-            <Button
-              variant="outlined"
-              style={{ margin: "5px" }}
-              color="primary"
-            >
-              View All Reservations
-            </Button>
-            <Button
-              variant="outlined"
-              style={{ margin: "5px" }}
-              color="primary"
-            >
-              View Membership Benefits
-            </Button>
-          </Grid>
-        </Grid>
-      </Paper>
-    </Container>
+        </Paper>
+      </Container>
+    </>
   );
 };
 

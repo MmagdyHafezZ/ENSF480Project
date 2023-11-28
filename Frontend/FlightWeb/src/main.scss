@@ -120,7 +120,7 @@ h2{
 
 // navBar styles ===========>
 .navBar{
-    position: fixed;
+    position: sticky;
     flex-direction: column;
     width: 100%;
     z-index: 1000;
@@ -158,6 +158,9 @@ h2{
         position: fixed;
         padding: 1.5rem 1rem;
         transition: .3s ease-in-out;
+        &.scrolled {
+            top: 0; // Remove the '3rem' top spacing when scrolled
+        }
         .logoDiv{
             .Logo{
                 width: 20%;
@@ -405,4 +408,51 @@ h2{
         }
     }
 
+}
+
+$fade-duration: 1s;
+$hover-animation-duration: 0.3s;
+
+.animated-title {
+  animation: fadeInDown 1s ease-in-out;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.benefits-list {
+  .benefit-item {
+    margin: 20px 0;
+    animation: fadeInUp 1s ease-in-out;
+    transition: box-shadow $hover-animation-duration ease-in-out, transform $hover-animation-duration ease-in-out;
+
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: translateY(-5px); // Slightly lift the card up
+
+      .MuiCardContent-root {
+        background-color: var(--PrimaryColor);
+        color: white;
+      }
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -4,7 +4,7 @@ import Navbar from "../Navbar/Navbar";
 const MembershipBenefits = () => {
   return (
     <>
-      <Navbar />
+      <Navbar style={{ marginBottom: "150px" }} />
       <Container maxWidth="md">
         <Box textAlign="center" style={{ marginTop: "130px" }} my={5}>
           <Typography variant="h2" className="animated-title">
