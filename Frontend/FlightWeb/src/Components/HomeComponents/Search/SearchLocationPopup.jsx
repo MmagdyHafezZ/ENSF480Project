@@ -94,7 +94,7 @@
 // };
 
 // export default SearchLocationPopup;
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useUserDataContext } from "../../../context/UserDataContext.jsx";
 
@@ -106,9 +106,10 @@ const SearchLocationPopup = ({
   value,
   setData,
 }) => {
+  const outClick = useRef();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [grow, setGrow] = useState([]);
 
   useEffect(() => {
     axios
@@ -120,6 +121,21 @@ const SearchLocationPopup = ({
         console.error("Error fetching data: ", error);
       });
   }, []);
+
+  useEffect(() => {
+    function handleClickOutsidePopup(event){
+      if (outClick.current && !outClick.current.contains(event.target)) {
+        setPopup(false);
+    }
+  }
+
+    document.addEventListener("mousedown", handleClickOutsidePopup);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsidePopup);
+    };
+
+  }, [setPopup]);
 
   // const dummyData = [
   //   { city: "New York", iata: "JFK" },
@@ -167,7 +183,7 @@ const SearchLocationPopup = ({
   };
 
   return (
-    <div className="search-location-popup" onClick={handlePopupClick}>
+    <div className="search-location-popup" ref={outClick} onClick={handlePopupClick}>
       <div className="search-location-popup__container">
         <input
           className="location-popup-placeholder"
