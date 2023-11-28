@@ -108,31 +108,32 @@ const SearchLocationPopup = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [grow, setGrow] = useState([]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:8080/getAirport")
-  //     .then((response) => {
-  //       setSearchResults(response.data), console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data: ", error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/getAirport")
+      .then((response) => {
+        setSearchResults(response.data), console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      });
+  }, []);
 
-  const dummyData = [
-    { city: "New York", iata: "JFK" },
-    { city: "Los Angeles", iata: "LAX" },
-    { city: "London", iata: "LHR" },
-    { city: "Paris", iata: "CDG" },
-    { city: "Tokyo", iata: "HND" },
-    { city: "Calgary", iata: "YYC" },
-    { city: "Fort McMurray", iata: "YMM" }, // Fort McMurray, Alberta, Canada
-    { city: "Vancouver", iata: "YVR" }, // Vancouver, British Columbia, Canada
-    { city: "Seattle", iata: "SEA" }, // Seattle, Washington, USA
-    { city: "Birmingham", iata: "BHX" }, // Birmingham, England, UK
-    // Add more cities and codes as needed
-  ];
+  // const dummyData = [
+  //   { city: "New York", iata: "JFK" },
+  //   { city: "Los Angeles", iata: "LAX" },
+  //   { city: "London", iata: "LHR" },
+  //   { city: "Paris", iata: "CDG" },
+  //   { city: "Tokyo", iata: "HND" },
+  //   { city: "Calgary", iata: "YYC" },
+  //   { city: "Fort McMurray", iata: "YMM" }, // Fort McMurray, Alberta, Canada
+  //   { city: "Vancouver", iata: "YVR" }, // Vancouver, British Columbia, Canada
+  //   { city: "Seattle", iata: "SEA" }, // Seattle, Washington, USA
+  //   { city: "Birmingham", iata: "BHX" }, // Birmingham, England, UK
+  //   // Add more cities and codes as needed
+  // ];
 
   function handleSelectLocation(location) {
     console.log(location);
@@ -146,7 +147,7 @@ const SearchLocationPopup = ({
   const handleSearch = (query) => {
     setSearchQuery(query);
     if (query) {
-      const filteredResults = dummyData.filter(
+      const filteredResults = searchResults.filter(
         (item) =>
           item.city.toLowerCase().includes(query.toLowerCase()) ||
           item.iata.toLowerCase().includes(query.toLowerCase())
@@ -178,6 +179,7 @@ const SearchLocationPopup = ({
         <ul>
           {searchResults.map((result, index) => (
             <li
+              className="list"
               key={index}
               onClick={() => {
                 handleSelectLocation(result);
@@ -185,7 +187,7 @@ const SearchLocationPopup = ({
                 // setPopup((prev) => !prev);
               }}
             >
-              {result.city} - {result.iata}
+              {result.iata} - {result.city}
             </li>
           ))}
         </ul>
