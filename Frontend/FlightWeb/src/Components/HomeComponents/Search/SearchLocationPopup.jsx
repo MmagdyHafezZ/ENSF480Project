@@ -178,6 +178,7 @@ const SearchLocationPopup = ({
         <ul>
           {searchResults.map((result, index) => (
             <li
+              className="list"
               key={index}
               onClick={() => {
                 handleSelectLocation(result);
@@ -185,7 +186,7 @@ const SearchLocationPopup = ({
                 // setPopup((prev) => !prev);
               }}
             >
-              {result.city} - {result.iata}
+              {result.iata} - {result.city}
             </li>
           ))}
         </ul>

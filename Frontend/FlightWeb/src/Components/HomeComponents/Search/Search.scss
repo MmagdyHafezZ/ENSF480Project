@@ -36,12 +36,18 @@
             top:-0.25rem;
             background-color: white;
             // background-color: red;
+
+            overflow-y: auto;
             
             border-radius: 1rem;
             box-shadow: 0px 2px 0.3rem 1px rgba(0,0,0,0.5);
             .search-location-popup__container{
-
                 border-bottom: 1px solid black;
+            }
+            .list{
+                font-size: larger;
+                padding-left: 10px;
+                margin-bottom: 10px;
             }
             input[type="text"]::placeholder{
                 // background-color: red;
@@ -52,6 +58,7 @@
                 // background-color: red!important;
                 padding: 1.5rem;
                 font-size: 1.5rem;
+                
 
             }
 
