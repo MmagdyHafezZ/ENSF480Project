@@ -18,9 +18,23 @@ import TravellersInput from "./TravellersInput.jsx";
 import CalendarInput from "./CalendarInput.jsx";
 import { formatDate } from "../../../utils/formatDate.js";
 import { useUserDataContext } from "../../../context/UserDataContext.jsx";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Search = () => {
-  const { userFlightData, setUserFlightData } = useUserDataContext();
+  const {
+    userFlightData,
+    setUserFlightData,
+    saveFlightDataToLocalStorage,
+    searchState,
+    setSearchState,
+  } = useUserDataContext();
+
+  useEffect(() => {
+    // Retrieve the userFlightData from localStorage
+    const storedData = localStorage.getItem("userFlightData");
+    if (storedData) {
+      setUserFlightData(JSON.parse(storedData));
+    }
+  }, []);
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") || false
   );
@@ -114,56 +128,21 @@ const Search = () => {
     );
   };
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const convertToLocalDateISOString = (dateString) => {
-    const date = new Date(dateString);
-    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-    return new Date(date.getTime() - userTimezoneOffset)
-      .toISOString()
-      .split("T")[0];
-  };
   // Function to update URL with userFlightData
-  const handleSearchFlight = () => {
-    const params = new URLSearchParams();
 
-    // Convert userFlightData to URLSearchParams
-    Object.keys(userFlightData).forEach((key) => {
-      if (
-        typeof userFlightData[key] === "object" &&
-        userFlightData[key] !== null
-      ) {
-        if (key === "depart" || key === "return") {
-          const date = new Date();
-          const formattedDate = convertToLocalDateISOString(
-            userFlightData[key]
-          );
-          params.set(key, formattedDate);
-        } else {
-          Object.keys(userFlightData[key]).forEach((subKey) => {
-            params.set(`${key}.${subKey}`, userFlightData[key][subKey]);
-          });
-        }
-      } else {
-        params.set(key, userFlightData[key]);
-      }
-      navigate(`/flights?${params.toString()}`);
-    });
+  const handleSearchFlight = () => {
+    setSearchState((prev) => !prev);
+    // localStorage.setItem("userFlightData", JSON.stringify(userFlightData));
+    const updatedUserFlightData = { ...userFlightData };
+    // Update userFlightData with the copy
+    setUserFlightData(userFlightData);
+
+    saveFlightDataToLocalStorage();
+    navigate("/flights");
   };
   return (
     <div className="search container section">
       <div className="sectionContainer grid">
-        {/* <div className="btns flex">
-          <div className="singleBtn">
-            <span>Economy</span>
-          </div>
-          <div className="singleBtn">
-            <span>Business Class</span>
-          </div>
-          <div className="singleBtn">
-            <span>First Class</span>
-          </div>
-        </div> */}
-
         <div className="main-search-container searchInputs flex">
           {/* Single Input */}
           <div className="singleInput flex">
@@ -243,7 +222,6 @@ const Search = () => {
           <button
             onClick={() => {
               // updateUserFlightData();
-              console.log(userFlightData);
               handleSearchFlight();
             }}
             className="search-flight-button btn btnBlock flex"
