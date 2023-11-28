@@ -108,6 +108,7 @@ const SearchLocationPopup = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [grow, setGrow] = useState([]);
 
   useEffect(() => {
     axios

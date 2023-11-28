@@ -9,5 +9,4 @@ import com.example.backend.Entity.ManageBookingEntity;
  */
 public interface ManageBookingRepository extends JpaRepository<ManageBookingEntity, Integer>{
 
-    
 }

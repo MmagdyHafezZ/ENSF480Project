@@ -9,5 +9,4 @@ import com.example.backend.Entity.AirportEntity;
  */
 public interface AirportRepository extends JpaRepository<AirportEntity, String>{
 
-    
 }

@@ -2,12 +2,21 @@ CREATE DATABASE IF NOT EXISTS 480base;
 
 USE 480base;
 
-CREATE TABLE airportData (
+CREATE TABLE airportdata (
     iata      	VARCHAR(3) 		PRIMARY KEY,
     city 		VARCHAR(100),
     state 	   	VARCHAR(100),
     country  	VARCHAR(100)
 );
+
+CREATE TABLE managebooking (
+    passenger	VARCHAR(100),
+    flight		VARCHAR(100),
+    confirm		VARCHAR(100)
+);
+
+INSERT INTO managebooking (passenger, flight, confirm) VALUES
+('John Doe', 'NY to LA', 'Confirmed');
 
 
 INSERT INTO airportData (iata, city, state, country) VALUES 
