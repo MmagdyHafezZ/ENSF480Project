@@ -27,4 +27,6 @@ public class ManageBookingService {
         return manageBookingRepository.findAll();
     }
     
+    // PUT
+    
 }

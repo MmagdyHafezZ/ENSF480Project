@@ -25,7 +25,6 @@ public class AirportController {
 
     @GetMapping(path = "/getAirport")
     public List<AirportEntity> getAirportEntities(){
-        System.out.println(airportService.getAirportData());
         return airportService.getAirportData();
     }
     
