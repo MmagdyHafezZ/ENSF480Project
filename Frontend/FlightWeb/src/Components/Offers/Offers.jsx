@@ -10,15 +10,15 @@ import {
   CardActions,
   Button,
 } from "@mui/material";
-import Flightoffer from "../../../public/images/FlightOffer.jpg";
-import Hoteloffer from "../../../public/images/Hoteloffer.jpg";
-import CarRent from "../../../public/images/CarRent.jpg";
-import Offer from "../../../public/images/Offer.jpg";
-import Discount from "../../../public/images/Discount.jpg";
-import Adventure from "../../../public/images/Adventure.jpg";
-import Cruise from "../../../public/images/Cruise.jpg";
-import City from "../../../public/images/City.jpg";
-import Holiday from "../../../public/images/Holiday.jpg";
+import Flightoffer from "../../assets/FlightOffer.jpg";
+import Hoteloffer from "../../assets/Hoteloffer.jpg";
+import CarRent from "../../assets/CarRent.jpg";
+import Offer from "../../assets/Offer.jpg";
+import Discount from "../../assets/Discount.jpg";
+import Adventure from "../../assets/Adventure.jpg";
+import Cruise from "../../assets/Cruise.jpg";
+import City from "../../assets/City.jpg";
+import Holiday from "../../assets/Holiday.jpg";
 import Navbar from "../Navbar/Navbar";
 
 const OffersPage = () => {
