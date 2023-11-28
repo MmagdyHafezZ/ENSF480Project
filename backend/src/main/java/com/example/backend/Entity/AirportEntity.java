@@ -14,22 +14,22 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Data
-@Table(name = "AirportData")
+@Table(name = "airportdata")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AirportEntity {
 
     @Id
-    // @Column(name = "iata")
+    @Column(name = "iata")
     // @GeneratedValue
     private String iata;
 
-    // @Column(name = "city")
+    @Column(name = "city")
     private String city;
 
-    // @Column(name = "state")
+    @Column(name = "state")
     private String state;
 
-    // @Column(name = "country")
+    @Column(name = "country")
     private String country;
 }
