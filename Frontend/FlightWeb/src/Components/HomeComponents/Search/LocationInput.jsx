@@ -27,7 +27,7 @@ const LocationInput = ({
       >
         {label}
       </div>
-      {value[type] && <div className="chosen-location">{value[type].name}</div>}
+      {value[type] && <div className="chosen-location">{value[type].city}</div>}
 
       {popupState && (
         <div ref={refProp}>
