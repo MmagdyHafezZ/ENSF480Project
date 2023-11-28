@@ -18,14 +18,8 @@ public class AirportController {
     @Autowired
     private AirportService airportService;
 
-    // @PostMapping("/addAirport")
-    // public AirportEntity postAirport(@RequestBody AirportEntity airportEntity){
-    //     return airportService.saveAirportData(airportEntity);
-    // }
-
     @GetMapping(path = "/getAirport")
     public List<AirportEntity> getAirportEntities(){
-        System.out.println(airportService.getAirportData());
         return airportService.getAirportData();
     }
     

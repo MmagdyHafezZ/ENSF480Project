@@ -3,12 +3,12 @@ package com.example.backend.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.backend.Entity.AirportEntity;
+import com.example.backend.Entity.ManageBookingEntity;
 
 /**
- * AirportRepository
+ * ManageBookingRepository
  */
 @Repository
-public interface AirportRepository extends JpaRepository<AirportEntity, String>{
+public interface ManageBookingRepository extends JpaRepository<ManageBookingEntity, Long>{
 
 }

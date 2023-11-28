@@ -16,11 +16,8 @@ public class AirportService {
 
     @Autowired
     private AirportRepository airportRepository;
-    
-    // public AirportEntity postAirportData(AirportEntity airportEntity){
-    //     return airportRepository.save(airportEntity);
-    // }
 
+    // GET
     public List<AirportEntity> getAirportData(){
         return airportRepository.findAll();
     }

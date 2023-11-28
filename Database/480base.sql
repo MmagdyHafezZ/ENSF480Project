@@ -2,12 +2,26 @@ CREATE DATABASE IF NOT EXISTS 480base;
 
 USE 480base;
 
-CREATE TABLE airportData (
+CREATE TABLE airportdata (
     iata      	VARCHAR(3) 		PRIMARY KEY,
     city 		VARCHAR(100),
     state 	   	VARCHAR(100),
     country  	VARCHAR(100)
 );
+
+CREATE TABLE managebooking (
+	id			BIGINT AUTO_INCREMENT 			PRIMARY KEY,
+    passenger	VARCHAR(100),
+    flight		VARCHAR(20),
+    confirm		VARCHAR(20),
+    seat		VARCHAR(10),
+    meal		VARCHAR(20)
+);
+
+DROP TABLE managebooking;
+
+INSERT INTO managebooking (id, passenger, flight, confirm) VALUES
+(1, 'John Doe', 'NY to LA', 'Confirmed', '10F', 'Oh Ya Bud');
 
 
 INSERT INTO airportData (iata, city, state, country) VALUES 
