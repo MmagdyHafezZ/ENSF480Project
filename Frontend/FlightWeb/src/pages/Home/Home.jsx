@@ -13,7 +13,7 @@ const Home = () => {
         </div>
         <div className="homeImages flex">
           <div className="videoDiv">
-            <video src={video} autoPlay muted className="video"></video>
+            <video src={video} autoPlay loop muted className="video"></video>
           </div>
           <img src={aeroplane} className="plane" alt="plane" />
         </div>
