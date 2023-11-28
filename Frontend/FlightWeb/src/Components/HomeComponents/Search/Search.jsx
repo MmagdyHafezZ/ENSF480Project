@@ -18,7 +18,7 @@ import TravellersInput from "./TravellersInput.jsx";
 import CalendarInput from "./CalendarInput.jsx";
 import { formatDate } from "../../../utils/formatDate.js";
 import { useUserDataContext } from "../../../context/UserDataContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 const Search = () => {
   const { userFlightData, setUserFlightData } = useUserDataContext();
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -112,6 +112,42 @@ const Search = () => {
     return Object.values(userFlightData).every(
       (value) => value !== "" && value !== null
     );
+  };
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const convertToLocalDateISOString = (dateString) => {
+    const date = new Date(dateString);
+    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - userTimezoneOffset)
+      .toISOString()
+      .split("T")[0];
+  };
+  // Function to update URL with userFlightData
+  const handleSearchFlight = () => {
+    const params = new URLSearchParams();
+
+    // Convert userFlightData to URLSearchParams
+    Object.keys(userFlightData).forEach((key) => {
+      if (
+        typeof userFlightData[key] === "object" &&
+        userFlightData[key] !== null
+      ) {
+        if (key === "depart" || key === "return") {
+          const date = new Date();
+          const formattedDate = convertToLocalDateISOString(
+            userFlightData[key]
+          );
+          params.set(key, formattedDate);
+        } else {
+          Object.keys(userFlightData[key]).forEach((subKey) => {
+            params.set(`${key}.${subKey}`, userFlightData[key][subKey]);
+          });
+        }
+      } else {
+        params.set(key, userFlightData[key]);
+      }
+      navigate(`/flights?${params.toString()}`);
+    });
   };
   return (
     <div className="search container section">
@@ -208,7 +244,7 @@ const Search = () => {
             onClick={() => {
               // updateUserFlightData();
               console.log(userFlightData);
-              navigate("/flights");
+              handleSearchFlight();
             }}
             className="search-flight-button btn btnBlock flex"
             disabled={!isAllDummyFilled()}
