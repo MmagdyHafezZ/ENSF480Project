@@ -2,6 +2,8 @@ import React from "react";
 import "./flights.scss";
 import { useNavigate } from "react-router-dom";
 import { useUserDataContext } from "../../context/UserDataContext";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 const FlightsList = () => {
   const navigate = useNavigate();
   const { userFlightData } = useUserDataContext();
@@ -158,8 +160,8 @@ const FlightsList = () => {
         arrivingTime: "2023-11-28T13:50:00",
         departureLocation: "Calgary",
         arrivalLocation: "Vancouver",
-        leavingTime: "2023-12-2T14:00:00", // Added fictional time
-        arriveBackTime: "2023-12-2T14:50:00", // Added fictional time
+        leavingTime: "2023-12-02T14:00:00", // Added fictional time
+        arriveBackTime: "2023-12-02T14:50:00", // Added fictional time
         leavingLocation: "Vancouver", // Added return location
         arriveBackLocation: "Calgary", // Added return location
         price: "110$",
@@ -184,6 +186,7 @@ const FlightsList = () => {
     },
     // Add more flight objects with their respective details and unique IDs
   ];
+  const [dataFromURL, setDataFromURL] = useState();
   const convertToLocalDateISOString = (dateString) => {
     const date = new Date(dateString);
     const userTimezoneOffset = date.getTimezoneOffset() * 60000;
@@ -191,6 +194,38 @@ const FlightsList = () => {
       .toISOString()
       .split("T")[0];
   };
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log("SEARCH", searchParams);
+  // useEffect(() => {
+  //   const params = Object.fromEntries(searchParams.entries());
+  //   console.log("URL Params on Load:", params);
+
+  //   if (
+  //     Object.keys(params).length > 0 &&
+  //     userFlightData &&
+  //     !userFlightData.depart
+  //   ) {
+  //     const restoredData = {
+  //       leaving: {
+  //         name: params["leaving.name"] || "",
+  //         iata: params["leaving.iataCode"] || "",
+  //       },
+  //       going: {
+  //         name: params["going.name"] || "",
+  //         iata: params["going.iataCode"] || "",
+  //       },
+  //       travellers: params["travellers"] || 0,
+  //       depart: params["depart"]
+  //         ? new Date(params["depart"] + "T00:00:00")
+  //         : "", // Adjusted for timezone
+  //       return: params["return"]
+  //         ? new Date(params["return"] + "T00:00:00")
+  //         : "", // Adjusted for timezone
+  //     };
+  //     setDataFromURL(restoredData);
+  //     console.log("Restored Data:", restoredData);
+  //   }
+  // }, []);
   const handleViewDetailsClick = (id) => {
     const params = new URLSearchParams();
 
@@ -233,95 +268,100 @@ const FlightsList = () => {
       minute: "2-digit",
     });
   };
+  const searchParamsObject = {
+    leavingName: searchParams.get("leaving.name") || "",
+    goingName: searchParams.get("going.name") || "",
+    travellers: parseInt(searchParams.get("travellers") || "0", 10),
+    departDate: searchParams.get("depart") || "",
+    returnDate: searchParams.get("return") || "",
+  };
+  console.log("SE", searchParamsObject);
 
-  const filteredFlights =
-    userFlightData.depart && userFlightData.return
-      ? flightsData.filter((flight) => {
-          const departureDate = flight.details.departingTime.split("T")[0];
+  // to search for flights
 
-          const returnDate = flight.details.arriveBackTime.split("T")[0];
-          const userDepartDate = convertToLocalDateISOString(
-            userFlightData.depart
-          );
-          const userReturnDate = convertToLocalDateISOString(
-            userFlightData.return
-          );
-          // console.log(userFlightData.leaving.name);
-          // console.log(departureDate, "-", returnDate);
-          // console.log("1", userDepartDate, "-", userReturnDate);
-          console.log(userFlightData);
-          // console.log(userDepartDate, userReturnDate);
-          return (
-            flight.details.departureLocation === userFlightData.leaving.name &&
-            flight.details.arrivalLocation === userFlightData.going.name &&
-            flight.details.seatCapacity >= userFlightData.travellers &&
-            departureDate === userDepartDate &&
-            returnDate === userReturnDate
-          );
-        })
-      : [];
+  const filterFlights = () => {
+    return flightsData.filter((flight) => {
+      const departureDate = flight.details.departingTime.split("T")[0];
+      const returnDate = flight.details.arriveBackTime.split("T")[0];
+
+      console.log(2, departureDate);
+      return (
+        flight.details.departureLocation === searchParamsObject.leavingName &&
+        flight.details.arrivalLocation === searchParamsObject.goingName &&
+        flight.details.seatCapacity >= searchParamsObject.travellers &&
+        departureDate === searchParamsObject.departDate &&
+        returnDate === searchParamsObject.returnDate
+      );
+    });
+  };
+  const filteredFlights = filterFlights();
+  console.log(filterFlights);
   return (
     <>
-      {filteredFlights.map((flight) => {
-        const { id, details } = flight;
-        return (
-          <div key={id} className="flight-details-container">
-            <div className="flight-details__times">
-              <div className="flight-details__time-info">
-                <div className="flights-info-left">
-                  <div className="plane-company">{details.airline}</div>
-                  <span>Departing</span>
-                </div>
-                <div className="flights-info-right">
-                  <div className="flight-time-window">
-                    <span>
-                      {formatTimeOnly(details.departingTime)} -{" "}
-                      {formatTimeOnly(details.arrivingTime)}
-                      {formatDateOnly(details.departingTime)} -{" "}
-                      {formatDateOnly(details.arrivingTime)}
-                    </span>
+      {filteredFlights.length > 0 ? (
+        filteredFlights.map((flight) => {
+          const { id, details } = flight;
+          return (
+            <div key={id} className="flight-details-container">
+              <div className="flight-details__times">
+                <div className="flight-details__time-info">
+                  <div className="flights-info-left">
+                    <div className="plane-company">{details.airline}</div>
+                    <span>Departing</span>
                   </div>
-                  <div className="flight-depart-return">
-                    {details.departureLocation} - {details.arrivalLocation}
+                  <div className="flights-info-right">
+                    <div className="flight-time-window">
+                      <span>
+                        {formatTimeOnly(details.departingTime)} -{" "}
+                        {formatTimeOnly(details.arrivingTime)}
+                        {formatDateOnly(details.departingTime)} -{" "}
+                        {formatDateOnly(details.arrivingTime)}
+                      </span>
+                    </div>
+                    <div className="flight-depart-return">
+                      {details.departureLocation} - {details.arrivalLocation}
+                    </div>
                   </div>
                 </div>
+                <div className="flight-details__time-info">
+                  <div className="flights-info-left">
+                    <div className="plane-company">{details.airline}</div>
+                    <span>Returning</span>
+                  </div>
+                  <div className="flights-info-right">
+                    <div className="flight-time-window">
+                      <span>
+                        {formatTimeOnly(details.leavingTime)} -{" "}
+                        {formatTimeOnly(details.arriveBackTime)}
+                        {formatDateOnly(details.leavingTime)} -{" "}
+                        {formatDateOnly(details.arriveBackTime)}
+                      </span>
+                    </div>
+                    <div className="flight-depart-return">
+                      {details.leavingLocation} - {details.arriveBackLocation}
+                    </div>
+                  </div>
+                </div>
+                {/* Include Returning section if needed */}
               </div>
-              <div className="flight-details__time-info">
-                <div className="flights-info-left">
-                  <div className="plane-company">{details.airline}</div>
-                  <span>Returning</span>
-                </div>
-                <div className="flights-info-right">
-                  <div className="flight-time-window">
-                    <span>
-                      {formatTimeOnly(details.leavingTime)} -{" "}
-                      {formatTimeOnly(details.arriveBackTime)}
-                      {formatDateOnly(details.leavingTime)} -{" "}
-                      {formatDateOnly(details.arriveBackTime)}
-                    </span>
-                  </div>
-                  <div className="flight-depart-return">
-                    {details.leavingLocation} - {details.arriveBackLocation}
-                  </div>
-                </div>
+              <div className="flight-details__price">
+                <div className="flight-price">{details.price}</div>
+                <span>Round Trip</span>
+                <button
+                  onClick={() => {
+                    handleViewDetailsClick(id);
+                  }}
+                  className="view-details-button"
+                >
+                  View Details
+                </button>
               </div>
-              {/* Include Returning section if needed */}
             </div>
-            <div className="flight-details__price">
-              <div className="flight-price">{details.price}</div>
-              <span>Round Trip</span>
-              <button
-                onClick={() => {
-                  handleViewDetailsClick(id);
-                }}
-                className="view-details-button"
-              >
-                View Details
-              </button>
-            </div>
-          </div>
-        );
-      })}
+          );
+        })
+      ) : (
+        <div>No flights found for the selected criteria.</div>
+      )}
     </>
   );
 };

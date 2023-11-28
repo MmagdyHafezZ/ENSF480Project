@@ -25,8 +25,8 @@
 //   }, []);
 
 //   // const dummyData = [
-//   //   { name: "New York", iataCode: "JFK" },
-//   //   { name: "Los Angeles", iataCode: "LAX" },
+//   //   { name: "New York", iata: "JFK" },
+//   //   { name: "Los Angeles", iata: "LAX" },
 //   //   { name: "London", iataCode: "LHR" },
 //   //   { name: "Paris", iataCode: "CDG" },
 //   //   { name: "Tokyo", iataCode: "HND" },
@@ -121,16 +121,16 @@ const SearchLocationPopup = ({
   // }, []);
 
   const dummyData = [
-    { name: "New York", iataCode: "JFK" },
-    { name: "Los Angeles", iataCode: "LAX" },
-    { name: "London", iataCode: "LHR" },
-    { name: "Paris", iataCode: "CDG" },
-    { name: "Tokyo", iataCode: "HND" },
-    { name: "Calgary", iataCode: "YYC" },
-    { name: "Fort McMurray", iataCode: "YMM" }, // Fort McMurray, Alberta, Canada
-    { name: "Vancouver", iataCode: "YVR" }, // Vancouver, British Columbia, Canada
-    { name: "Seattle", iataCode: "SEA" }, // Seattle, Washington, USA
-    { name: "Birmingham", iataCode: "BHX" }, // Birmingham, England, UK
+    { name: "New York", iata: "JFK" },
+    { name: "Los Angeles", iata: "LAX" },
+    { name: "London", iata: "LHR" },
+    { name: "Paris", iata: "CDG" },
+    { name: "Tokyo", iata: "HND" },
+    { name: "Calgary", iata: "YYC" },
+    { name: "Fort McMurray", iata: "YMM" }, // Fort McMurray, Alberta, Canada
+    { name: "Vancouver", iata: "YVR" }, // Vancouver, British Columbia, Canada
+    { name: "Seattle", iata: "SEA" }, // Seattle, Washington, USA
+    { name: "Birmingham", iata: "BHX" }, // Birmingham, England, UK
     // Add more cities and codes as needed
   ];
 
@@ -149,7 +149,7 @@ const SearchLocationPopup = ({
       const filteredResults = dummyData.filter(
         (item) =>
           item.name.toLowerCase().includes(query.toLowerCase()) ||
-          item.iataCode.toLowerCase().includes(query.toLowerCase())
+          item.iata.toLowerCase().includes(query.toLowerCase())
       );
       setSearchResults(filteredResults);
       console.log();
@@ -185,7 +185,7 @@ const SearchLocationPopup = ({
                 // setPopup((prev) => !prev);
               }}
             >
-              {result.name} - {result.iataCode}
+              {result.name} - {result.iata}
             </li>
           ))}
         </ul>

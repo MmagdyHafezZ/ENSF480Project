@@ -55,11 +55,11 @@ const FlightsPage = () => {
       const restoredData = {
         leaving: {
           name: params["leaving.name"] || "",
-          iata: params["leaving.iataCode"] || "",
+          iata: params["leaving.iata"] || "",
         },
         going: {
           name: params["going.name"] || "",
-          iata: params["going.iataCode"] || "",
+          iata: params["going.iata"] || "",
         },
         travellers: params["travellers"] || 0,
         depart: params["depart"]
@@ -80,7 +80,6 @@ const FlightsPage = () => {
       <div className="flights-wrapper flex container">
         <Search />
         {userFlightData.leaving.name}
-        <button onClick={console.log(userFlightData)}>biut</button>
         <div className="flights-main-container flex">
           {/* <div className="flights-main__left">Left</div> */}
           <div className="flights-list__container">
