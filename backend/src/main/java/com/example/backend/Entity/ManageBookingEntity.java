@@ -7,14 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * ManageBookingEntity
  */
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "managebooking")
@@ -32,5 +30,37 @@ public class ManageBookingEntity {
 
     @Column(name = "confirm")
     private String confirm;
+
+    public void setID(Long id){
+        this.id = id;
+    }
+
+    public Long getID(){
+        return id;
+    }
+
+    public void setPassenger(String passenger){
+        this.passenger = passenger;
+    }
+
+    public String getPassenger(){
+        return passenger;
+    }
+
+    public void setFlight(String flight){
+        this.flight = flight;
+    }
+
+    public String getFlight(){
+        return flight;
+    }
+
+    public void setConfirm(String confirm){
+        this.confirm = confirm;
+    }
+
+    public String getConfirm(){
+        return confirm;
+    }
 
 }

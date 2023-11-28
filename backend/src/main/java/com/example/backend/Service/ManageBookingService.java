@@ -1,6 +1,7 @@
 package com.example.backend.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,18 @@ public class ManageBookingService {
         return manageBookingRepository.findAll();
     }
     
-    // PUT
-    
+    // DELETE
+    public void deleteManageBookingData(Long id){
+        manageBookingRepository.deleteById(id);
+    }
+
+    public ManageBookingEntity updateManageBookingData(Long id, ManageBookingEntity existingData){
+        ManageBookingEntity updateData = manageBookingRepository.findById(id).get();
+        updateData.setPassenger(existingData.getPassenger());
+        updateData.setFlight(existingData.geFlight());
+        updateData.setConfirm(existingData.getConfirm());
+
+        return manageBookingRepository.save(updateData);
+    }
+
 }
