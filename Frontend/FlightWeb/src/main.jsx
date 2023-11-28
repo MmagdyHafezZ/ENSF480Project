@@ -15,6 +15,8 @@ import MembershipBenefits from "./Components/Profile/MembershipBenefits.jsx";
 import SystemAdmin from "./pages/SystemAdmin/SystemAdmin.jsx";
 import AboutPage from "./Components/About/About.jsx";
 import OffersPage from "./Components/Offers/Offers.jsx";
+import AirlineAgentPage from "./Components/Airline_Agent/AirlineAgent.jsx";
+import AirlineAgentLoginPage from "./Components/Airline_Agent/AgentLoginPage.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="561701800707-oiljspvu920o0pfkavpfiedsu7sbrfgj.apps.googleusercontent.com">
@@ -32,6 +34,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/admin" element={<SystemAdmin />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/offers" element={<OffersPage />} />
+          <Route path="/agent" element={<AirlineAgentPage />} />
+          <Route path="/signin-agent" element={<AirlineAgentLoginPage />} />
         </Routes>
       </UserDataProvider>
     </BrowserRouter>
