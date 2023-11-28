@@ -6,6 +6,7 @@ const SystemAdmin = () => {
       id: "1", // Unique identifier
       details: {
         airline: "Air Canada",
+        date: "2023-11-10",
         departingTime: "4:30pm",
         arrivingTime: "7:30pm",
         departureLocation: "Calgary, AB",
@@ -15,12 +16,15 @@ const SystemAdmin = () => {
         leavingLocation: "Vancouver, BC",
         arriveBackLocation: "Calgary, AB",
         price: "89$",
+        crew: "crewA",
+        aircraft: "aircraftA",
       },
     },
     {
       id: "2", // Unique identifier
       details: {
         airline: "United Airlines",
+        date: "2023-11-10",
         departingTime: "6:00pm",
         arrivingTime: "9:00pm",
         departureLocation: "Los Angeles, CA",
@@ -30,12 +34,15 @@ const SystemAdmin = () => {
         leavingLocation: "Vancouver, BC",
         arriveBackLocation: "Calgary, AB",
         price: "120$",
+        crew: "crewB",
+        aircraft: "aircraftB",
       },
     },
     {
       id: "3", // Unique identifier
       details: {
         airline: "British Airways",
+        date: "2023-11-12",
         departingTime: "10:00am",
         arrivingTime: "2:00pm",
         departureLocation: "London, UK",
@@ -45,6 +52,8 @@ const SystemAdmin = () => {
         leavingLocation: "Vancouver, BC",
         arriveBackLocation: "Calgary, AB",
         price: "75£",
+        crew: "crewC",
+        aircraft: "aircraftC",
       },
     },
     // Add more flight objects with their respective details and unique IDs
@@ -60,6 +69,18 @@ const SystemAdmin = () => {
     arrivalLocation: '',
     price: '',
   });
+  const [searchDate, setSearchDate] = useState(''); // State to store the search date
+  const [searchedFlights, setSearchedFlights] = useState([]); // State to store the search results
+
+  const handleSearch = () => {
+    // Logic for searching flights based on the entered date
+    const results = flightsData.filter((flight) => {
+      // Assuming your flight details include a 'date' property
+      return flight.details.date === searchDate;
+    });
+
+    setSearchedFlights(results);
+  };
 
   const handleModifyFlight = (flightId) => {
     // Find the selected flight for modification
@@ -143,11 +164,14 @@ const SystemAdmin = () => {
           <tr>
             <th>ID</th>
             <th>Airline</th>
+            <th>Date</th>
             <th>Departing Time</th>
             <th>Arriving Time</th>
             <th>Departure Location</th>
             <th>Arrival Location</th>
             <th>Price</th>
+            <th>Crew</th>
+            <th>Aircraft</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -156,11 +180,14 @@ const SystemAdmin = () => {
             <tr key={flight.id}>
               <td>{flight.id}</td>
               <td>{flight.details.airline}</td>
+              <td>{flight.details.date}</td>
               <td>{flight.details.departingTime}</td>
               <td>{flight.details.arrivingTime}</td>
               <td>{flight.details.departureLocation}</td>
               <td>{flight.details.arrivalLocation}</td>
               <td>{flight.details.price}</td>
+              <td>{flight.details.crew}</td>
+              <td>{flight.details.aircraft}</td>
               <td>
                 <button onClick={() => handleModifyFlight(flight.id)}>Modify</button>
               </td>
@@ -172,6 +199,68 @@ const SystemAdmin = () => {
         </tbody>
       </table>
       <div>
+        <label>
+          Search Flights by Date:
+          <input
+            type="text"
+            value={searchDate}
+            onChange={(e) => setSearchDate(e.target.value)}
+            placeholder="Enter YYYY-MM-DD"
+          />
+        </label>
+        <button type="button" onClick={handleSearch}>
+          Search
+        </button>
+      </div>
+
+      {searchedFlights.length > 0 && (
+        <div>
+          <h2>Search Results</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Airline</th>
+                <th>Date</th>
+                <th>Departing Time</th>
+                <th>Arriving Time</th>
+                <th>Departure Location</th>
+                <th>Arrival Location</th>
+                <th>Price</th>
+                <th>Crew</th>
+                <th>Aircraft</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {searchedFlights.map((flight) => (
+                <tr key={flight.id}>
+                <td>{flight.id}</td>
+                <td>{flight.details.airline}</td>
+                <td>{flight.details.date}</td>
+                <td>{flight.details.departingTime}</td>
+                <td>{flight.details.arrivingTime}</td>
+                <td>{flight.details.departureLocation}</td>
+                <td>{flight.details.arrivalLocation}</td>
+                <td>{flight.details.price}</td>
+                <td>{flight.details.crew}</td>
+                <td>{flight.details.aircraft}</td>
+                <td>
+                  <button onClick={() => handleModifyFlight(flight.id)}>Modify</button>
+                </td>
+                <td>
+                  <button onClick={() => handleRemoveFlight(flight.id)}>Remove</button>
+                </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+
+
+      <div>
         <button type="button" onClick={handleAddFlight}>
           Add Flight
         </button>
@@ -181,6 +270,7 @@ const SystemAdmin = () => {
         <div>
           <h2>Add New Flight</h2>
           <form>
+            <div>
             <label>
               Airline:
               <input
@@ -191,6 +281,8 @@ const SystemAdmin = () => {
                 placeholder="Enter airline"
               />
             </label>
+            </div>
+            <div>
             <label>
               Departing Time:
               <input
@@ -201,6 +293,8 @@ const SystemAdmin = () => {
                 placeholder="Enter departing time"
               />
             </label>
+            </div>
+            <div>
             <label>
               Arriving Time:
               <input
@@ -211,6 +305,8 @@ const SystemAdmin = () => {
                 placeholder="Enter arriving time"
               />
             </label>
+            </div>
+            <div>
             <label>
               Departure Location:
               <input
@@ -221,6 +317,8 @@ const SystemAdmin = () => {
                 placeholder="Enter departure location"
               />
             </label>
+            </div>
+            <div>
             <label>
               Arrival Location:
               <input
@@ -231,6 +329,8 @@ const SystemAdmin = () => {
                 placeholder="Enter arrival location"
               />
             </label>
+            </div>
+            <div>
             <label>
               Price:
               <input
@@ -241,6 +341,31 @@ const SystemAdmin = () => {
                 placeholder="Enter price"
               />
             </label>
+            </div>
+            <div>
+            <label>
+              Crew:
+              <input
+                type="text"
+                name="crew"
+                value={newFlightDetails.price}
+                onChange={handleNewFlightInputChange}
+                placeholder="Enter crew"
+              />
+            </label>
+            </div>
+            <div>
+            <label>
+              Aircraft:
+              <input
+                type="text"
+                name="aircraft"
+                value={newFlightDetails.price}
+                onChange={handleNewFlightInputChange}
+                placeholder="Enter aircraft"
+              />
+            </label>
+            </div>
             <button type="button" onClick={handleAddNewFlight}>
               Add New Flight
             </button>
@@ -252,15 +377,19 @@ const SystemAdmin = () => {
         <div>
           <h2>Modify Flight</h2>
           <form>
+            <div>
+            <label>
+              ID:
+              <span>{` ${selectedFlight.id}`}</span>
+            </label>
+            </div>
+            <div>
             <label>
               Airline:
-              <input
-                type="text"
-                name="airline"
-                value={selectedFlight.details.airline}
-                onChange={handleInputChange}
-              />
+              <span>{` ${selectedFlight.details.airline}`}</span>
             </label>
+            </div>
+            <div>
             <label>
               Departing Time:
               <input
@@ -270,6 +399,8 @@ const SystemAdmin = () => {
                 onChange={handleInputChange}
               />
             </label>
+            </div>
+            <div>
             <label>
               Arriving Time:
               <input
@@ -279,6 +410,8 @@ const SystemAdmin = () => {
                 onChange={handleInputChange}
               />
             </label>
+            </div>
+            <div>
             <label>
               Departure Location:
               <input
@@ -288,6 +421,8 @@ const SystemAdmin = () => {
                 onChange={handleInputChange}
               />
             </label>
+            </div>
+            <div>
             <label>
               Arrival Location:
               <input
@@ -297,6 +432,8 @@ const SystemAdmin = () => {
                 onChange={handleInputChange}
               />
             </label>
+            </div>
+            <div>
             <label>
               Price:
               <input
@@ -306,9 +443,32 @@ const SystemAdmin = () => {
                 onChange={handleInputChange}
               />
             </label>
+            </div>
+            <div>
+            <label>
+              Crew:
+              <input
+                type="text"
+                name="crew"
+                value={selectedFlight.details.crew}
+                onChange={handleInputChange}
+              />
+            </label>
+            </div>
+            <label>
+              Aircraft:
+              <input
+                type="text"
+                name="aircraft"
+                value={selectedFlight.details.aircraft}
+                onChange={handleInputChange}
+              />
+            </label>
+            <div>
             <button type="button" onClick={handleSaveChanges}>
               Save Changes
             </button>
+            </div>
           </form>
         </div>
       )}
