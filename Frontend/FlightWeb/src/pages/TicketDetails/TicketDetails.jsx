@@ -20,11 +20,11 @@ const TicketDetails = () => {
     ) {
       const restoredData = {
         leaving: {
-          name: params["leaving.name"] || "",
+          city: params["leaving.city"] || "",
           iata: params["leaving.iataCode"] || "",
         },
         going: {
-          name: params["going.name"] || "",
+          city: params["going.city"] || "",
           iata: params["going.iataCode"] || "",
         },
         travellers: params["travellers"] || 0,

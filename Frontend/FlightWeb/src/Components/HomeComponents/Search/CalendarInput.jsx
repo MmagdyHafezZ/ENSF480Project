@@ -13,10 +13,12 @@ const CalendarInput = ({
 }) => {
   const formatDate = (date) => {
     if (!date) return "";
-
-    // Format the date in mm/yy format
-    return format(new Date(date), "MM/yy");
+    const formattedDate = format(date, "MM/dd");
+    return formattedDate;
   };
+  if (value.return) {
+    // console.log("vale", value);
+  }
 
   return (
     <div
