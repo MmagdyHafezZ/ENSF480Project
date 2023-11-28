@@ -114,12 +114,12 @@ const Navbar = () => {
               <Link to="/" onClick={hideNavBar} className="listItem">
                 Home
               </Link>
-              <li onClick={hideNavBar} className="listItem">
+              <Link to="/about" onClick={hideNavBar} className="listItem">
                 About
-              </li>
-              <li onClick={hideNavBar} className="listItem">
+              </Link>
+              <Link to="/offers" onClick={hideNavBar} className="listItem">
                 Offers
-              </li>
+              </Link>
               <Link to="/seats" onClick={hideNavBar} className="listItem">
                 Seats
               </Link>
