@@ -121,16 +121,16 @@ const SearchLocationPopup = ({
   // }, []);
 
   const dummyData = [
-    { name: "New York", iata: "JFK" },
-    { name: "Los Angeles", iata: "LAX" },
-    { name: "London", iata: "LHR" },
-    { name: "Paris", iata: "CDG" },
-    { name: "Tokyo", iata: "HND" },
-    { name: "Calgary", iata: "YYC" },
-    { name: "Fort McMurray", iata: "YMM" }, // Fort McMurray, Alberta, Canada
-    { name: "Vancouver", iata: "YVR" }, // Vancouver, British Columbia, Canada
-    { name: "Seattle", iata: "SEA" }, // Seattle, Washington, USA
-    { name: "Birmingham", iata: "BHX" }, // Birmingham, England, UK
+    { city: "New York", iata: "JFK" },
+    { city: "Los Angeles", iata: "LAX" },
+    { city: "London", iata: "LHR" },
+    { city: "Paris", iata: "CDG" },
+    { city: "Tokyo", iata: "HND" },
+    { city: "Calgary", iata: "YYC" },
+    { city: "Fort McMurray", iata: "YMM" }, // Fort McMurray, Alberta, Canada
+    { city: "Vancouver", iata: "YVR" }, // Vancouver, British Columbia, Canada
+    { city: "Seattle", iata: "SEA" }, // Seattle, Washington, USA
+    { city: "Birmingham", iata: "BHX" }, // Birmingham, England, UK
     // Add more cities and codes as needed
   ];
 
@@ -148,7 +148,7 @@ const SearchLocationPopup = ({
     if (query) {
       const filteredResults = dummyData.filter(
         (item) =>
-          item.name.toLowerCase().includes(query.toLowerCase()) ||
+          item.city.toLowerCase().includes(query.toLowerCase()) ||
           item.iata.toLowerCase().includes(query.toLowerCase())
       );
       setSearchResults(filteredResults);
@@ -185,7 +185,7 @@ const SearchLocationPopup = ({
                 // setPopup((prev) => !prev);
               }}
             >
-              {result.name} - {result.iata}
+              {result.city} - {result.iata}
             </li>
           ))}
         </ul>

@@ -269,8 +269,8 @@ const FlightsList = () => {
     });
   };
   const searchParamsObject = {
-    leavingName: searchParams.get("leaving.name") || "",
-    goingName: searchParams.get("going.name") || "",
+    leavingName: searchParams.get("leaving.city") || "",
+    goingName: searchParams.get("going.city") || "",
     travellers: parseInt(searchParams.get("travellers") || "0", 10),
     departDate: searchParams.get("depart") || "",
     returnDate: searchParams.get("return") || "",
