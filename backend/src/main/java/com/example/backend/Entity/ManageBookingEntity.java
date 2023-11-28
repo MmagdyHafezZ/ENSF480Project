@@ -34,6 +34,9 @@ public class ManageBookingEntity {
     @Column(name = "seat")
     private String seat;
 
+    @Column(name = "meal")
+    private String meal;
+
     public void setID(Long id){
         this.id = id;
     }
@@ -74,5 +77,12 @@ public class ManageBookingEntity {
         return seat;
     }
 
+    public void setMeal(String meal){
+        this.meal = meal;
+    }
+
+    public String getMeal(){
+        return meal;
+    }
 
 }

@@ -39,7 +39,8 @@ public class ManageBookingService {
         updateData.setFlight(existingData.getFlight());
         updateData.setConfirm(existingData.getConfirm());
         updateData.setSeat(existingData.getSeat());
-        
+        updateData.setMeal(existingData.getMeal());
+
         return manageBookingRepository.save(updateData);
     }
     
