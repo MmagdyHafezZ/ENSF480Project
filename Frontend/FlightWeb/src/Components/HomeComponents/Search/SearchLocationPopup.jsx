@@ -84,7 +84,7 @@ const SearchLocationPopup = ({
                 // setPopup((prev) => !prev);
               }}
             >
-              {result.city} - {result.iata}
+              {result.name} - {result.iataCode}
             </li>
           ))}
         </ul>
