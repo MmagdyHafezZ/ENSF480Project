@@ -1,0 +1,123 @@
+.seatMap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  flex-direction: row;
+  gap: 1rem;
+  min-height: 100%;
+  width: 100%;
+  padding: 1rem;
+}
+.seatMap .row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  position: relative;
+}
+.seatMap .row .left-column,
+.seatMap .row .right-column, .seatMap .row .middle-column {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  justify-content: space-around;
+  flex: 2;
+  gap: 0.5rem;
+}
+.seatMap .row .aisle {
+  width: 2rem;
+  display: block;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.seatMap .seat {
+  padding: 0rem;
+  flex: 1;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  border: 1px solid black;
+  background-color: rgb(206, 206, 206);
+  cursor: pointer;
+}
+.seatMap .seat:hover {
+  background-color: antiquewhite;
+}
+.seatMap .seat.seat-map-header {
+  background-color: transparent;
+  border: none;
+}
+.seatMap .seat.selected {
+  background-color: antiquewhite;
+}
+.seatMap .seat.business {
+  background-color: #483D8B;
+  color: lightgray;
+}
+.seatMap .seat.comfort {
+  background-color: #5F9EA0; /* Medium Blue */
+  color: rgb(55, 55, 55);
+}
+.seatMap .seat.ordinary {
+  background-color: #e8e8e8; /* Light Grey */
+  /* Alternatively: beige (#F5F5DC) or soft blue (#ADD8E6) */
+}
+.seatMap .seat.remove-seat {
+  opacity: 0;
+}
+.seatMap .seat.wing-row:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -2rem;
+  right: -2rem;
+  bottom: 0;
+  border-right: 3px solid black;
+  border-left: 3px solid black;
+  opacity: 0.2;
+}
+
+.legend {
+  border: 1px solid rgb(198, 198, 198);
+  padding: 2rem;
+  width: 75%;
+  border-radius: 1rem;
+}
+.legend .legend__item {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+.legend .legend__item .legend__item__color {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  display: block !important;
+}
+.legend .legend__item .legend__item__color.legend_business {
+  background-color: #483D8B;
+}
+.legend .legend__item .legend__item__color.legend_comfort {
+  background-color: #5F9EA0;
+}
+.legend .legend__item .legend__item__color.legend_ordinary {
+  background-color: #e8e8e8;
+}
+.legend .legend__item-wing {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.legend .legend__item-wing .legend__item__wing {
+  height: 3rem;
+  display: block !important;
+  background-color: green;
+  border-left: 3px solid black;
+  margin-left: 1.5rem;
+}/*# sourceMappingURL=planes.css.map */
