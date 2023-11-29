@@ -32,7 +32,8 @@ const AirlineAgentPage = () => {
   const [agent, setAgent] = useState(localStorage.getItem("agent") || false);
   const [getBookings, setGetBookings] = useState([]);
   const [putPassenger, setPutPassenger] = useState("");
-  const [putFlight, setPutFlight] = useState("");
+  const [putOrigin, setPutOrigin] = useState("");
+  const [putDestination, setPutDestination] = useState("");
   const [putConfirm, setPutConfirm] = useState("");
   const [putSeat, setPutSeat] = useState("");
   const [putMeal, setPutMeal] = useState("");
@@ -71,7 +72,8 @@ const AirlineAgentPage = () => {
     event.stopPropagation();
     setSelectedBooking(booking);
     setPutPassenger(booking.passenger);
-    setPutFlight(booking.flight);
+    setPutOrigin(booking.origin);
+    setPutDestination(booking.destination)
     setPutConfirm(booking.confirm);
     setPutSeat(booking.seat);
     setPutMeal(booking.meal);
@@ -96,8 +98,12 @@ const AirlineAgentPage = () => {
     setPutPassenger(event.target.value);
   }
 
-  const handleFlightEdit = (event) => {
-    setPutFlight(event.target.value);
+  const handleOriginEdit = (event) => {
+    setPutOrigin(event.target.value);
+  }
+
+  const handleDestinationEdit = (event) => {
+    setPutDestination(event.target.value);
   }
 
   const handleConfirmEdit = (event) => {
@@ -116,7 +122,8 @@ const AirlineAgentPage = () => {
     const updatedBookingData = {
       ...selectedBooking,
       passenger: putPassenger,
-      flight: putFlight,
+      origin: putOrigin,
+      destination: putDestination,
       confirm: putConfirm,
       seat: putSeat,
       meal: putMeal
@@ -146,7 +153,8 @@ const AirlineAgentPage = () => {
   const handleAddBookingSubmit = async () => {
     const newBooking = {
       passenger: putPassenger,
-      flight: putFlight,
+      origin: putOrigin,
+      destination: putDestination,
       confirm: putConfirm,
       seat: putSeat,
       meal: putMeal
@@ -172,6 +180,7 @@ const AirlineAgentPage = () => {
       const response = await
       axios
         .delete(`http://localhost:8080/deleteBooking/${selectedBooking.id}`);
+        console.log(selectedBooking.id);
       if (response.status === 200) {
         const updatedBookings = getBookings.filter(booking => booking.id !== selectedBooking.id);
       setGetBookings(updatedBookings);
@@ -205,7 +214,8 @@ const AirlineAgentPage = () => {
           <TableHead>
             <TableRow>
               <TableCell>Passenger Name</TableCell>
-              <TableCell>Flight</TableCell>
+              <TableCell>Origin</TableCell>
+              <TableCell>Destination</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
@@ -220,7 +230,8 @@ const AirlineAgentPage = () => {
                 style={{ cursor: "pointer" }}
               >
                 <TableCell>{getBooking.passenger}</TableCell>
-                <TableCell>{getBooking.flight}</TableCell>
+                <TableCell>{getBooking.origin}</TableCell>
+                <TableCell>{getBooking.destination}</TableCell>
                 <TableCell>{getBooking.confirm}</TableCell>
                 <TableCell>
                   <Button
@@ -268,10 +279,19 @@ const AirlineAgentPage = () => {
             />
           </DialogContent>
           <DialogContent>
-            {/* Add field for adding FLIGHT */}
+            {/* Add field for adding ORIGIN */}
             <TextField
-              label="Flight"
-              onChange={(e) => setPutFlight(e.target.value)}
+              label="Origin"
+              onChange={(e) => setPutOrigin(e.target.value)}
+              fullWidth
+              sx={{ mb: 1, mt: 1 }}
+            />
+          </DialogContent>
+          <DialogContent>
+            {/* Add field for adding DESTINATION */}
+            <TextField
+              label="Destination"
+              onChange={(e) => setPutDestination(e.target.value)}
               fullWidth
               sx={{ mb: 1, mt: 1 }}
             />
@@ -333,14 +353,21 @@ const AirlineAgentPage = () => {
               sx={{ mb: 1, mt: 1 }}
             />
 
-            {/* Add field for editing FLIGHT */}
+            {/* Add field for editing ORIGIN */}
             <TextField
-              label="Flight"
-              placeholder={putFlight}
-              // value={putFlight}
-              onChange={handleFlightEdit}
+              label="Origin"
+              placeholder={putOrigin}
+              onChange={handleOriginEdit}
               fullWidth
-              sx={{ mb: 1, mt: 1 }}
+              sx={{ mb : 1, mt : 1 , textTransform : 'uppercase'}}
+            />
+            {/* Add field for editing DESTINATION */}
+            <TextField
+              label="Destination"
+              placeholder={putDestination}
+              onChange={handleDestinationEdit}
+              fullWidth
+              sx={{ mb : 1, mt : 1 }}
             />
             {/* Add field for editing CONFIRM */}
             <TextField
@@ -405,7 +432,10 @@ const AirlineAgentPage = () => {
               Passenger Name: {selectedBooking.passenger}
             </Typography>
             <Typography variant="body1" style={{ paddingBottom: "2px" }}>
-              Flight: {selectedBooking.flight}
+              Origin: {selectedBooking.origin}
+            </Typography>
+            <Typography variant="body1" style={{ paddingBottom: "2px" }}>
+              Destination: {selectedBooking.destination}
             </Typography>
             <Typography variant="body1" style={{ paddingBottom: "2px" }}>
               Status: {selectedBooking.confirm}
