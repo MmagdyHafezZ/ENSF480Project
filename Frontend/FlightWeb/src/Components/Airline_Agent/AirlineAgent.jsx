@@ -1,6 +1,5 @@
 // src/components/AirlineAgentPage.js
 import React, { useEffect, useState } from "react";
-import * as Mui from "@mui/material"
 import {
   Container,
   Paper,
@@ -23,24 +22,6 @@ import {
 import axios from "axios";
 
 const AirlineAgentPage = () => {
-  // const [bookings, setBookings] = useState([
-  //   // Dummy data for demonstration
-  //   {
-  //     id: 1,
-  //     passengerName: "John Doe",
-  //     flight: "NY to LA",
-  //     status: "Confirmed",
-  //     details: "Seat 21A, No meal preference",
-  //   },
-  //   {
-  //     id: 2,
-  //     passengerName: "Jane Smith",
-  //     flight: "Berlin to Paris",
-  //     status: "Confirmed",
-  //     details: "Seat 14C, Vegetarian",
-  //   },
-  //   // Add more bookings here
-  // ]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -85,7 +66,7 @@ const AirlineAgentPage = () => {
     setOpenDialog(true);
   };
   const handleOpenEditDialog = (event, booking) => {
-    event.stopPropagation(); // Prevent event from propagating to the table row
+    event.stopPropagation();
     setSelectedBooking(booking);
     setPutPassenger(booking.passenger);
     setPutFlight(booking.flight);
@@ -96,7 +77,7 @@ const AirlineAgentPage = () => {
   };
 
   const handleOpenCancelDialog = (event, booking) => {
-    event.stopPropagation(); // Prevent event from propagating to the table row
+    event.stopPropagation();
     setSelectedBooking(booking);
     setOpenCancelDialog(true);
   };
@@ -156,37 +137,6 @@ const AirlineAgentPage = () => {
     }
   }
 
-  // const filteredBookings = getBookings.filter((booking) =>
-  //   booking.passengerName.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
-  const saveData = async () => {
-    // Gather data from form fields
-    const data = {};
-
-    // Send POST request to server
-    try {
-      const response = await fetch("/api/airlineAgent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      // Handle server response
-      if (response.ok) {
-        // Notify user of successful save
-        console.log("Data saved successfully");
-      } else {
-        // Notify user of error
-        console.log("Error saving data");
-      }
-    } catch (error) {
-      // Notify user of error
-      console.log("Error saving data", error);
-    }
-  };
-
   return (
     <Container maxWidth="lg">
       <Typography variant="h4" style={{ margin: "20px 0" }}>
@@ -235,39 +185,12 @@ const AirlineAgentPage = () => {
                     color="secondary"
                     onClick={(e) => handleOpenCancelDialog(e, getBooking)}
                   >
-                    Cancel
+                    Delete
                   </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
-          {/* <TableBody>
-            {filteredBookings.map((booking) => (
-              <TableRow
-                key={booking.id}
-                onClick={() => handleOpenDialog(booking)}
-                style={{ cursor: "pointer" }}
-              >
-                <TableCell>{booking.passengerName}</TableCell>
-                <TableCell>{booking.flight}</TableCell>
-                <TableCell>{booking.status}</TableCell>
-                <TableCell>
-                  <Button
-                    color="primary"
-                    onClick={(e) => handleOpenEditDialog(e, booking)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    color="secondary"
-                    onClick={(e) => handleOpenCancelDialog(e, booking)}
-                  >
-                    Cancel
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody> */}
         </Table>
       </TableContainer>
 
@@ -329,6 +252,7 @@ const AirlineAgentPage = () => {
               sx={{mb : 1, mt : 1}}
             />
           </DialogContent>
+          
           <DialogActions>
             <Button onClick={handleCloseEditDialog}>Cancel</Button>
             <Button onClick={handlePutMethod}>Save</Button>
@@ -339,23 +263,22 @@ const AirlineAgentPage = () => {
       {/* Cancel Booking Dialog */}
       {selectedBooking && (
         <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
-          <DialogTitle>Cancel Booking</DialogTitle>
+          <DialogTitle>Delete Booking</DialogTitle>
           <DialogContent>
             <Typography>
-              Are you sure you want to cancel the booking for{" "}
+              Are you sure you want to delete the booking for{" "}
               {selectedBooking.passengerName}?
             </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseCancelDialog}>No</Button>
             <Button
-              onClick={() => {
-                /* Implement save logic here */
-                saveData();
-              }}
-              color="secondary"
+              // onClick={() => {
+              //   // We will put delete method here
+              // }}
+              // color="secondary"
             >
-              Yes, Cancel
+              Delete
             </Button>
           </DialogActions>
         </Dialog>
