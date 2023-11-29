@@ -1,27 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import "./planes.css";
 import "./planes.scss";
 import { BsXLg } from "react-icons/bs";
 import seatData from "../../data/sm_seatAvailability.json";
-const SmallPlane = ({ isBooking }) => {
-  const [selectedSeats, setSelectedSeats] = useState({});
-
+import { useUserDataContext } from "../../context/UserDataContext";
+const SmallPlane = ({ isBooking, flightDetails }) => {
+  const [allSeatData, setAllSeatData] = useState(seatData);
+  const { userFlightData, selectedSeats, setSelectedSeats, price, setPrice } =
+    useUserDataContext();
   // Function to handle the click event on seats
-  const handleSeatClick = (seatId) => {
+  // Function to handle the click event on seats
+  const handleSeatClick = (seatId, seatContent) => {
     if (isBooking) {
-      console.log("1");
-      setSelectedSeats((prevSelectedSeats) => ({
-        ...prevSelectedSeats,
-        [seatId]: !prevSelectedSeats[seatId], // Toggle the selected state
-      }));
-    }
-  };
+      setSelectedSeats((prevSelectedSeats) => {
+        const currentlySelected = Object.keys(prevSelectedSeats).filter(
+          (key) => prevSelectedSeats[key]
+        ).length;
 
-  const displaySelectedSeats = () => {
-    const selectedSeatIds = Object.keys(selectedSeats).filter(
-      (seatId) => selectedSeats[seatId]
-    );
-    return selectedSeatIds.length > 0 ? selectedSeatIds.join(", ") : "None";
+        // Toggle the selected state for the seat
+        let updatedSelectedSeats;
+        if (prevSelectedSeats[seatId]) {
+          // Seat is currently selected, so remove it
+          updatedSelectedSeats = { ...prevSelectedSeats };
+          delete updatedSelectedSeats[seatId];
+        } else {
+          // Seat is not selected and we have room for more, so add it
+          if (currentlySelected < userFlightData.travellers) {
+            updatedSelectedSeats = {
+              ...prevSelectedSeats,
+              [seatId]: true,
+            };
+          } else {
+            // No room for more selections, return previous state
+            return prevSelectedSeats;
+          }
+        }
+
+        // Calculate the total price based on the selected seats
+        const totalPrice = Object.keys(updatedSelectedSeats).reduce(
+          (total, seatId) => {
+            if (updatedSelectedSeats[seatId]) {
+              const seatInfo = seatData[seatId];
+              if (seatInfo && seatInfo.available) {
+                total += seatInfo.price;
+              }
+            }
+            return total;
+          },
+          0
+        );
+
+        // Update the price state
+        setPrice(totalPrice);
+
+        return updatedSelectedSeats;
+      });
+    }
   };
 
   // Function to generate seat divs
@@ -112,7 +146,7 @@ const SmallPlane = ({ isBooking }) => {
             className={`seat ${isSelected ? "selected" : ""} ${
               isAvailable === false ? "unavailable" : ""
             } business ${isB ? "remove-seat" : ""}`}
-            onClick={() => isAvailable && handleSeatClick(seatId)}
+            onClick={() => isAvailable && handleSeatClick(seatId, seatContent)}
           >
             {seatContent}
           </span>
@@ -148,6 +182,8 @@ const SmallPlane = ({ isBooking }) => {
           rowIndex + 1
         }`;
         const seatInfo = seatData[seatId];
+        // console.log(seatData);
+        // console.log(seatInfo);
         const isAvailable = seatInfo?.available;
         const isSelected = selectedSeats[seatId];
         const rowNumber = parseInt(seatId.slice(1));
@@ -189,9 +225,30 @@ const SmallPlane = ({ isBooking }) => {
     return rows;
   };
 
+  // Function to update seat availability from flightDetails
+  const updateSeatAvailability = () => {
+    const newSeatData = { ...allSeatData }; // Clone the seatData object
+
+    // Set all seats to unavailable initially
+    Object.keys(newSeatData).forEach((seatId) => {
+      newSeatData[seatId].available = false;
+    });
+
+    flightDetails.details.availableSeats.forEach((seatId) => {
+      if (newSeatData[seatId]) {
+        // console.log("this is true", newSeatData[seatId]);
+        newSeatData[seatId].available = true;
+      }
+    });
+    setAllSeatData(newSeatData); // Update the state
+  };
+  useEffect(() => {
+    updateSeatAvailability();
+  }, [flightDetails]);
+
   return (
     <>
-      <div className="seatMap">{generateSeats(23, 4)}</div>
+      <div className="seatMap">{generateSeats(19, 4)}</div>
     </>
   );
 };
