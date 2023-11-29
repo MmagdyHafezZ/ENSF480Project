@@ -17,6 +17,8 @@ export const UserDataProvider = ({ children }) => {
       return: "",
     }
   );
+  const [selectedSeats, setSelectedSeats] = useState({});
+  const [price, setPrice] = useState(0); // Initialize price with 0
   const [searchState, setSearchState] = useState(false);
   const saveFlightDataToLocalStorage = () => {
     const userFlightDataCopy = { ...userFlightData };
@@ -56,6 +58,10 @@ export const UserDataProvider = ({ children }) => {
     saveFlightDataToLocalStorage,
     searchState,
     setSearchState,
+    selectedSeats,
+    setSelectedSeats,
+    price,
+    setPrice,
   };
   return (
     <UserDataContext.Provider value={values}>

@@ -3,190 +3,12 @@ import "./flights.scss";
 import { useNavigate } from "react-router-dom";
 import { useUserDataContext } from "../../context/UserDataContext";
 import { useState, useEffect } from "react";
+import flightsData from "../../data/flightsData.json";
 import { useSearchParams } from "react-router-dom";
 const FlightsList = () => {
   const navigate = useNavigate();
   const { userFlightData, searchState } = useUserDataContext();
 
-  const flightsData = [
-    {
-      id: "1",
-      details: {
-        airline: "Air Canada",
-        departingTime: "2023-11-29T16:30:00", // 4:30pm in 24-hour format
-        arrivingTime: "2023-11-29T19:30:00", // 7:30pm in 24-hour format
-        departureLocation: "Calgary",
-        arrivalLocation: "Vancouver",
-        leavingTime: "2023-11-30T14:30:00", // 2:30pm next day
-        arriveBackTime: "2023-11-30T17:30:00", // 5:30pm next day
-        leavingLocation: "Vancouver",
-        arriveBackLocation: "Calgary",
-        price: "89$",
-        seatCapacity: 32,
-      },
-    },
-    {
-      id: "2",
-      details: {
-        airline: "United Airlines",
-        departingTime: "2023-11-29T18:00:00", // 6:00pm in 24-hour format
-        arrivingTime: "2023-11-29T21:00:00", // 9:00pm in 24-hour format
-        departureLocation: "Los Angeles, CA",
-        arrivalLocation: "New York, NY",
-        leavingTime: "2023-11-30T14:30:00", // 2:30pm on the return date
-        arriveBackTime: "2023-11-30T17:30:00", // 5:30pm on the return date
-        leavingLocation: "New York, NY",
-        arriveBackLocation: "Los Angeles, CA",
-        price: "120$",
-        seatCapacity: 12,
-      },
-    },
-    {
-      id: "3",
-      details: {
-        airline: "British Airways",
-        departingTime: "2023-11-29T10:00:00", // 10:00am in 24-hour format
-        arrivingTime: "2023-11-29T14:00:00", // 2:00pm in 24-hour format
-        departureLocation: "London, UK",
-        arrivalLocation: "Paris, FR",
-        leavingTime: "2023-11-30T14:30:00", // 2:30pm on the return date
-        arriveBackTime: "2023-11-30T17:30:00", // 5:30pm on the return date
-        leavingLocation: "Paris, FR",
-        arriveBackLocation: "London, UK",
-        price: "75£",
-        seatCapacity: 68,
-      },
-    },
-    {
-      id: "4",
-      details: {
-        airline: "WestJet",
-        departingTime: "2023-11-29T08:00:00",
-        arrivingTime: "2023-11-29T09:15:00",
-        departureLocation: "Calgary",
-        arrivalLocation: "Fort McMurray",
-        leavingTime: "2023-11-30T10:00:00", // Added fictional time
-        arriveBackTime: "2023-11-30T11:15:00", // Added fictional time
-        leavingLocation: "Fort McMurray", // Added return location
-        arriveBackLocation: "Calgary", // Added return location
-        price: "110$",
-        seatCapacity: 53,
-      },
-    },
-    {
-      id: "5",
-      details: {
-        airline: "Air Canada",
-        departingTime: "2023-11-29T12:30:00",
-        arrivingTime: "2023-11-29T13:45:00",
-        departureLocation: "Calgary",
-        arrivalLocation: "Fort McMurray",
-        leavingTime: "2023-11-30T14:00:00", // Added fictional time
-        arriveBackTime: "2023-11-30T15:15:00", // Added fictional time
-        leavingLocation: "Fort McMurray", // Added return location
-        arriveBackLocation: "Calgary", // Added return location
-        price: "120$",
-        seatCapacity: 23,
-      },
-    },
-    {
-      id: "6",
-      details: {
-        airline: "WestJet",
-        departingTime: "2023-11-28T18:00:00",
-        arrivingTime: "2023-11-28T19:15:00",
-        departureLocation: "Calgary",
-        arrivalLocation: "Fort McMurray",
-        leavingTime: "2023-11-30T19:00:00", // Added fictional time
-        arriveBackTime: "2023-11-30T20:15:00", // Added fictional time
-        leavingLocation: "Fort McMurray", // Added return location
-        arriveBackLocation: "Calgary", // Added return location
-        price: "115$",
-        seatCapacity: 32,
-      },
-    },
-    {
-      id: "7",
-      details: {
-        airline: "Air Canada",
-        departingTime: "2023-11-30T21:00:00",
-        arrivingTime: "2023-11-30T22:15:00",
-        departureLocation: "Calgary",
-        arrivalLocation: "Fort McMurray",
-        leavingTime: "2023-12-4T22:00:00", // Added fictional time
-        arriveBackTime: "2023-12-4T23:15:00", // Added fictional time
-        leavingLocation: "Fort McMurray", // Added return location
-        arriveBackLocation: "Calgary", // Added return location
-        price: "130$",
-        seatCapacity: 19,
-      },
-    },
-    {
-      id: "8",
-      details: {
-        airline: "WestJet",
-        departingTime: "2023-11-29T07:00:00", // 7:00am in 24-hour format
-        arrivingTime: "2023-11-29T07:50:00", // 7:50am in 24-hour format
-        departureLocation: "Calgary",
-        arrivalLocation: "Vancouver",
-        leavingTime: "2023-11-30T11:00:00", // Added fictional time
-        arriveBackTime: "2023-11-30T11:50:00", // Added fictional time
-        leavingLocation: "Vancouver", // Added return location
-        arriveBackLocation: "Calgary", // Added return location
-        price: "99$",
-        seatCapacity: 42,
-      },
-    },
-    {
-      id: "9",
-      details: {
-        airline: "Air Canada",
-        departingTime: "2023-12-04T00:00:00",
-        arrivingTime: "2023-12-04T00:00:00",
-        departureLocation: "Calgary",
-        arrivalLocation: "Vancouver",
-        leavingTime: "2023-12-08T00:00:00", // Added fictional time
-        arriveBackTime: "2023-12-08T00:00:00", // Added fictional time
-        leavingLocation: "Vancouver", // Added return location
-        arriveBackLocation: "Calgary", // Added return location
-        price: "105$",
-        seatCapacity: 43,
-      },
-    },
-    {
-      id: "10",
-      details: {
-        airline: "WestJet",
-        departingTime: "2023-11-28T13:00:00",
-        arrivingTime: "2023-11-28T13:50:00",
-        departureLocation: "Calgary",
-        arrivalLocation: "Vancouver",
-        leavingTime: "2023-12-02T14:00:00", // Added fictional time
-        arriveBackTime: "2023-12-02T14:50:00", // Added fictional time
-        leavingLocation: "Vancouver", // Added return location
-        arriveBackLocation: "Calgary", // Added return location
-        price: "110$",
-        seatCapacity: 12,
-      },
-    },
-    {
-      id: "11",
-      details: {
-        airline: "Air Canada",
-        departingTime: "2023-11-29T18:30:00",
-        arrivingTime: "2023-11-29T19:20:00",
-        departureLocation: "Calgary",
-        arrivalLocation: "Vancouver",
-        leavingTime: "2023-11-30T19:00:00", // Added fictional time
-        arriveBackTime: "2023-11-30T19:50:00", // Added fictional time
-        leavingLocation: "Vancouver", // Added return location
-        arriveBackLocation: "Calgary", // Added return location
-        price: "115$",
-        seatCapacity: 15,
-      },
-    },
-    // Add more flight objects with their respective details and unique IDs
-  ];
   const [dataFromURL, setDataFromURL] = useState();
   const convertToLocalDateISOString = (dateString) => {
     const date = new Date(dateString);
@@ -199,7 +21,8 @@ const FlightsList = () => {
   console.log("SEARCH", searchParams);
 
   const handleViewDetailsClick = (id) => {
-    navigate(`/tickets`);
+    const flightDetails = flightsData.find((flight) => flight.id === id);
+    navigate("/tickets", { state: { flightDetails } });
   };
   const formatDateOnly = (dateString) => {
     const date = new Date(dateString);
@@ -250,7 +73,7 @@ const FlightsList = () => {
             <div className="flight-details__times">
               <div className="flight-details__time-info">
                 <div className="flights-info-left">
-                  <div className="plane-company">{details.airline}</div>
+                  <div className="plane-company">{details.aircraft}</div>
                   <span>Departing</span>
                 </div>
                 <div className="flights-info-right">
@@ -269,7 +92,7 @@ const FlightsList = () => {
               </div>
               <div className="flight-details__time-info">
                 <div className="flights-info-left">
-                  <div className="plane-company">{details.airline}</div>
+                  <div className="plane-company">{details.aircraft}</div>
                   <span>Returning</span>
                 </div>
                 <div className="flights-info-right">
