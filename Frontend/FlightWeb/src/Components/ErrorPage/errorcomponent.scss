@@ -1,0 +1,49 @@
+$error-bg: #fff;
+$error-text-color: #ff4757;
+$button-bg: #1e90ff;
+$button-hover-bg: #0077cc;
+$font-family: 'Arial', sans-serif;
+
+.error-container {
+  text-align: center;
+  padding: 40px;
+  background-color: $error-bg;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  width: 350px;
+  margin: 100px auto;
+  font-family: $font-family;
+
+  h1 {
+    color: $error-text-color;
+    margin-bottom: 24px;
+    font-size: 26px;
+  }
+
+  p {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 18px;
+  }
+
+  button {
+    padding: 12px 25px;
+    background-color: $button-bg;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+
+    &:hover {
+      background-color: $button-hover-bg;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
