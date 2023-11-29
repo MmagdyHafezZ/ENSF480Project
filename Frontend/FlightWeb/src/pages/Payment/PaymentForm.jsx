@@ -22,7 +22,7 @@ const PaymentForm = () => {
 
   // Mock data - replace with actual data from the user's profile
   const totalLoyaltyPoints =
-    parseInt(localStorage.getItem("loyaltyPoints")) || 100;
+    parseInt(localStorage.getItem("loyaltyPoints")) || 200;
   const totalAmount = 100; // Replace with actual amount
 
   const handleLoyaltyChange = (event, newValue) => {
@@ -90,7 +90,11 @@ const PaymentForm = () => {
                     onChange={handleLoyaltyChange}
                     aria-labelledby="loyalty-slider"
                     valueLabelDisplay="auto"
-                    max={totalLoyaltyPoints}
+                    max={
+                      totalLoyaltyPoints > totalAmount
+                        ? totalAmount
+                        : totalLoyaltyPoints
+                    }
                   />
                 )}
               </Grid>
