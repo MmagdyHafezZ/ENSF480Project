@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import "./planes.css";
 import "./planes.scss";
 import { BsXLg } from "react-icons/bs";
 import seatData from "../../data/sm_seatAvailability.json";
-const SmallPlane = ({ isBooking }) => {
+const SmallPlane = ({ isBooking, flightDetails }) => {
   const [selectedSeats, setSelectedSeats] = useState({});
-
+  const [allSeatData, setAllSeatData] = useState(seatData);
   // Function to handle the click event on seats
   const handleSeatClick = (seatId) => {
     if (isBooking) {
@@ -23,6 +23,7 @@ const SmallPlane = ({ isBooking }) => {
     );
     return selectedSeatIds.length > 0 ? selectedSeatIds.join(", ") : "None";
   };
+  console.log(flightDetails);
 
   // Function to generate seat divs
   const generateSeats = (numRows, numColumns) => {
@@ -148,6 +149,8 @@ const SmallPlane = ({ isBooking }) => {
           rowIndex + 1
         }`;
         const seatInfo = seatData[seatId];
+        // console.log(seatData);
+        // console.log(seatInfo);
         const isAvailable = seatInfo?.available;
         const isSelected = selectedSeats[seatId];
         const rowNumber = parseInt(seatId.slice(1));
@@ -189,9 +192,40 @@ const SmallPlane = ({ isBooking }) => {
     return rows;
   };
 
+  // Function to update seat availability
+  const updateSeatAvailability = () => {
+    const newSeatData = { ...allSeatData }; // Clone the seatData object
+
+    // Set all seats to unavailable initially
+    Object.keys(newSeatData).forEach((seatId) => {
+      newSeatData[seatId].available = false;
+    });
+
+    flightDetails.details.availableSeats.forEach((seatId) => {
+      if (newSeatData[seatId]) {
+        // console.log("this is true", newSeatData[seatId]);
+        newSeatData[seatId].available = true;
+      }
+    });
+
+    // flightDetails.details.unavailableSeats.forEach((seatId) => {
+    //   if (newSeatData[seatId]) {
+    //     newSeatData[seatId].available = false;
+    //   }
+    // });
+
+    setAllSeatData(newSeatData); // Update the state
+  };
+
+  // useEffect to call updateSeatAvailability when flightDetails changes
+  useEffect(() => {
+    updateSeatAvailability();
+  }, [flightDetails]);
+
   return (
     <>
-      <div className="seatMap">{generateSeats(23, 4)}</div>
+      <div className="seatMap">{generateSeats(19, 4)}</div>
+      {/* <button onClick={updateSeatAvailability}>Test</button> */}
     </>
   );
 };
