@@ -49,6 +49,10 @@ const AirlineAgentPage = () => {
   const [agent, setAgent] = useState(localStorage.getItem("agent") || false);
   const [getBookings, setGetBookings] = useState([]);
   const [putPassenger, setPutPassenger] = useState("");
+  const [putFlight, setPutFlight] = useState("");
+  const [putConfirm, setPutConfirm] = useState("");
+  const [putSeat, setPutSeat] = useState("");
+  const [putMeal, setPutMeal] = useState("");
 
   useEffect(() => {
     axios
@@ -83,6 +87,10 @@ const AirlineAgentPage = () => {
     event.stopPropagation(); // Prevent event from propagating to the table row
     setSelectedBooking(booking);
     setPutPassenger(booking.passenger);
+    setPutFlight(booking.flight);
+    setPutConfirm(booking.confirm);
+    setPutSeat(booking.seat);
+    setPutMeal(booking.meal);
     setOpenEditDialog(true);
   };
 
@@ -104,23 +112,40 @@ const AirlineAgentPage = () => {
     setPutPassenger(event.target.value);
   }
 
+  const handleFlightEdit = (event) => {
+    setPutFlight(event.target.value);
+  }
+
+  const handleConfirmEdit = (event) => {
+    setPutConfirm(event.target.value);
+  }
+
+  const handleSeatEdit = (event) => {
+    setPutSeat(event.target.value);
+  }
+
+  const handleMealEdit = (event) => {
+    setPutMeal(event.target.value);
+  }
+
   const handlePutMethod = async() => {
+    const updatedBookingData = {
+      ...selectedBooking,
+      passenger : putPassenger,
+      flight : putFlight,
+      confirm : putConfirm,
+      seat : putSeat,
+      meal : putMeal
+    }
     try{
       const response = await 
         axios
-          .put(`http://localhost:8080/putBooking/${selectedBooking.id}`,
-            {
-              ...selectedBooking,
-              passenger: putPassenger
-            }
-          );
-      console.log(response.status);
-      console.log(response);
+          .put(`http://localhost:8080/putBooking/${selectedBooking.id}`, updatedBookingData);
       if(response.status === 200) {
-        const index = getBookings.findIndex((booking) => booking.id === selectedBooking.id)
-        let newBookings = [...getBookings];
-        newBookings[index] = {...newBookings[index], passenger: putPassenger}
-        setGetBookings(newBookings);
+        const updatedBookings = getBookings.map((booking) =>
+        booking.id === selectedBooking.id ? { ...booking, ...updatedBookingData } : booking
+      );
+        setGetBookings(updatedBookings);
         setOpenEditDialog(false);
       } else {
         console.log("Error updating booking: ", response.data)
@@ -260,18 +285,48 @@ const AirlineAgentPage = () => {
         >
           <DialogTitle>Edit Booking</DialogTitle>
           <DialogContent>
-            {/* Add form fields for editing the booking */}
+            {/* Add field for editing PASSENGER */}
             <TextField
               label="Passenger Name"
-              value={putPassenger}
+              placeholder={putPassenger}  
               onChange={handlePassengerEdit}
-              // defaultValue={selectedBooking.passenger}
               fullWidth
-              InputLabelProps={{
-                style: { paddingTop: '8px' }
-              }}
+              sx={{mb : 1, mt : 1}}
             />
-            {/* Add more fields as needed */}
+            
+            {/* Add field for editing FLIGHT */}
+            <TextField
+              label="Flight"
+              placeholder={putFlight}
+              // value={putFlight}
+              onChange={handleFlightEdit}
+              fullWidth
+              sx={{mb : 1, mt : 1}}
+            />
+            {/* Add field for editing CONFIRM */}
+            <TextField
+              label="Confirm"
+              placeholder={putConfirm}
+              onChange={handleConfirmEdit}
+              fullWidth
+              sx={{mb : 1, mt : 1}}
+            />
+            {/* Add field for editing SEAT */}
+            <TextField
+              label="Seat"
+              placeholder={putSeat}
+              onChange={handleSeatEdit}
+              fullWidth
+              sx={{mb : 1, mt : 1}}
+            />
+            {/* Add field for editing MEAL */}
+            <TextField
+              label="Meal"
+              placeholder={putMeal}
+              onChange={handleMealEdit}
+              fullWidth
+              sx={{mb : 1, mt : 1}}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseEditDialog}>Cancel</Button>
