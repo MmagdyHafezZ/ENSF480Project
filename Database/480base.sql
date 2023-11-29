@@ -18,9 +18,9 @@ CREATE TABLE managebooking (
     meal		VARCHAR(20)
 );
 
-DROP TABLE managebooking;
 
 INSERT INTO managebooking (id, passenger, flight, confirm, seat, meal) VALUES
+
 (1, 'John Doe', 'NY to LA', 'Confirmed', '10F', 'Oh Ya Bud');
 
 
