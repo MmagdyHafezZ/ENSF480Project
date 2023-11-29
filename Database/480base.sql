@@ -9,19 +9,32 @@ CREATE TABLE airportdata (
     country  	VARCHAR(100)
 );
 
+DROP TABLE IF EXISTS managebooking;
+
 CREATE TABLE managebooking (
-	id			BIGINT	AUTO_INCREMENT	PRIMARY KEY,
-    passenger	VARCHAR(100),
-    flight		VARCHAR(20),
-    confirm		VARCHAR(20),
-    seat		VARCHAR(10),
-    meal		VARCHAR(20)
+    user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    departure_airport VARCHAR(3),
+    arrival_airport VARCHAR(3),
+    confirm VARCHAR(20),
+    seat VARCHAR(10),
+    meal VARCHAR(20),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (departure_airport) REFERENCES airportdata(iata),
+    FOREIGN KEY (arrival_airport) REFERENCES airportdata(iata)
 );
 
+INSERT INTO managebooking (user_id, departure_airport, arrival_airport, confirm, seat, meal) VALUES
+(1, 'NYC', 'LAX', 'Confirmed', '10F', 'Vegetarian');
 
-INSERT INTO managebooking (id, passenger, flight, confirm, seat, meal) VALUES
-
-(1, 'John Doe', 'NY to LA', 'Confirmed', '10F', 'Oh Ya Bud');
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255), -- NULL for Google OAuth users
+    google_id VARCHAR(255), -- Unique ID from Google, NULL for regular users
+    name VARCHAR(255)
+);
+INSERT INTO users (email, password, name) VALUES 
+('johndoe@example.com', 'encrypted_password', 'John Doe');
 
 
 INSERT INTO airportData (iata, city, state, country) VALUES 
