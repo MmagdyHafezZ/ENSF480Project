@@ -18,6 +18,7 @@ import {
   DialogActions,
   Box,
   Pagination,
+
 } from "@mui/material";
 import axios from "axios";
 
@@ -35,6 +36,8 @@ const AirlineAgentPage = () => {
   const [putConfirm, setPutConfirm] = useState("");
   const [putSeat, setPutSeat] = useState("");
   const [putMeal, setPutMeal] = useState("");
+  const [postBooking, setPostBooking] = useState("");
+  const [openPostDialog, setOpenPostDialog] = useState(false);
 
   useEffect(() => {
     axios
@@ -110,23 +113,23 @@ const AirlineAgentPage = () => {
     setPutMeal(event.target.value);
   }
 
-  const handlePutMethod = async() => {
+  const handlePutMethod = async () => {
     const updatedBookingData = {
       ...selectedBooking,
-      passenger : putPassenger,
-      flight : putFlight,
-      confirm : putConfirm,
-      seat : putSeat,
-      meal : putMeal
+      passenger: putPassenger,
+      flight: putFlight,
+      confirm: putConfirm,
+      seat: putSeat,
+      meal: putMeal
     }
-    try{
-      const response = await 
+    try {
+      const response = await
         axios
           .put(`http://localhost:8080/putBooking/${selectedBooking.id}`, updatedBookingData);
-      if(response.status === 200) {
+      if (response.status === 200) {
         const updatedBookings = getBookings.map((booking) =>
-        booking.id === selectedBooking.id ? { ...booking, ...updatedBookingData } : booking
-      );
+          booking.id === selectedBooking.id ? { ...booking, ...updatedBookingData } : booking
+        );
         setGetBookings(updatedBookings);
         setOpenEditDialog(false);
       } else {
@@ -134,6 +137,34 @@ const AirlineAgentPage = () => {
       }
     } catch (error) {
       console.error("Error updating booking: ", error);
+    }
+  }
+
+  const handleAddBookingClick = () => {
+    setOpenPostDialog(true);
+  }
+
+  const handleAddBookingSubmit = async () => {
+    const newBooking = {
+      passenger: putPassenger,
+      flight: putFlight,
+      confirm: putConfirm,
+      seat: putSeat,
+      meal: putMeal
+    };
+    console.log(newBooking);
+    try {
+      const response = await
+        axios
+          .post(`http://localhost:8080/postBooking`, newBooking);
+      if (response.status === 200 || response.status === 201) {
+        setGetBookings([...getBookings, response.data]);
+        setOpenPostDialog(false);
+      } else {
+        console.log("Error adding booking: ", response.data);
+      }
+    } catch (error) {
+      console.error("Error adding booking: ", error);
     }
   }
 
@@ -194,30 +225,97 @@ const AirlineAgentPage = () => {
         </Table>
       </TableContainer>
 
-      <Box my={2}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
         <Pagination count={10} color="primary" />
+        <Button
+          variant="contained"
+          onClick={handleAddBookingClick}
+          sx={{ bgcolor: 'info.main' }}
+        >
+          Add Booking
+        </Button>
       </Box>
+
+      {openPostDialog && (
+        <Dialog open={openPostDialog} onClose={() => setOpenPostDialog(false)}>
+          <DialogTitle>
+            Add New Booking
+          </DialogTitle>
+          <DialogContent>
+            {/* Add field for adding PASSENGER */}
+            <TextField
+              label="Passenger Name"
+              onChange={(e) => setPutPassenger(e.target.value)}
+              fullWidth
+              sx={{ mb: 1, mt: 1 }}
+            />
+          </DialogContent>
+          <DialogContent>
+            {/* Add field for adding FLIGHT */}
+            <TextField
+              label="Flight"
+              onChange={(e) => setPutFlight(e.target.value)}
+              fullWidth
+              sx={{ mb: 1, mt: 1 }}
+            />
+          </DialogContent>
+          <DialogContent>
+            {/* Add field for adding CONFIRM */}
+            <TextField
+              label="Confirm"
+              onChange={(e) => setPutConfirm(e.target.value)}
+              fullWidth
+              sx={{ mb: 1, mt: 1 }}
+            />
+          </DialogContent>
+          <DialogContent>
+            {/* Add field for adding SEAT */}
+            <TextField
+              label="Seat"
+              onChange={(e) => setPutSeat(e.target.value)}
+              fullWidth
+              sx={{ mb: 1, mt: 1 }}
+            />
+          </DialogContent>
+          <DialogContent>
+            {/* Add field for adding MEAL */}
+            <TextField
+              label="Meal"
+              onChange={(e) => setPutMeal(e.target.value)}
+              fullWidth
+              sx={{ mb: 1, mt: 1 }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenPostDialog(false)}>Cancel</Button>
+            <Button onClick={handleAddBookingSubmit}>Add</Button>
+          </DialogActions>
+        </Dialog>
+      )}
 
       {/* Edit Booking Dialog */}
       {selectedBooking && (
-        <Dialog 
-          open={openEditDialog} 
+        <Dialog
+          open={openEditDialog}
           onClose={handleCloseEditDialog}
-          sx={{ '& .MuiDialog-paper': { 
-            minWidth: '300px',
-            minHeight: '300px' } }}
+          sx={{
+            '& .MuiDialog-paper': {
+              minWidth: '300px',
+              minHeight: '300px'
+            }
+          }}
         >
           <DialogTitle>Edit Booking</DialogTitle>
           <DialogContent>
             {/* Add field for editing PASSENGER */}
             <TextField
               label="Passenger Name"
-              placeholder={putPassenger}  
+              placeholder={putPassenger}
               onChange={handlePassengerEdit}
               fullWidth
-              sx={{mb : 1, mt : 1}}
+              sx={{ mb: 1, mt: 1 }}
             />
-            
+
             {/* Add field for editing FLIGHT */}
             <TextField
               label="Flight"
@@ -225,7 +323,7 @@ const AirlineAgentPage = () => {
               // value={putFlight}
               onChange={handleFlightEdit}
               fullWidth
-              sx={{mb : 1, mt : 1}}
+              sx={{ mb: 1, mt: 1 }}
             />
             {/* Add field for editing CONFIRM */}
             <TextField
@@ -233,7 +331,7 @@ const AirlineAgentPage = () => {
               placeholder={putConfirm}
               onChange={handleConfirmEdit}
               fullWidth
-              sx={{mb : 1, mt : 1}}
+              sx={{ mb: 1, mt: 1 }}
             />
             {/* Add field for editing SEAT */}
             <TextField
@@ -241,7 +339,7 @@ const AirlineAgentPage = () => {
               placeholder={putSeat}
               onChange={handleSeatEdit}
               fullWidth
-              sx={{mb : 1, mt : 1}}
+              sx={{ mb: 1, mt: 1 }}
             />
             {/* Add field for editing MEAL */}
             <TextField
@@ -249,10 +347,10 @@ const AirlineAgentPage = () => {
               placeholder={putMeal}
               onChange={handleMealEdit}
               fullWidth
-              sx={{mb : 1, mt : 1}}
+              sx={{ mb: 1, mt: 1 }}
             />
           </DialogContent>
-          
+
           <DialogActions>
             <Button onClick={handleCloseEditDialog}>Cancel</Button>
             <Button onClick={handlePutMethod}>Save</Button>
@@ -273,10 +371,10 @@ const AirlineAgentPage = () => {
           <DialogActions>
             <Button onClick={handleCloseCancelDialog}>No</Button>
             <Button
-              // onClick={() => {
-              //   // We will put delete method here
-              // }}
-              // color="secondary"
+            // onClick={() => {
+            //   // We will put delete method here
+            // }}
+            // color="secondary"
             >
               Delete
             </Button>
@@ -292,16 +390,16 @@ const AirlineAgentPage = () => {
             <Typography variant="body1">
               Passenger Name: {selectedBooking.passenger}
             </Typography>
-            <Typography variant="body1" style={{paddingBottom: "2px"}}>
+            <Typography variant="body1" style={{ paddingBottom: "2px" }}>
               Flight: {selectedBooking.flight}
             </Typography>
-            <Typography variant="body1" style={{paddingBottom: "2px"}}>
+            <Typography variant="body1" style={{ paddingBottom: "2px" }}>
               Status: {selectedBooking.confirm}
             </Typography>
-            <Typography variant="body1" style={{paddingBottom: "2px"}}>
+            <Typography variant="body1" style={{ paddingBottom: "2px" }}>
               Seat: {selectedBooking.seat}
             </Typography>
-            <Typography variant="body1" style={{paddingBottom: "2px"}}>
+            <Typography variant="body1" style={{ paddingBottom: "2px" }}>
               Meal: {selectedBooking.meal}
             </Typography>
           </DialogContent>

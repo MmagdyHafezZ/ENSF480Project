@@ -1,4 +1,6 @@
+
 import React, { useEffect, useState } from "react";
+
 import {
   Table,
   TableBody,
@@ -466,7 +468,7 @@ const SystemAdmin = () => {
                   onChange={handleInputChange}
                   placeholder="Enter aircraft"
                 />
-              </div>
+
               <Button
                 variant="contained"
                 color="primary"
