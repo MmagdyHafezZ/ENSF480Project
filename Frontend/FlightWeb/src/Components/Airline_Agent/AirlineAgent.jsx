@@ -28,7 +28,7 @@ const AirlineAgentPage = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [openCancelDialog, setOpenCancelDialog] = useState(false);
+  const [OpenDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [agent, setAgent] = useState(localStorage.getItem("agent") || false);
   const [getBookings, setGetBookings] = useState([]);
   const [putPassenger, setPutPassenger] = useState("");
@@ -36,7 +36,6 @@ const AirlineAgentPage = () => {
   const [putConfirm, setPutConfirm] = useState("");
   const [putSeat, setPutSeat] = useState("");
   const [putMeal, setPutMeal] = useState("");
-  const [postBooking, setPostBooking] = useState("");
   const [openPostDialog, setOpenPostDialog] = useState(false);
 
   useEffect(() => {
@@ -61,7 +60,7 @@ const AirlineAgentPage = () => {
   };
 
   const handleCloseCancelDialog = () => {
-    setOpenCancelDialog(false);
+    setOpenDeleteDialog(false);
   };
 
   const handleOpenDialog = (booking) => {
@@ -79,10 +78,10 @@ const AirlineAgentPage = () => {
     setOpenEditDialog(true);
   };
 
-  const handleOpenCancelDialog = (event, booking) => {
+  const handleOpenDeleteDialog = (event, booking) => {
     event.stopPropagation();
     setSelectedBooking(booking);
-    setOpenCancelDialog(true);
+    setOpenDeleteDialog(true);
   };
 
   const handleCloseDialog = () => {
@@ -168,6 +167,24 @@ const AirlineAgentPage = () => {
     }
   }
 
+  const handleDeleteBooking = async () => {
+    try{
+      const response = await
+      axios
+        .delete(`http://localhost:8080/deleteBooking/${selectedBooking.id}`);
+      if (response.status === 200) {
+        const updatedBookings = getBookings.filter(booking => booking.id !== selectedBooking.id);
+      setGetBookings(updatedBookings);
+        setOpenDeleteDialog(false);
+      } else {
+        console.log("Error deleting booking: ", response.data);
+      }
+    } catch(error) {
+      console.error("Error deleting booking: ", error);
+    }
+  }
+  
+
   return (
     <Container maxWidth="lg">
       <Typography variant="h4" style={{ margin: "20px 0" }}>
@@ -214,7 +231,7 @@ const AirlineAgentPage = () => {
                   </Button>
                   <Button
                     color="secondary"
-                    onClick={(e) => handleOpenCancelDialog(e, getBooking)}
+                    onClick={(e) => handleOpenDeleteDialog(e, getBooking)}
                   >
                     Delete
                   </Button>
@@ -360,21 +377,18 @@ const AirlineAgentPage = () => {
 
       {/* Cancel Booking Dialog */}
       {selectedBooking && (
-        <Dialog open={openCancelDialog} onClose={handleCloseCancelDialog}>
+        <Dialog open={OpenDeleteDialog} onClose={handleCloseCancelDialog}>
           <DialogTitle>Delete Booking</DialogTitle>
           <DialogContent>
             <Typography>
               Are you sure you want to delete the booking for{" "}
-              {selectedBooking.passengerName}?
+              {selectedBooking.passenger}?
             </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseCancelDialog}>No</Button>
             <Button
-            // onClick={() => {
-            //   // We will put delete method here
-            // }}
-            // color="secondary"
+            onClick={handleDeleteBooking}
             >
               Delete
             </Button>
