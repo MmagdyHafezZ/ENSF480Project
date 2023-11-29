@@ -136,7 +136,6 @@ const Search = () => {
     const updatedUserFlightData = { ...userFlightData };
     // Update userFlightData with the copy
     setUserFlightData(userFlightData);
-
     saveFlightDataToLocalStorage();
     navigate("/flights");
   };
