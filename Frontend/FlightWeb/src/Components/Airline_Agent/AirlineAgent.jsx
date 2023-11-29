@@ -359,7 +359,7 @@ const AirlineAgentPage = () => {
               placeholder={putOrigin}
               onChange={handleOriginEdit}
               fullWidth
-              sx={{ mb: 1, mt: 1 }}
+              sx={{ mb : 1, mt : 1 , textTransform : 'uppercase'}}
             />
             {/* Add field for editing DESTINATION */}
             <TextField
@@ -367,7 +367,7 @@ const AirlineAgentPage = () => {
               placeholder={putDestination}
               onChange={handleDestinationEdit}
               fullWidth
-              sx={{ mb: 1, mt: 1 }}
+              sx={{ mb : 1, mt : 1 }}
             />
             {/* Add field for editing CONFIRM */}
             <TextField
