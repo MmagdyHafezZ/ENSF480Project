@@ -265,7 +265,15 @@ const AirlineAgentPage = () => {
       </Box>
 
       {openPostDialog && (
-        <Dialog open={openPostDialog} onClose={() => setOpenPostDialog(false)}>
+        <Dialog open={openPostDialog} 
+          onClose={() => setOpenPostDialog(false)}
+          sx={{
+            '& .MuiDialog-paper': {
+              minWidth: '500px',
+              minHeight: '400px'
+            }
+          }}
+        >
           <DialogTitle>
             Add New Booking
           </DialogTitle>
