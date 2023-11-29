@@ -1,9 +1,9 @@
-package com.example.backend.Repository;
+package com.example.thebackend.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.backend.Entity.ManageBookingEntity;
+import com.example.thebackend.Entity.ManageBookingEntity;
 
 /**
  * ManageBookingRepository

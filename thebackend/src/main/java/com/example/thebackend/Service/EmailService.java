@@ -1,4 +1,4 @@
-// package com.example.backend.Service;
+// package com.example.thebackend.Service;
 
 // import org.springframework.mail.javamail.JavaMailSender;
 // import org.springframework.mail.javamail.MimeMessageHelper;
