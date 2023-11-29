@@ -17,7 +17,8 @@ import AboutPage from "./Components/About/About.jsx";
 import OffersPage from "./Components/Offers/Offers.jsx";
 import AirlineAgentPage from "./Components/Airline_Agent/AirlineAgent.jsx";
 import AirlineAgentLoginPage from "./Components/Airline_Agent/AgentLoginPage.jsx";
-
+import TicketInfo from "./pages/TicketInfo/TIcketInfo.jsx";
+import PaymentForm from "./pages/Payment/PaymentForm.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="561701800707-oiljspvu920o0pfkavpfiedsu7sbrfgj.apps.googleusercontent.com">
     <BrowserRouter>
@@ -36,6 +37,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/offers" element={<OffersPage />} />
           <Route path="/agent" element={<AirlineAgentPage />} />
           <Route path="/signin-agent" element={<AirlineAgentLoginPage />} />
+          <Route path="/ticket-QR" element={<TicketInfo />} />
+          <Route path="/payment" element={<PaymentForm />} />
         </Routes>
       </UserDataProvider>
     </BrowserRouter>

@@ -30,11 +30,17 @@
   position: absolute;
   top: -0.25rem;
   background-color: white;
+  overflow-y: auto;
   border-radius: 1rem;
   box-shadow: 0px 2px 0.3rem 1px rgba(0, 0, 0, 0.5);
 }
 .choose-locations .location-input .search-location-popup .search-location-popup__container {
   border-bottom: 1px solid black;
+}
+.choose-locations .location-input .search-location-popup .list {
+  font-size: larger;
+  padding-left: 10px;
+  margin-bottom: 10px;
 }
 .choose-locations .location-input .search-location-popup input[type=text]::-moz-placeholder {
   font-size: 2rem;
@@ -75,7 +81,7 @@
 .main-search-container {
   outline: 1px solid black;
   border-radius: 1rem;
-  padding: 4rem 1rem;
+  padding: 1.5rem 1rem;
   justify-content: center;
 }
 .main-search-container > :nth-child(1) {
@@ -83,6 +89,7 @@
 }
 .search {
   padding: 1rem 4rem;
+  width: -webkit-fill-available;
 }
 
 .search-pop {
