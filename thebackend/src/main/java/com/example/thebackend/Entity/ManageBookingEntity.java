@@ -18,15 +18,18 @@ import lombok.NoArgsConstructor;
 @Table(name = "managebooking")
 public class ManageBookingEntity {
     @Id
-    @Column(name = "id")
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long user_id;
 
     @Column(name = "passenger")
     private String passenger;
 
-    @Column(name = "flight")
-    private String flight;
+    @Column(name = "origin")
+    private String origin;
+
+    @Column(name = "destination")
+    private String destination;
 
     @Column(name = "confirm")
     private String confirm;
@@ -37,12 +40,12 @@ public class ManageBookingEntity {
     @Column(name = "meal")
     private String meal;
 
-    public void setID(Long id){
-        this.id = id;
+    public void setID(Long user_id){
+        this.user_id = user_id;
     }
 
     public Long getID(){
-        return id;
+        return user_id;
     }
 
     public void setPassenger(String passenger){
@@ -53,12 +56,20 @@ public class ManageBookingEntity {
         return passenger;
     }
 
-    public void setFlight(String flight){
-        this.flight = flight;
+    public void setOrigin(String origin){
+        this.origin = origin;
     }
 
-    public String getFlight(){
-        return flight;
+    public String getOrigin(){
+        return origin;
+    }
+
+    public void setDestination(String destination){
+        this.destination = destination;
+    }
+
+    public String getDestination(){
+        return destination;
     }
 
     public void setConfirm(String confirm){

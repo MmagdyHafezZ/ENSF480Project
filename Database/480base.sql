@@ -13,18 +13,19 @@ DROP TABLE IF EXISTS managebooking;
 
 CREATE TABLE managebooking (
     user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    departure_airport VARCHAR(3),
-    arrival_airport VARCHAR(3),
+    passenger VARCHAR(50),
+    origin VARCHAR(3),
+    destination VARCHAR(3),
     confirm VARCHAR(20),
     seat VARCHAR(10),
     meal VARCHAR(20),
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (departure_airport) REFERENCES airportdata(iata),
-    FOREIGN KEY (arrival_airport) REFERENCES airportdata(iata)
+    FOREIGN KEY (origin) REFERENCES airportdata(iata),
+    FOREIGN KEY (destination) REFERENCES airportdata(iata)
 );
 
-INSERT INTO managebooking (user_id, departure_airport, arrival_airport, confirm, seat, meal) VALUES
-(1, 'NYC', 'LAX', 'Confirmed', '10F', 'Vegetarian');
+INSERT INTO managebooking (user_id, passenger, origin, destination, confirm, seat, meal) VALUES
+(1, 'Smith', 'NYC', 'LAX', 'Confirmed', '10F', 'Vegetarian');
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -33,6 +34,7 @@ CREATE TABLE IF NOT EXISTS users (
     google_id VARCHAR(255), -- Unique ID from Google, NULL for regular users
     name VARCHAR(255)
 );
+
 INSERT INTO users (email, password, name) VALUES 
 ('johndoe@example.com', 'encrypted_password', 'John Doe');
 
