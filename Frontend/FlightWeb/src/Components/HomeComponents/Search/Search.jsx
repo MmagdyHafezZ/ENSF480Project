@@ -146,7 +146,8 @@ const Search = () => {
       } else {
         params.set(key, userFlightData[key]);
       }
-      navigate(`/flights?${params.toString()}`);
+      localStorage.setItem("userFlightData", JSON.stringify(userFlightData));
+      navigate(`/flights`); // Navigate to /flights with the URLSearchParams
     });
   };
   return (
