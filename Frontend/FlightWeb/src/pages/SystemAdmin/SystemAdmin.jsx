@@ -9,7 +9,7 @@ import {
   Paper,
   Button,
   TextField,
-} from '@material-ui/core';
+} from '@mui/material';
 
   const SystemAdmin = () => {
     const [flightsData, setFlightsData] = useState([
