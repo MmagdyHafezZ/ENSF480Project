@@ -115,7 +115,7 @@ const SearchLocationPopup = ({
     axios
       .get("http://localhost:8080/getAirport")
       .then((response) => {
-        setSearchResults(response.data), console.log(response.data);
+        setSearchResults(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
