@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend.Entity.AirportEntity;
-import com.example.backend.Service.AirportService;
+import com.example.thebackend.Entity.AirportEntity;
+import com.example.thebackend.Service.AirportService;
 
 /**
  * AirportController

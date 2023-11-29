@@ -2,7 +2,7 @@ package com.example.thebackend.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.backend.Entity.FlightsDetails;
+import com.example.thebackend.Entity.FlightsDetails;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;

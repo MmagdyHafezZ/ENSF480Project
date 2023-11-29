@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.backend.Service.TicketService;
-import com.example.backend.Entity.FlightsDetails;
+import com.example.thebackend.Service.TicketService;
+import com.example.thebackend.Entity.FlightsDetails;
 
 @RestController
 public class TicketController {

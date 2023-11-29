@@ -1,4 +1,5 @@
 package com.example.thebackend.Entity;
+
 public class FlightsDetails {
     private String flightNumber;
     private String departure;
