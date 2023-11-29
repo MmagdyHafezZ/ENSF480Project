@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**
@@ -14,9 +13,9 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "managebooking")
 public class ManageBookingEntity {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +24,11 @@ public class ManageBookingEntity {
     @Column(name = "passenger")
     private String passenger;
 
-    @Column(name = "flight")
-    private String flight;
+    @Column(name = "origin")
+    private String origin;
+
+    @Column(name = "destination")
+    private String destination;
 
     @Column(name = "confirm")
     private String confirm;
@@ -36,6 +38,16 @@ public class ManageBookingEntity {
 
     @Column(name = "meal")
     private String meal;
+
+    public ManageBookingEntity(Long id, String passenger, String origin, String destination, String confirm, String seat, String meal){
+        this.id = id;
+        this.passenger = passenger;
+        this.origin = origin;
+        this.destination = destination;
+        this.confirm = confirm;
+        this.seat = seat;
+        this.meal = meal;
+    }
 
     public void setID(Long id){
         this.id = id;
@@ -53,12 +65,20 @@ public class ManageBookingEntity {
         return passenger;
     }
 
-    public void setFlight(String flight){
-        this.flight = flight;
+    public void setOrigin(String origin){
+        this.origin = origin;
     }
 
-    public String getFlight(){
-        return flight;
+    public String getOrigin(){
+        return origin;
+    }
+
+    public void setDestination(String destination){
+        this.destination = destination;
+    }
+
+    public String getDestination(){
+        return destination;
     }
 
     public void setConfirm(String confirm){

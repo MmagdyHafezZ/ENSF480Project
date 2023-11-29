@@ -36,7 +36,8 @@ public class ManageBookingService {
     public ManageBookingEntity updateManageBookingEntity(Long id, ManageBookingEntity existingData){
         ManageBookingEntity updateData = manageBookingRepository.findById(id).get();
         updateData.setPassenger(existingData.getPassenger());
-        updateData.setFlight(existingData.getFlight());
+        updateData.setOrigin(existingData.getOrigin());
+        updateData.setDestination(existingData.getDestination());
         updateData.setConfirm(existingData.getConfirm());
         updateData.setSeat(existingData.getSeat());
         updateData.setMeal(existingData.getMeal());

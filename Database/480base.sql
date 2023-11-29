@@ -54,10 +54,7 @@ CREATE TABLE userPreferences (
     mealPreference VARCHAR(255),
     seatPreference ENUM('aisle', 'window'),
     FOREIGN KEY (userId) REFERENCES userProfile(id)
-);
-
-
-	
+);	
 
 INSERT INTO airportdata (iata, city, state, country) VALUES 
 ('ICY', 'Icy Bay', 'Alaska', 'US'),

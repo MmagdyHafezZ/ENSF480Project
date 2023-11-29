@@ -13,17 +13,19 @@ import {
   Switch,
   Slider,
 } from "@mui/material";
-
+import { useLocation } from "react-router-dom";
 const PaymentForm = () => {
   const [useLoyaltyPoints, setUseLoyaltyPoints] = useState(false);
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
   const [saveCardDetails, setSaveCardDetails] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
-
+  const location = useLocation();
+  const { price, flightDetails, selectedSeats } = location.state || {}; // Extracting price from the state <----FlightDetails should have the flight data, selectedSeats is the userSelectedSeats
+  console.log(selectedSeats);
   // Mock data - replace with actual data from the user's profile
   const totalLoyaltyPoints =
     parseInt(localStorage.getItem("loyaltyPoints")) || 200;
-  const totalAmount = 100; // Replace with actual amount
+  const totalAmount = price; // Replace with actual amount
 
   const handleLoyaltyChange = (event, newValue) => {
     setLoyaltyPoints(newValue);

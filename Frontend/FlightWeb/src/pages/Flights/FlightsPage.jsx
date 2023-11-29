@@ -5,6 +5,7 @@ import Navbar from "../../Components/Navbar/Navbar";
 import Search from "../../Components/HomeComponents/Search/Search";
 import "./flights.scss";
 import FlightsList from "./FlightsList";
+import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
 
 const FlightsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -12,6 +13,13 @@ const FlightsPage = () => {
   // State declaration
   const { userFlightData, searchState } = useUserDataContext();
   console.log("STATE", searchState);
+  if (!userFlightData.return && !userFlightData.leaving.city) {
+    return (
+      <>
+        <ErrorComponent />
+      </>
+    );
+  }
   return (
     <>
       <Navbar />
