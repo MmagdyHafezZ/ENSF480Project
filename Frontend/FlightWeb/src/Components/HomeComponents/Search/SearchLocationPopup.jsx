@@ -123,18 +123,17 @@ const SearchLocationPopup = ({
   }, []);
 
   useEffect(() => {
-    function handleClickOutsidePopup(event){
+    function handleClickOutsidePopup(event) {
       if (outClick.current && !outClick.current.contains(event.target)) {
         setPopup(false);
+      }
     }
-  }
 
     document.addEventListener("mousedown", handleClickOutsidePopup);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutsidePopup);
     };
-
   }, [setPopup]);
 
   // const dummyData = [
@@ -183,7 +182,11 @@ const SearchLocationPopup = ({
   };
 
   return (
-    <div className="search-location-popup" ref={outClick} onClick={handlePopupClick}>
+    <div
+      className="search-location-popup"
+      ref={outClick}
+      onClick={handlePopupClick}
+    >
       <div className="search-location-popup__container">
         <input
           className="location-popup-placeholder"
