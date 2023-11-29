@@ -2,16 +2,14 @@ CREATE DATABASE IF NOT EXISTS 480base;
 
 USE 480base;
 
-CREATE TABLE airportdata (
+CREATE TABLE IF NOT EXISTS airportdata (
     iata      	VARCHAR(3) 		PRIMARY KEY,
     city 		VARCHAR(100),
     state 	   	VARCHAR(100),
     country  	VARCHAR(100)
 );
 
-DROP TABLE IF EXISTS managebooking;
-
-CREATE TABLE managebooking (
+CREATE TABLE IF NOT EXISTS managebooking (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     passenger VARCHAR(50),
     origin VARCHAR(3),
@@ -19,15 +17,10 @@ CREATE TABLE managebooking (
     confirm VARCHAR(20),
     seat VARCHAR(10),
     meal VARCHAR(20),
---     FOREIGN KEY (user_id) REFERENCES users(id),
+--     FOREIGN KEY (id) REFERENCES users(id),
     FOREIGN KEY (origin) REFERENCES airportdata(iata),
     FOREIGN KEY (destination) REFERENCES airportdata(iata)
 );
-
-INSERT INTO managebooking (id, passenger, origin, destination, confirm, seat, meal) VALUES
-(1, 'Smith', 'JFK', 'LAX', 'Confirmed', '10F', 'Vegetarian');
-
-DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -37,11 +30,52 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(255)
 );
 
-INSERT INTO users (email, password, name) VALUES 
-('johndoe@example.com', 'encrypted_password', 'John Doe'),
-('brojane@poop.com', 'blahblah', 'Jane Bro');
+CREATE TABLE IF NOT EXISTS `aircraftmodel` (
+	`id`			INT NOT NULL AUTO_INCREMENT,
+    `model`			VARCHAR(50),
+    `seatcapacity`	SMALLINT UNSIGNED,
+    `row`			SMALLINT UNSIGNED,
+    `column`		SMALLINT UNSIGNED,
+    CONSTRAINT UC_Model	UNIQUE (`modelname`),
+    PRIMARY KEY (`id`)
+);
 
+CREATE TABLE IF NOT EXISTS `aircraft` (
+	`id`		INT NOT NULL AUTO_INCREMENT,
+    `modelid`	INT NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT FK_AircraftModel FOREIGN KEY (`modelid`)
+    REFERENCES `aircraftmodel`(`id`) ON UPDATE CASCADE
+);
 
+CREATE TABLE IF NOT EXISTS `region` (
+	`id`		INT NOT NULL AUTO_INCREMENT,
+    `city`		VARCHAR(50) NOT NULL,
+    `state`		VARCHAR(50) NOT NULL,
+    `country` 	VARCHAR(2)	NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `airport` (
+	`id` 				INT NOT NULL AUTO_INCREMENT,
+    `iata`				VARCHAR(3),
+    `parentregionid`	INT NOT NULL,
+    CONSTRAINT FK_ParentRegionID FOREIGN KEY (`parentregionid`)
+    REFERENCES `region`(`id`) ON UPDATE CASCADE
+);
+	
+CREATE TABLE IF NOT EXISTS `route` (
+	`id`			INT NOT NULL AUTO_INCREMENT,
+    `origin`		INT NOT NULL,
+    `destination`	INT NOT NULL,
+    PRIMARY KEY(`id`),
+    CONSTRAINT FK_Origin FOREIGN KEY (`origin`)
+    REFERENCES `airport`(`id`) ON UPDATE CASCADE,
+    CONSTRAINT FK_Destination FOREIGN KEY (`destination`)
+    REFERENCES `airport`(`id`) ON UPDATE CASCADE,
+    CONSTRAINT UC_Route UNIQUE (`origin`, `destination`)
+);
+)
+    
 INSERT INTO airportData (iata, city, state, country) VALUES 
 ('ICY', 'Icy Bay', 'Alaska', 'US'),
 ('HGZ', 'Hogatza', 'Alaska', 'US'),
