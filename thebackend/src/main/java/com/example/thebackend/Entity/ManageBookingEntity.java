@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**
@@ -14,13 +13,13 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "managebooking")
 public class ManageBookingEntity {
+
     @Id
-    @Column(name = "user_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long id;
 
     @Column(name = "passenger")
     private String passenger;
@@ -40,12 +39,22 @@ public class ManageBookingEntity {
     @Column(name = "meal")
     private String meal;
 
-    public void setID(Long user_id){
-        this.user_id = user_id;
+    public ManageBookingEntity(Long id, String passenger, String origin, String destination, String confirm, String seat, String meal){
+        this.id = id;
+        this.passenger = passenger;
+        this.origin = origin;
+        this.destination = destination;
+        this.confirm = confirm;
+        this.seat = seat;
+        this.meal = meal;
+    }
+
+    public void setID(Long id){
+        this.id = id;
     }
 
     public Long getID(){
-        return user_id;
+        return id;
     }
 
     public void setPassenger(String passenger){

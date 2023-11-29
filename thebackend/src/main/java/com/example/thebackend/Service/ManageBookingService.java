@@ -23,8 +23,8 @@ public class ManageBookingService {
     }
 
     // GET Single
-    public ManageBookingEntity singleGet(Long user_id){
-        return manageBookingRepository.findById(user_id).get();
+    public ManageBookingEntity singleGet(Long id){
+        return manageBookingRepository.findById(id).get();
     }
 
     // POST
@@ -33,8 +33,8 @@ public class ManageBookingService {
     }
 
     // PUT
-    public ManageBookingEntity updateManageBookingEntity(Long user_id, ManageBookingEntity existingData){
-        ManageBookingEntity updateData = manageBookingRepository.findById(user_id).get();
+    public ManageBookingEntity updateManageBookingEntity(Long id, ManageBookingEntity existingData){
+        ManageBookingEntity updateData = manageBookingRepository.findById(id).get();
         updateData.setPassenger(existingData.getPassenger());
         updateData.setOrigin(existingData.getOrigin());
         updateData.setDestination(existingData.getDestination());
@@ -46,8 +46,8 @@ public class ManageBookingService {
     }
     
     // DELETE
-    public void deleteManageBookingEntity(Long user_id){
-        manageBookingRepository.deleteById(user_id);
+    public void deleteManageBookingEntity(Long id){
+        manageBookingRepository.deleteById(id);
     }
 
 }

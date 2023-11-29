@@ -131,10 +131,10 @@ const AirlineAgentPage = () => {
     try {
       const response = await
         axios
-          .put(`http://localhost:8080/putBooking/${selectedBooking.user_id}`, updatedBookingData);
+          .put(`http://localhost:8080/putBooking/${selectedBooking.id}`, updatedBookingData);
       if (response.status === 200) {
         const updatedBookings = getBookings.map((booking) =>
-          booking.user_id === selectedBooking.user_id ? { ...booking, ...updatedBookingData } : booking
+          booking.id === selectedBooking.id ? { ...booking, ...updatedBookingData } : booking
         );
         setGetBookings(updatedBookings);
         setOpenEditDialog(false);
@@ -179,9 +179,10 @@ const AirlineAgentPage = () => {
     try{
       const response = await
       axios
-        .delete(`http://localhost:8080/deleteBooking/${selectedBooking.user_id}`);
+        .delete(`http://localhost:8080/deleteBooking/${selectedBooking.id}`);
+        console.log(selectedBooking.id);
       if (response.status === 200) {
-        const updatedBookings = getBookings.filter(booking => booking.user_id !== selectedBooking.user_id);
+        const updatedBookings = getBookings.filter(booking => booking.id !== selectedBooking.id);
       setGetBookings(updatedBookings);
         setOpenDeleteDialog(false);
       } else {
@@ -224,7 +225,7 @@ const AirlineAgentPage = () => {
               booking.passenger.toLowerCase().includes(searchTerm.toLowerCase())
             ).map((getBooking) => (
               <TableRow
-                key={getBooking.user_id}
+                key={getBooking.id}
                 onClick={() => handleOpenDialog(getBooking)}
                 style={{ cursor: "pointer" }}
               >

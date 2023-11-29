@@ -12,20 +12,22 @@ CREATE TABLE airportdata (
 DROP TABLE IF EXISTS managebooking;
 
 CREATE TABLE managebooking (
-    user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     passenger VARCHAR(50),
     origin VARCHAR(3),
     destination VARCHAR(3),
     confirm VARCHAR(20),
     seat VARCHAR(10),
     meal VARCHAR(20),
-    FOREIGN KEY (user_id) REFERENCES users(id),
+--     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (origin) REFERENCES airportdata(iata),
     FOREIGN KEY (destination) REFERENCES airportdata(iata)
 );
 
-INSERT INTO managebooking (user_id, passenger, origin, destination, confirm, seat, meal) VALUES
-(1, 'Smith', 'NYC', 'LAX', 'Confirmed', '10F', 'Vegetarian');
+INSERT INTO managebooking (id, passenger, origin, destination, confirm, seat, meal) VALUES
+(1, 'Smith', 'JFK', 'LAX', 'Confirmed', '10F', 'Vegetarian');
+
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -36,7 +38,8 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 INSERT INTO users (email, password, name) VALUES 
-('johndoe@example.com', 'encrypted_password', 'John Doe');
+('johndoe@example.com', 'encrypted_password', 'John Doe'),
+('brojane@poop.com', 'blahblah', 'Jane Bro');
 
 
 INSERT INTO airportData (iata, city, state, country) VALUES 
