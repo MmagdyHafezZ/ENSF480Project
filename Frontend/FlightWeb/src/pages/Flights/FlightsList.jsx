@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 const FlightsList = () => {
   const navigate = useNavigate();
-  const { userFlightData } = useUserDataContext();
+  const { userFlightData, searchState } = useUserDataContext();
+
   const flightsData = [
     {
       id: "1",
@@ -140,12 +141,12 @@ const FlightsList = () => {
       id: "9",
       details: {
         airline: "Air Canada",
-        departingTime: "2023-12-4T00:00:00",
-        arrivingTime: "2023-12-4T00:00:00",
+        departingTime: "2023-12-04T00:00:00",
+        arrivingTime: "2023-12-04T00:00:00",
         departureLocation: "Calgary",
         arrivalLocation: "Vancouver",
-        leavingTime: "2023-12-8T00:00:00", // Added fictional time
-        arriveBackTime: "2023-12-8T00:00:00", // Added fictional time
+        leavingTime: "2023-12-08T00:00:00", // Added fictional time
+        arriveBackTime: "2023-12-08T00:00:00", // Added fictional time
         leavingLocation: "Vancouver", // Added return location
         arriveBackLocation: "Calgary", // Added return location
         price: "105$",
@@ -196,63 +197,9 @@ const FlightsList = () => {
   };
   const [searchParams, setSearchParams] = useSearchParams();
   console.log("SEARCH", searchParams);
-  // useEffect(() => {
-  //   const params = Object.fromEntries(searchParams.entries());
-  //   console.log("URL Params on Load:", params);
 
-  //   if (
-  //     Object.keys(params).length > 0 &&
-  //     userFlightData &&
-  //     !userFlightData.depart
-  //   ) {
-  //     const restoredData = {
-  //       leaving: {
-  //         name: params["leaving.name"] || "",
-  //         iata: params["leaving.iataCode"] || "",
-  //       },
-  //       going: {
-  //         name: params["going.name"] || "",
-  //         iata: params["going.iataCode"] || "",
-  //       },
-  //       travellers: params["travellers"] || 0,
-  //       depart: params["depart"]
-  //         ? new Date(params["depart"] + "T00:00:00")
-  //         : "", // Adjusted for timezone
-  //       return: params["return"]
-  //         ? new Date(params["return"] + "T00:00:00")
-  //         : "", // Adjusted for timezone
-  //     };
-  //     setDataFromURL(restoredData);
-  //     console.log("Restored Data:", restoredData);
-  //   }
-  // }, []);
   const handleViewDetailsClick = (id) => {
-    const params = new URLSearchParams();
-
-    // Convert userFlightData to URLSearchParams
-    Object.keys(userFlightData).forEach((key) => {
-      if (
-        typeof userFlightData[key] === "object" &&
-        userFlightData[key] !== null
-      ) {
-        if (key === "depart" || key === "return") {
-          const date = new Date(userFlightData[key]);
-          const formattedDate = convertToLocalDateISOString(
-            userFlightData[key]
-          );
-          params.set(key, formattedDate);
-        } else {
-          Object.keys(userFlightData[key]).forEach((subKey) => {
-            params.set(`${key}.${subKey}`, userFlightData[key][subKey]);
-          });
-        }
-      } else {
-        params.set(key, userFlightData[key]);
-      }
-    });
-    params.set("flight_id", id);
-
-    navigate(`/tickets?${params.toString()}`);
+    navigate(`/tickets`);
   };
   const formatDateOnly = (dateString) => {
     const date = new Date(dateString);
@@ -268,101 +215,94 @@ const FlightsList = () => {
       minute: "2-digit",
     });
   };
-  const searchParamsObject = {
-    leavingName: searchParams.get("leaving.city") || "",
-    goingName: searchParams.get("going.city") || "",
-    travellers: parseInt(searchParams.get("travellers") || "0", 10),
-    departDate: searchParams.get("depart") || "",
-    returnDate: searchParams.get("return") || "",
-  };
-  console.log("SE", searchParamsObject);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [filteredFlights, setFilteredFlights] = useState([]);
+  useEffect(() => {
+    const originalDepartDate = new Date(userFlightData.depart);
+    const formattedOriginalDate = originalDepartDate.toISOString().slice(0, 19);
+    const originalReturnDate = new Date(userFlightData.return);
+    const formattedReturnDate = originalReturnDate.toISOString().slice(0, 19);
 
-  // to search for flights
-
-  const filterFlights = () => {
-    return flightsData.filter((flight) => {
-      const departureDate = flight.details.departingTime.split("T")[0];
-      const returnDate = flight.details.arriveBackTime.split("T")[0];
-
-      console.log(2, departureDate);
+    const newFilteredFlights = flightsData.filter((flight) => {
       return (
-        flight.details.departureLocation === searchParamsObject.leavingName &&
-        flight.details.arrivalLocation === searchParamsObject.goingName &&
-        flight.details.seatCapacity >= searchParamsObject.travellers &&
-        departureDate === searchParamsObject.departDate &&
-        returnDate === searchParamsObject.returnDate
+        flight.details.departureLocation === userFlightData.leaving.city &&
+        flight.details.arrivalLocation === userFlightData.going.city &&
+        flight.details.departingTime.split("T")[0] ===
+          formattedOriginalDate.split("T")[0] &&
+        flight.details.leavingTime.split("T")[0] ===
+          formattedReturnDate.split("T")[0] &&
+        userFlightData.travellers < flight.details.seatCapacity
       );
     });
-  };
-  const filteredFlights = filterFlights();
-  console.log(filterFlights);
+
+    // Update filteredFlights when searchState changes
+    if (searchState !== isSearchActive) {
+      setFilteredFlights(newFilteredFlights);
+      setIsSearchActive(searchState);
+    }
+  }, [searchState, userFlightData]);
   return (
-    <>
-      {filteredFlights.length > 0 ? (
-        filteredFlights.map((flight) => {
-          const { id, details } = flight;
-          return (
-            <div key={id} className="flight-details-container">
-              <div className="flight-details__times">
-                <div className="flight-details__time-info">
-                  <div className="flights-info-left">
-                    <div className="plane-company">{details.airline}</div>
-                    <span>Departing</span>
+    <div className="flights-list">
+      {filteredFlights.map((flight) => {
+        const { id, details } = flight;
+        return (
+          <div key={id} className="flight-details-container">
+            <div className="flight-details__times">
+              <div className="flight-details__time-info">
+                <div className="flights-info-left">
+                  <div className="plane-company">{details.airline}</div>
+                  <span>Departing</span>
+                </div>
+                <div className="flights-info-right">
+                  <div className="flight-time-window">
+                    <span>
+                      {formatTimeOnly(details.departingTime)} -{" "}
+                      {formatTimeOnly(details.arrivingTime)}
+                      {/* {formatDateOnly(details.departingTime)} -{" "}
+                      {formatDateOnly(details.arrivingTime)} */}
+                    </span>
                   </div>
-                  <div className="flights-info-right">
-                    <div className="flight-time-window">
-                      <span>
-                        {formatTimeOnly(details.departingTime)} -{" "}
-                        {formatTimeOnly(details.arrivingTime)}
-                        {formatDateOnly(details.departingTime)} -{" "}
-                        {formatDateOnly(details.arrivingTime)}
-                      </span>
-                    </div>
-                    <div className="flight-depart-return">
-                      {details.departureLocation} - {details.arrivalLocation}
-                    </div>
+                  <div className="flight-depart-return">
+                    {details.departureLocation} - {details.arrivalLocation}
                   </div>
                 </div>
-                <div className="flight-details__time-info">
-                  <div className="flights-info-left">
-                    <div className="plane-company">{details.airline}</div>
-                    <span>Returning</span>
-                  </div>
-                  <div className="flights-info-right">
-                    <div className="flight-time-window">
-                      <span>
-                        {formatTimeOnly(details.leavingTime)} -{" "}
-                        {formatTimeOnly(details.arriveBackTime)}
-                        {formatDateOnly(details.leavingTime)} -{" "}
-                        {formatDateOnly(details.arriveBackTime)}
-                      </span>
-                    </div>
-                    <div className="flight-depart-return">
-                      {details.leavingLocation} - {details.arriveBackLocation}
-                    </div>
-                  </div>
-                </div>
-                {/* Include Returning section if needed */}
               </div>
-              <div className="flight-details__price">
-                <div className="flight-price">{details.price}</div>
-                <span>Round Trip</span>
-                <button
-                  onClick={() => {
-                    handleViewDetailsClick(id);
-                  }}
-                  className="view-details-button"
-                >
-                  View Details
-                </button>
+              <div className="flight-details__time-info">
+                <div className="flights-info-left">
+                  <div className="plane-company">{details.airline}</div>
+                  <span>Returning</span>
+                </div>
+                <div className="flights-info-right">
+                  <div className="flight-time-window">
+                    <span>
+                      {formatTimeOnly(details.leavingTime)} -{" "}
+                      {formatTimeOnly(details.arriveBackTime)}
+                      {/* {formatDateOnly(details.leavingTime)} -{" "}
+                      {formatDateOnly(details.arriveBackTime)} */}
+                    </span>
+                  </div>
+                  <div className="flight-depart-return">
+                    {details.leavingLocation} - {details.arriveBackLocation}
+                  </div>
+                </div>
               </div>
             </div>
-          );
-        })
-      ) : (
-        <div>No flights found for the selected criteria.</div>
-      )}
-    </>
+            <div className="flight-details__price">
+              <div className="flight-price">{details.price}</div>
+              <span>Round Trip</span>
+              <button
+                onClick={() => {
+                  handleViewDetailsClick(id);
+                }}
+                className="view-details-button"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 
