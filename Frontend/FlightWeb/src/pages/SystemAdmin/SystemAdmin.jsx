@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -9,7 +9,10 @@ import {
   Paper,
   Button,
   TextField,
-} from '@material-ui/core';
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from '@mui/material';
 
   const SystemAdmin = () => {
     const [flightsData, setFlightsData] = useState([
@@ -85,6 +88,12 @@ import {
 
   const [searchDate, setSearchDate] = useState('');
   const [searchedFlights, setSearchedFlights] = useState([]);
+  const [admin, setAdmin] = useState(localStorage.getItem("admin") || false);
+  useEffect(() => {
+    if (admin == false) {
+      window.location.href = "/signin-admin";
+    }
+  }, []);
 
   const handleSearchDate = () => {
     const results = flightsData.filter((flight) => flight.details.date === searchDate);
@@ -260,9 +269,9 @@ import {
         </Button>
       </div>
 
-      {isNewFlightFormVisible && (
-        <div>
-          <h2>Add New Flight</h2>
+      <Dialog open={isNewFlightFormVisible} onClose={() => setNewFlightFormVisible(false)}>
+        <DialogTitle>Add New Flight</DialogTitle>
+        <DialogContent>
           <form>
             <div>
               <TextField
@@ -348,12 +357,13 @@ import {
               Add New Flight
             </Button>
           </form>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
-{selectedFlight && (
-        <div>
-          <h2>Modify Flight</h2>
+      {selectedFlight && (
+        <Dialog open={!!selectedFlight} onClose={() => setSelectedFlight(null)}>
+        <DialogTitle>Modify Flight</DialogTitle>
+        <DialogContent>
           <form>
             <div>
               <TextField
@@ -439,7 +449,8 @@ import {
               Save Changes
             </Button>
           </form>
-        </div>
+          </DialogContent>
+          </Dialog>
       )}
     </div>
   );
