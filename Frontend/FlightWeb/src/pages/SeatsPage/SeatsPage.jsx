@@ -37,12 +37,12 @@ const SeatsPage = () => {
           // size={false}
         />
 
-        <SeatSelectionCard
+        {/* <SeatSelectionCard
           SeatMapComponent={LargePlane}
           aircraftData={largeAircraft}
           planeType="Large - Airbus A350-900"
           // size={true}
-        />
+        /> */}
       </div>
     </>
   );
