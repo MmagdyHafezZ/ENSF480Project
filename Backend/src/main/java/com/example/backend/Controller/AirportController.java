@@ -18,8 +18,6 @@ public class AirportController {
     @Autowired
     private AirportService airportService;
 
-
-
     @GetMapping(path = "/getAirport")
     public List<AirportEntity> getAirportEntities(){
         System.out.println(airportService.getAirportData());
