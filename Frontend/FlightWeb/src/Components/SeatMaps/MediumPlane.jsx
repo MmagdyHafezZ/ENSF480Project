@@ -2,7 +2,7 @@ import React, { useState } from "react";
 // import "./planes.css";
 import "./planes.scss";
 import { BsXLg } from "react-icons/bs";
-import seatData from "../../data/mp_seatAvailability.json";
+import seatData from "./mp_seatAvailability.json";
 const MediumPlane = ({ isBooking }) => {
   const [selectedSeats, setSelectedSeats] = useState({});
 

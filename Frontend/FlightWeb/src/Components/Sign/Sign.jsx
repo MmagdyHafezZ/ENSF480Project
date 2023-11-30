@@ -44,14 +44,14 @@ const SignUpSignIn = () => {
 
     // Adjusted body to match the required format
     const body = JSON.stringify({
-      first_name,
-      last_name,
+      firstName: first_name,
+      lastName: last_name,
       email,
       password: password1, // Changed from password1 to password
     });
     console.log(body);
     axios
-      .post("http://10.9.154.180:8000/users", body, {
+      .post("http://localhost:8080/auth/signup", body, {
         headers: {
           "Content-Type": "application/json", // Ensure to set Content-Type for JSON
         },
@@ -81,13 +81,12 @@ const SignUpSignIn = () => {
     }
 
     const body = JSON.stringify({
-      email,
-      password: password, // Changed from password1 to password
-      is_google: false,
+      email: email,
+      password: password,
     });
     console.log(body);
     axios
-      .post("http://10.9.154.180:8000/login/", body, {
+      .post("http://localhost:8080/auth/login", body, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -96,6 +95,7 @@ const SignUpSignIn = () => {
         console.log(res);
         setIsSignIn(true);
         localStorage.setItem("id", res.data.id);
+        localStorage.setItem("isLoggedIn", true);
         setUsername(res.data.username); // Ensure `setUsername` is defined and working as expected
         setEmail(email); // Ensure `setEmail` is defined and working as expected
         jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
@@ -132,6 +132,7 @@ const SignUpSignIn = () => {
           // }
           // )
           localStorage.setItem("isLoggedIn", true);
+          localStorage.setItem("token", access_token);
 
           jumpToHome();
         } catch (err) {

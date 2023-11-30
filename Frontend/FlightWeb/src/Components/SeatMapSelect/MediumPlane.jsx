@@ -1,11 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 // import "./planes.css";
-import "./planes.scss";
+import "../SeatMaps/planes.scss";
 import { BsXLg } from "react-icons/bs";
-import seatData from "./sm_seatAvailability.json";
-const SmallPlane = ({ isBooking }) => {
-  const [allSeatData, setAllSeatData] = useState(seatData);
+import seatData from "./mp_seatAvailability.json";
+const MediumPlane = ({ isBooking }) => {
+  const [selectedSeats, setSelectedSeats] = useState({});
+
   // Function to handle the click event on seats
+  const handleSeatClick = (seatId) => {
+    if (isBooking) {
+      console.log("1");
+      setSelectedSeats((prevSelectedSeats) => ({
+        ...prevSelectedSeats,
+        [seatId]: !prevSelectedSeats[seatId], // Toggle the selected state
+      }));
+    }
+  };
+
+  const displaySelectedSeats = () => {
+    const selectedSeatIds = Object.keys(selectedSeats).filter(
+      (seatId) => selectedSeats[seatId]
+    );
+    return selectedSeatIds.length > 0 ? selectedSeatIds.join(", ") : "None";
+  };
 
   // Function to generate seat divs
   const generateSeats = (numRows, numColumns) => {
@@ -15,7 +32,7 @@ const SmallPlane = ({ isBooking }) => {
     const headerBusinessRow = (
       <div className="row header-row">
         <div className="left-column">
-          {["A"].map((letter) => (
+          {["A", "C"].map((letter) => (
             <span key={letter} className="seat seat-map-header">
               {letter}
             </span>
@@ -23,7 +40,7 @@ const SmallPlane = ({ isBooking }) => {
         </div>
         <div className="aisle"></div>
         <div className="right-column">
-          {["C", "D"].map((letter) => (
+          {["D", "F"].map((letter) => (
             <span key={letter} className="seat seat-map-header">
               {letter}
             </span>
@@ -36,7 +53,7 @@ const SmallPlane = ({ isBooking }) => {
     const headerRow = (
       <div className="row header-row">
         <div className="left-column">
-          {["A", "B"].map((letter) => (
+          {["A", "B", "C"].map((letter) => (
             <span key={letter} className="seat seat-map-header">
               {letter}
             </span>
@@ -44,7 +61,7 @@ const SmallPlane = ({ isBooking }) => {
         </div>
         <div className="aisle"></div>
         <div className="right-column">
-          {["C", "D"].map((letter) => (
+          {["D", "E", "F"].map((letter) => (
             <span key={letter} className="seat seat-map-header">
               {letter}
             </span>
@@ -65,19 +82,16 @@ const SmallPlane = ({ isBooking }) => {
       let leftColumnSeats = [];
       let rightColumnSeats = [];
 
-      for (let columnIndex = 0; columnIndex < 4; columnIndex++) {
-        // Skip B for business class
-        if (columnIndex === 4) continue;
+      for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+        // Skip B and E seats for business class
+        if (columnIndex === 1 || columnIndex === 4) continue;
         const seatId = `${String.fromCharCode(65 + columnIndex)}${
           rowIndex + 1
         }`;
         const seatInfo = seatData[seatId];
         const isAvailable = seatInfo?.available;
-        const isB =
-          seatId === "B1" ||
-          seatId === "B2" ||
-          seatId === "B3" ||
-          seatId === "B4";
+        const isSelected = selectedSeats[seatId];
+        const isWingSeat = 16 <= seatData[seatId] <= 23 ? "wing-row" : "";
         let seatContent = isBooking ? (
           isAvailable ? (
             `$${seatInfo?.price}`
@@ -91,16 +105,16 @@ const SmallPlane = ({ isBooking }) => {
         const seat = (
           <span
             key={seatId}
-            className={`seat ${
+            className={`seat ${isSelected ? "selected" : ""} ${
               isAvailable === false ? "unavailable" : ""
-            } business ${isB ? "remove-seat" : ""}`}
+            } business `}
             onClick={() => isAvailable && handleSeatClick(seatId)}
           >
             {seatContent}
           </span>
         );
 
-        columnIndex < 2
+        columnIndex < 3
           ? leftColumnSeats.push(seat)
           : rightColumnSeats.push(seat);
       }
@@ -130,12 +144,10 @@ const SmallPlane = ({ isBooking }) => {
           rowIndex + 1
         }`;
         const seatInfo = seatData[seatId];
-        // console.log(seatData);
-        // console.log(seatInfo);
         const isAvailable = seatInfo?.available;
-        // const isSelected = selectedSeats[seatId];
+        const isSelected = selectedSeats[seatId];
         const rowNumber = parseInt(seatId.slice(1));
-        const isWingSeat = rowNumber >= 9 && rowNumber <= 12 ? "wing-row" : "";
+        const isWingSeat = rowNumber >= 16 && rowNumber <= 23 ? "wing-row" : "";
         let seatContent = isBooking ? (
           isAvailable ? (
             `$${seatInfo?.price}`
@@ -149,9 +161,9 @@ const SmallPlane = ({ isBooking }) => {
         const seat = (
           <span
             key={seatId}
-            className={`seat  ${isAvailable === false ? "unavailable" : ""} ${
-              seatInfo?.type || "ordinary"
-            } ${isWingSeat}`}
+            className={`seat ${isSelected ? "selected" : ""} ${
+              isAvailable === false ? "unavailable" : ""
+            } ${isWingSeat} ${seatInfo?.type || "ordinary"} ${rowNumber}`}
             onClick={() => isAvailable && handleSeatClick(seatId)}
           >
             {seatContent}
@@ -163,9 +175,9 @@ const SmallPlane = ({ isBooking }) => {
 
       rows.push(
         <div key={rowIndex} className="row">
-          <div className="left-column">{seats.slice(0, 2)}</div>
+          <div className="left-column">{seats.slice(0, 3)}</div>
           <div className="aisle"></div>
-          <div className="right-column">{seats.slice(2, 4)}</div>
+          <div className="right-column">{seats.slice(3)}</div>
         </div>
       );
     }
@@ -173,16 +185,11 @@ const SmallPlane = ({ isBooking }) => {
     return rows;
   };
 
-  // Function to update seat availability
-
-  // useEffect to call updateSeatAvailability when flightDetails changes
-
   return (
     <>
-      <div className="seatMap">{generateSeats(19, 4)}</div>
-      {/* <button onClick={updateSeatAvailability}>Test</button> */}
+      <div className="seatMap">{generateSeats(28, 6)}</div>
     </>
   );
 };
 
-export default SmallPlane;
+export default MediumPlane;

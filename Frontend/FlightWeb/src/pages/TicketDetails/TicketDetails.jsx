@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar/Navbar";
 import "./TicketDetails.scss";
 import { useSearchParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUserDataContext } from "../../context/UserDataContext";
 import SeatContainer from "../../Components/SeatMaps/SeatsContainer";
-import SmallPlane from "../../Components/SeatMaps/SmallPlane";
+import SmallPlane from "../../Components/SeatMapSelect/SmallPlane";
+import MediumPlane from "../../Components/SeatMapSelect/MediumPlane";
+import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
 const TicketDetails = () => {
   // const [flightId, setFlightId] = useState();
   const { userFlightData, setUserFlightData, selectedSeats, price, setPrice } =
@@ -15,8 +17,17 @@ const TicketDetails = () => {
   const seats = Object.keys(selectedSeats).filter(
     (seat) => selectedSeats[seat]
   );
+  const navigate = useNavigate();
 
-  const formatDate = (date) => {
+  const formatDate = (dateInput) => {
+    // Check if the input is not a Date object and try to convert it
+    const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+      return "Invalid date"; // or handle the error as you see fit
+    }
+
     let month = date.getMonth() + 1; // getMonth() returns month from 0-11
     let day = date.getDate();
 
@@ -28,14 +39,27 @@ const TicketDetails = () => {
   };
 
   const calculateTotalPrice = () => {
-    return Object.values(selectedSeats)
+    const total = Object.values(selectedSeats)
       .filter((seat) => seat.isSelected)
       .reduce((total, seat) => total + seat.price, 0);
+
+    setPrice(total); // Update the price state with the calculated total
   };
   const isSeatSelectionComplete =
     Object.keys(selectedSeats).length === userFlightData.travellers;
   // console.log(Object.keys(selectedSeats).length);
   console.log(selectedSeats);
+  const SeatMapComponent =
+    flightDetails?.details?.aircraft === "Embraer E175-E2"
+      ? SmallPlane
+      : MediumPlane;
+  if (!flightDetails) {
+    return (
+      <>
+        <ErrorComponent />
+      </>
+    );
+  }
   return (
     <>
       <Navbar />
@@ -53,8 +77,13 @@ const TicketDetails = () => {
             <span>{formatDate(userFlightData.return)}</span>
           </div>
           <div className="ticket-details-bottom">
-            <span>{flightDetails.details.departureLocation}</span> -{" "}
-            <span>{flightDetails.details.arrivalLocation}</span>
+            <span>
+              {flightDetails && flightDetails.details.departureLocation}
+            </span>{" "}
+            -{" "}
+            <span>
+              {flightDetails && flightDetails.details.arrivalLocation}
+            </span>
           </div>
         </div>
 
@@ -63,7 +92,7 @@ const TicketDetails = () => {
           <div className="seat-select-container-body">
             <div className="seat-map-card-container">
               <SeatContainer
-                SeatMapComponent={SmallPlane}
+                SeatMapComponent={SeatMapComponent}
                 isBooking={true}
                 flightDetails={flightDetails}
                 // size={size}
@@ -91,6 +120,11 @@ const TicketDetails = () => {
               </div>
               <button
                 disabled={!isSeatSelectionComplete}
+                onClick={() => {
+                  navigate("/payment", {
+                    state: { price, flightDetails, selectedSeats },
+                  });
+                }}
                 className="ticket-next-button"
               >
                 Next

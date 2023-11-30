@@ -31,7 +31,7 @@ public class AuthService {
         return instance;
     }
 
-    public void signup(String email, String password) {
+    public void signup(String email, String password, String firstName, String lastName) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("User already exists with email: " + email);
         }
@@ -39,10 +39,16 @@ public class AuthService {
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setPassword(password); // In real applications, consider encrypting the password
+        newUser.setfirst_name(firstName);
+        newUser.setlast_name(lastName);
         userRepository.save(newUser);
+
     }
     public boolean login(String email, String password) {
         User user = userRepository.findByEmail(email);
+        System.out.println("user: " + user);
+        System.out.println("password: " + password);
+        System.out.println("user.getPassword(): " + user.getPassword());
         if (user != null && user.getPassword().equals(password)) {
             return true; // Login successful
         }
@@ -50,12 +56,18 @@ public class AuthService {
     }
     public boolean googleLogin(String googleToken) throws IllegalArgumentException {
         try {
-            System.out.println("Google Token: " + googleToken); // Log the token
+            System.out.println("in");
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
                     .setAudience(Collections.singletonList("561701800707-oiljspvu920o0pfkavpfiedsu7sbrfgj.apps.googleusercontent.com"))
                     .build();
     
             GoogleIdToken idToken = verifier.verify(googleToken);
+            if (googleToken == null || googleToken.trim().isEmpty()) {
+                System.out.println("Token is null or empty");
+                return false;
+            }
+            
+            System.out.println("verifier: " + verifier);
             if (idToken != null) {
                 Payload payload = idToken.getPayload();
     
