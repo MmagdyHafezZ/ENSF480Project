@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `aircraftmodel` (
     `seatcapacity`	SMALLINT UNSIGNED,
     `row`			SMALLINT UNSIGNED,
     `column`		SMALLINT UNSIGNED,
-    CONSTRAINT UC_Model	UNIQUE (`modelname`),
+    CONSTRAINT UC_Model	UNIQUE (`model`),
     PRIMARY KEY (`id`)
 );
 
@@ -71,13 +71,15 @@ CREATE TABLE IF NOT EXISTS `region` (
 	`id`		INT NOT NULL AUTO_INCREMENT,
     `city`		VARCHAR(50) NOT NULL,
     `state`		VARCHAR(50) NOT NULL,
-    `country` 	VARCHAR(2)	NOT NULL
+    `country` 	VARCHAR(2)	NOT NULL,
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `airport` (
 	`id` 				INT NOT NULL AUTO_INCREMENT,
     `iata`				VARCHAR(3),
     `parentregionid`	INT NOT NULL,
+    PRIMARY KEY (`id`),
     CONSTRAINT FK_ParentRegionID FOREIGN KEY (`parentregionid`)
     REFERENCES `region`(`id`) ON UPDATE CASCADE
 );
@@ -2521,3 +2523,20 @@ CREATE TABLE managebooking (
 
 INSERT INTO managebooking (user_id, departure_airport, arrival_airport, confirm, seat, meal) VALUES
 (1, 'JFK', 'LAX', 'Confirmed', '10F', 'Vegetarian');
+
+DROP TABLE IF EXISTS flightschedule;
+CREATE TABLE flightschedule (
+    flight_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    departure_airport VARCHAR(3),
+    arrival_airport VARCHAR(3),
+    departure_date DATE,
+    arrival_date DATE,
+    departure_time TIME,
+    arrival_time TIME
+);
+
+INSERT INTO flightschedule (departure_airport, arrival_airport, departure_date, arrival_date, departure_time, arrival_time) VALUES 
+('JFK', 'LAX', '2023-01-01', '2023-01-02', '01:00:00', '07:30:00'),
+('LHR', 'CDG', '2023-03-01', '2023-03-02', '08:45:00', '11:30:00'),
+('ATL', 'MIA', '2023-04-01', '2023-04-02', '12:15:00', '15:00:00'),
+('ORD', 'DFW', '2023-05-01', '2023-05-02', '18:30:00', '21:15:00');
