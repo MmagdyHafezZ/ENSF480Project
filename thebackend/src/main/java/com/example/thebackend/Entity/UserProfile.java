@@ -10,6 +10,11 @@ public class UserProfile {
     @Id
     private Long id;
 
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private User user;
+
     private String username;
     private String userRole;
     private String membershipType;
@@ -24,7 +29,7 @@ public class UserProfile {
     private Boolean emailNotification;
 
     // Constructors, Getters and Setters
-    public UserProfile( String username, String userRole, String membershipType, Integer loyaltyPoints, List<String> recentBookings, List<String> upcomingFlights, Boolean emailNotification) {
+    public UserProfile( String username, String userRole, String membershipType, Integer loyaltyPoints, List<String> recentBookings, List<String> upcomingFlights, Boolean emailNotification, User user) {
         this.username = username;
         this.userRole = userRole;
         this.membershipType = membershipType;
@@ -32,6 +37,7 @@ public class UserProfile {
         this.recentBookings = recentBookings;
         this.upcomingFlights = upcomingFlights;
         this.emailNotification = emailNotification;
+        this.user = user;
     }
     public UserProfile() {
     }
@@ -92,6 +98,15 @@ public class UserProfile {
                 ", upcomingFlights=" + upcomingFlights +
                 ", emailNotification=" + emailNotification +
                 '}';
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public Long getId() {
+        return id;
+    }
+    public User getUser() {
+        return user;
     }
 
 }

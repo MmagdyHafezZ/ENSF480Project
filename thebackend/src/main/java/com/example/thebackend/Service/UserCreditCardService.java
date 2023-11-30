@@ -21,7 +21,7 @@ public class UserCreditCardService {
         creditCard.setCvv(dto.getCvv());
         creditCard.setCardholderName(dto.getCardholderName());
         creditCard.setAddress(dto.getAddress());
-        // creditCard.setUserProfile(dto.getUserProfile());
+        creditCard.setUserProfile(dto.getUserProfile());
 
         return userCreditCardRepository.save(creditCard);
     }
