@@ -17,8 +17,8 @@ INSERT INTO users (email, password, first_name, last_name) VALUES
 ('johndoe@example.com', 'encrypted_password', 'John','Doe');
 
 
-DROP TABLE IF EXISTS userProfile;
-CREATE TABLE userProfile (
+DROP TABLE IF EXISTS user_profile;
+CREATE TABLE user_profile (
     id BIGINT NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
     userRole VARCHAR(255),
@@ -29,21 +29,18 @@ CREATE TABLE userProfile (
     emailNotification BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id) REFERENCES users(id)
 );
-DROP TABLE IF EXISTS userCreditCard;
-CREATE TABLE userCreditCard (
+DROP TABLE IF EXISTS user_credit_card;
+CREATE TABLE user_credit_card (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    userId BIGINT NOT NULL,
-    cardNumber VARCHAR(255),
-    expiryDate DATE,
+    user_id BIGINT NOT NULL,  -- Changed from userId to user_id to match foreign key reference
+    card_number VARCHAR(255),
+    expiry_date VARCHAR(7),
     cvv VARCHAR(10),
-    cardholderName VARCHAR(255),
+    cardholder_name VARCHAR(255),
     address TEXT,
-    FOREIGN KEY (userId) REFERENCES userProfile(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-
-
-	
 CREATE TABLE IF NOT EXISTS `route` (
 	`id`			INT NOT NULL AUTO_INCREMENT,
     `origin`		INT NOT NULL,
@@ -62,7 +59,7 @@ CREATE TABLE userPreferences (
     userId BIGINT NOT NULL,
     mealPreference VARCHAR(255),
     seatPreference ENUM('aisle', 'window'),
-    FOREIGN KEY (userId) REFERENCES userProfile(id)
+	FOREIGN KEY (user_id) REFERENCES users(id)
 );	
 
 DROP TABLE IF EXISTS managebooking;

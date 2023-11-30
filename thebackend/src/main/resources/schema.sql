@@ -59,5 +59,5 @@ CREATE TABLE
     `travellers`    INT NOT NULL,
     `departing`        TIMESTAMP NOT NULL,
     `returning`     TIMESTAMP NOT NULL,
-    PRIMARY KEY (`searchbook`)
+    PRIMARY KEY (`id`)
     )
