@@ -29,6 +29,10 @@
 
 body{
     background-color: var(--whiteColor);
+    &.no-scroll{
+        overflow: hidden;
+        height: 100%;
+    }
 }
 a{
     text-decoration: none;

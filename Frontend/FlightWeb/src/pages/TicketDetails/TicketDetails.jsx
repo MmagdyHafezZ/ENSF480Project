@@ -33,9 +33,10 @@ const TicketDetails = () => {
   // }, []);
 
   const [isLoading, setIsLoading] = useState(false);
+
   const handleNavigation = () => {
     setIsLoading(true); // Show loading screen
-
+    document.body.classList.add("no-scroll");
     setTimeout(() => {
       if (isLoggedInContext) {
         // User is logged in, navigate to payment
@@ -44,6 +45,7 @@ const TicketDetails = () => {
         });
       } else {
         // User is not logged in, navigate to login and pass current state
+        document.body.classList.remove("no-scroll");
         navigate("/signin", {
           state: {
             from: "ticketDetails",
@@ -56,6 +58,24 @@ const TicketDetails = () => {
 
   const location = useLocation();
   const flightDetails = location.state?.flightDetails;
+  const [showCheckmark, setShowCheckmark] = useState(
+    location.state?.showCheckmark || false
+  );
+  console.log("CHECL", userFlightData);
+  useEffect(() => {
+    document.body.classList.add("no-scroll");
+    if (showCheckmark) {
+      // Show checkmark animation
+
+      setTimeout(() => {
+        // After animation, redirect to payment
+        document.body.classList.remove("no-scroll");
+        navigate("/payment", {
+          state: { price, flightDetails, selectedSeats },
+        });
+      }, 2000); // Replace with actual animation duration
+    }
+  }, [showCheckmark]);
   const seats = Object.keys(selectedSeats).filter(
     (seat) => selectedSeats[seat]
   );
@@ -118,8 +138,38 @@ const TicketDetails = () => {
       </>
     );
   }
+
   return (
     <>
+      {showCheckmark && (
+        <div className="ticket-details-popup">
+          <div className="checkmark-container">
+            <div class="wrapper">
+              {" "}
+              <svg
+                class="checkmark"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 52 52"
+              >
+                {" "}
+                <circle
+                  class="checkmark__circle"
+                  cx="26"
+                  cy="26"
+                  r="25"
+                  fill="none"
+                />{" "}
+                <path
+                  class="checkmark__check"
+                  fill="none"
+                  d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                />
+              </svg>
+            </div>
+            <span>Your are now Logged In</span>
+          </div>
+        </div>
+      )}
       <Navbar />
       <div className="ticket-details-wrapper">
         {/* <div className="">gello {selectedSeats[0]}</div> */}

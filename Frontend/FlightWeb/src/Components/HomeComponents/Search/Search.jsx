@@ -157,7 +157,7 @@ const Search = () => {
     handleButtonClick();
     handlePostSearchBooking();
     navigate("/flights", { state: { userFlightData, sendData } });
-
+    
   };
 
 

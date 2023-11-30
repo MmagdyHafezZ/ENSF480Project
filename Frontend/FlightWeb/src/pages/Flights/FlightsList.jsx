@@ -65,18 +65,18 @@ const FlightsList = ({ userFlightData, apiFlight }) => {
         setFilteredFlights(newFilteredFlights);
         setIsSearchActive(searchState);
       }
-    }
-
-    // console.log("got data");
-    // console.log(userFlightData);
   }, [searchState, flightData, userFlightData]); // Add flightData as a dependency
-
+  const originalDepartDate = new Date(userFlightData.depart);
+  const formattedOriginalDate = originalDepartDate.toISOString().slice(0, 19);
+  console.log(formattedOriginalDate); // Convert
   return (
     <div className="flights-list">
       {isLoading ? (
         <>
           <div className="loading-flight-list">
-            <span className="loadingSpan"></span>
+            <div className="loading-flights-list-container">
+              <span className="loadingSpan"></span>
+            </div>
           </div>
         </> // Loading indicator
       ) : filteredFlights.length > 0 ? (

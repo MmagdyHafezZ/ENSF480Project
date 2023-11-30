@@ -122,6 +122,7 @@ const SearchLocationPopup = ({
       });
   }, []);
 
+
   useEffect(() => {
     function handleClickOutsidePopup(event){
       if (outClick.current && !outClick.current.contains(event.target)) {
@@ -152,7 +153,6 @@ const SearchLocationPopup = ({
   // ];
 
   function handleSelectLocation(location) {
-    // console.log(location);
     setData((prevData) => ({
       ...prevData,
       [type]: location, // 'type' can be 'leaving' or 'going'

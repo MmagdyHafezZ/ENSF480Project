@@ -60,6 +60,7 @@ export const UserDataProvider = ({ children }) => {
   };
   const location = useLocation();
   useEffect(() => {
+    document.body.classList.remove("no-scroll");
     // Retrieve the userFlightData from sessionStorage
     const storedData = sessionStorage.getItem("userFlightData");
     if (storedData) {
@@ -72,8 +73,24 @@ export const UserDataProvider = ({ children }) => {
       setUserFlightData(parsedData);
     }
   }, [location.pathname]);
+  useEffect(() => {
+    if (location.pathname === "/") {
+      // Reset userFlightData to its initial state
+      setUserFlightData({
+        leaving: { name: "", iata: "" },
+        going: { name: "", iata: "" },
+        travellers: 0,
+        depart: "",
+        return: "",
+      });
+
+      // Also, clear it from sessionStorage
+      sessionStorage.removeItem("userFlightData");
+    }
+  }, [location.pathname]);
+
   const [isLoggedInContext, setIsLoggedInContext] = useState(
-    JSON.parse(sessionStorage.getItem("isLoggedIn")) || false
+    JSON.parse(localStorage.getItem("isLoggedIn")) || false
   );
 
   // Use useEffect to clear local storage when the URL is at '/'
