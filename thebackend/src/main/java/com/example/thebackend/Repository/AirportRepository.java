@@ -9,6 +9,6 @@ import com.example.thebackend.Entity.AirportEntity;
  * AirportRepository
  */
 @Repository
-public interface AirportRepository extends JpaRepository<AirportEntity, String>{
+public interface AirportRepository extends JpaRepository<AirportEntity, Long>{
 
 }
