@@ -5,6 +5,7 @@
 
 **/node_modules/
 
+**/Backend/
 
 # Office Docs open (super annoying)
 **/~$*.docx
