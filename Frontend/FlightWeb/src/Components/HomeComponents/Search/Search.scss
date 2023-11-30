@@ -15,7 +15,8 @@
         // background-color: !important;
         width: 12.5rem;
         height: 3rem;
-        border: 1px solid black !important;
+        border: 0.5px solid rgb(99, 99, 99) !important;
+        border-radius: 1.5rem;
         flex: 1;
         .location-input-placeholder{
             // background-color: red;
@@ -28,12 +29,16 @@
         }
         .search-location-popup{
 
-            left: -0.25rem;
+            left: 0;
+            bottom: 0;
+            transform: scale(0);
+            transform-origin: bottom left;
+            transition: transform 0.2s ease-in-out;
             width: 25rem;
             height: 25rem;
             z-index: 10;
             position: absolute;
-            top:-0.25rem;
+            bottom: 0;
             background-color: white;
             // background-color: red;
 
@@ -41,6 +46,9 @@
             
             border-radius: 1rem;
             box-shadow: 0px 2px 0.3rem 1px rgba(0,0,0,0.5);
+            &.location-popup-active{
+                transform: scale(1);
+            }
             .search-location-popup__container{
                 border-bottom: 1px solid black;
             }
@@ -98,8 +106,9 @@
 }
 .main-search-container{
     // background-color: red;
-    outline: 1px solid black;
-    border-radius: 1rem;
+    border: 0.5px solid rgb(99, 99, 99) !important;
+    border-radius: 1.5rem;
+
     // background-color: var(--SecondaryColor);
     padding: 1.5rem 1rem;
     // justify-content: space-evenly;
@@ -122,7 +131,7 @@
 
 .search-pop{
     position: absolute;
-    top: 10rem;
+    top: 0rem;
     left: 5rem;
     width: 50rem;
     background-color: grey;
@@ -133,6 +142,7 @@
     .texts{
  width: 100%;
         .searching-input{
+            // background-color: red;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -141,7 +151,8 @@
             padding-right: 2rem;
             width: 12.5rem;
             height: 3rem;
-            border: 1px solid black !important;
+            border: 0.5px solid rgb(99, 99, 99) !important;
+            border-radius: 1.5rem;
             // width: 100%;
         
             .searching-input-placeholder{
@@ -153,17 +164,31 @@
                 font-size: 1rem;
             }
         
+            // overflow: hidden;
         .searching-popup{
-            left: -0.25rem;
+
+       left: 0;
+       bottom: 0;
+       transform: scale(0);
+       transform-origin: bottom left;
+       transition: transform 0.2s ease-in-out;
+
             width: 25rem;
             // height: 10rem;
             z-index: 10;
             position: absolute;
-            top:-0.25rem;
+            // top:-3rem;
+            // bottom: 0;
+    
             background-color: white;
             border-radius: 1rem;
             box-shadow: 0px 2px 0.3rem 1px rgba(0,0,0,0.5);
             padding: 1.5rem;
+
+            &.popup-active{
+                transform: scale(1);
+                // transform: translateY(-100%) translateX(100%);
+            }
             .select-travellers-container{
                 justify-content: space-between;
                 .select-travellers-container__btns{

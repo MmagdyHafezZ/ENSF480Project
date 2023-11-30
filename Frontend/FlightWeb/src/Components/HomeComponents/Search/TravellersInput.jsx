@@ -32,17 +32,16 @@ const TravellersInput = ({
       ) : (
         <div className="chosen-input">{value.travellers}</div>
       )}
-      {popupState && (
-        <div ref={refProp}>
-          <TravellerSelectPopup
-            value={value}
-            setData={setData}
-            setPopup={() => {
-              togglePopup(); // Toggle the associated popup when closing
-            }}
-          />
-        </div>
-      )}
+
+      <TravellerSelectPopup
+        ref={refProp}
+        value={value}
+        setData={setData}
+        popupState={popupState}
+        setPopup={() => {
+          togglePopup(); // Toggle the associated popup when closing
+        }}
+      />
     </div>
   );
 };
