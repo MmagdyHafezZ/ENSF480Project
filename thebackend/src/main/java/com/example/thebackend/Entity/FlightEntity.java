@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * FlightEntity
  */
@@ -30,9 +32,11 @@ public class FlightEntity {
     private String arrivalAirport;
 
     @Column(name = "departure_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date departureDate;
 
     @Column(name = "arrival_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date arrivalDate;
 
     @Column(name = "departure_time")
