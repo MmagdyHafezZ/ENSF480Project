@@ -25,61 +25,56 @@ public class AircraftModelEntity {
     @Column(name = "seatcapacity")
     private int seatcapacity;
 
-    @Column(name = "row")
-    private int row;
+    @Column(name = "rownumber")
+    private int rownumber;
 
-    @Column(name = "column")
-    private int column;
+    @Column(name = "columnnumber")
+    private int columnnumber;
 
-    public AircraftModelEntity(){
-    }
-
-    public AircraftModelEntity(Long id, String model, int seatcapacity, int row, int column){
-        this.id = id;
+    public AircraftModelEntity(String model, int seatcapacity, int rownumber, int columnnumber){
         this.model = model;
         this.seatcapacity = seatcapacity;
-        this.row = row;
-        this.column = column;
+        this.rownumber = rownumber;
+        this.columnnumber = columnnumber;
+    }
+    
+    public Long getID(){
+        return id;
     }
     
     public void setID(Long id){
         this.id = id;
     }
-
-    public Long getID(){
-        return id;
-    }
-
-    public void setModel(String model){
-        this.model = model;
-    }
-
+    
     public String getModel(){
         return model;
     }
     
+    public void setModel(String model){
+        this.model = model;
+    }
+    
+    public int getSeatcapacity() {
+        return seatcapacity;
+    }
+
     public void setSeatcapacity(int seatcapacity) {
         this.seatcapacity = seatcapacity;
     }
 
-    public int getSeatcapacity() {
-        return this.seatcapacity;
+    public int getRowNumber(){
+        return rownumber;
     }
-
-    public void setRow(int row){
-        this.row = row;
+    
+    public void setRowNumber(int rownumber){
+        this.rownumber = rownumber;
     }
-
-    public int getRow(int row){
-        return row;
+    
+    public int getColumnNumber(){
+        return columnnumber;
     }
-
-    public void setColumn(int column){
-        this.column = column;
+    
+    public void setColumnNumber(int columnnumber){
+        this.columnnumber = columnnumber;
     }
-
-    public int getColumn(){
-        return column;
-    }
-
 }
