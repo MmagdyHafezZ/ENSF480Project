@@ -13,7 +13,8 @@ const FlightsPage = () => {
   // State declaration
   const { searchState, isLoggedIn } = useUserDataContext();
 
-  const userFlightData = location.state?.userFlightData;
+  const {userFlightData, apiFlight} = location.state||{};
+
   if (!userFlightData.return && !userFlightData.leaving.city) {
     return (
       <>
@@ -35,7 +36,7 @@ const FlightsPage = () => {
           <div className="flights-list__container">
             {/* List of Flights Here */}
 
-            <FlightsList userFlightData={userFlightData} />
+            <FlightsList userFlightData={userFlightData} apiFlight = {apiFlight} />
           </div>
           <div className="flights-main__right">Right</div>
         </div>

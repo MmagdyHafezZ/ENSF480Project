@@ -2,7 +2,7 @@ package com.example.thebackend.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user_preferences")
+@Table(name = "userPreferences")
 public class UserPreferences {
 
     @Id

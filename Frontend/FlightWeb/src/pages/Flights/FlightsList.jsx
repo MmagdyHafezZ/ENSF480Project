@@ -7,10 +7,16 @@ import dummyFlightsData from "../../data/flightsData.json";
 import { useSearchParams } from "react-router-dom";
 import AirplaneLoading from "../../Components/LoadingScreens/AirplaneLoading";
 import axios from "axios";
-const FlightsList = ({ userFlightData }) => {
+
+const FlightsList = ({ userFlightData, apiFlight }) => {
   const navigate = useNavigate();
   const { searchState, isLoading, setIsLoading } = useUserDataContext();
+  
+
+  //Put flight data with all times and stuff here
   const [flightData, setFlightData] = useState(dummyFlightsData);
+
+  
 
   const handleViewDetailsClick = (id) => {
     const flightDetails = flightData.find((flight) => flight.id === id);
@@ -61,7 +67,8 @@ const FlightsList = ({ userFlightData }) => {
       }
     }
 
-    console.log("got data");
+    // console.log("got data");
+    // console.log(userFlightData);
   }, [searchState, flightData, userFlightData]); // Add flightData as a dependency
 
   return (

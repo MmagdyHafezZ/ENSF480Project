@@ -1,4 +1,4 @@
-INSERT INTO airportdata (iata, city, state, country) VALUES 
+INSERT INTO `airportdata` (`iata`, `city`, `state`, `country`) VALUES 
 ('ICY', 'Icy Bay', 'Alaska', 'US'),
 ('HGZ', 'Hogatza', 'Alaska', 'US'),
 ('BYW', 'Blakely Island', 'Washington', 'US'),
