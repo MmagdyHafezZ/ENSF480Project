@@ -23,7 +23,7 @@ public class RegionController {
     @Autowired
     private RegionService regionService;
 
-    @GetMapping(params = "/getRegion")
+    @GetMapping(path = "/getRegion")
     public List<RegionEntity> getRegion(){
         return regionService.getRegionData();
     }
@@ -43,7 +43,7 @@ public class RegionController {
         return regionService.updateRegionEntity(id, regionEntity);
     }
 
-    @DeleteMapping(params = "/deleteRegion/{id}")
+    @DeleteMapping(path = "/deleteRegion/{id}")
     public void deleteRegion(@PathVariable Long id){
         regionService.deleteRegionEntity(id);
     }
