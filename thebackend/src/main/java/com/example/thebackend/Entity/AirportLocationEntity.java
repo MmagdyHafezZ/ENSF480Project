@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -30,10 +28,6 @@ public class AirportLocationEntity {
     
     @Column(name = "parentregionid")
     private int parentregionid;
-    
-    @ManyToOne
-    @JoinColumn(name = "parentregionid", referencedColumnName = "id")
-    private Region parentRegion;
     
     public AirportLocationEntity(String iata, int parentregionid){
         this.iata = iata;
