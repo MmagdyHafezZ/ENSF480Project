@@ -12,7 +12,7 @@ import FlightsPage from "./pages/Flights/FlightsPage.jsx";
 import TicketDetails from "./pages/TicketDetails/TicketDetails.jsx";
 import AllReservations from "./Components/Profile/AllReservations.jsx";
 import MembershipBenefits from "./Components/Profile/MembershipBenefits.jsx";
-// import SystemAdmin from "./pages/SystemAdmin/SystemAdmin.jsx";
+import SystemAdmin from "./pages/SystemAdmin/SystemAdmin.jsx";
 import AboutPage from "./Components/About/About.jsx";
 import OffersPage from "./Components/Offers/Offers.jsx";
 import AirlineAgentPage from "./Components/Airline_Agent/AirlineAgent.jsx";
@@ -33,7 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/tickets" element={<TicketDetails />} />
           <Route path="/reservations" element={<AllReservations />} />
           <Route path="/membership" element={<MembershipBenefits />} />
-          {/* <Route path="/admin" element={<SystemAdmin />} /> */}
+          <Route path="/admin" element={<SystemAdmin />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/offers" element={<OffersPage />} />
           <Route path="/agent" element={<AirlineAgentPage />} />
