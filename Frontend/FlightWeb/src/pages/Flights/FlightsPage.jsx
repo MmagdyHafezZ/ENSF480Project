@@ -14,7 +14,6 @@ const FlightsPage = () => {
   // State declaration
   const { searchState, isLoggedIn } = useUserDataContext();
 
-
   const {userFlightData, sendData} = location.state||{};
 
   if (!userFlightData.return && !userFlightData.leaving.city) {
