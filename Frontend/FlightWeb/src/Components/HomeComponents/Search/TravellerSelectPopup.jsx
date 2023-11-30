@@ -7,7 +7,6 @@ export default function TravelerSelectPopup({
   value,
   setData,
   popupState,
-  ref,
 }) {
   const handlePopupClick = (event) => {
     event.stopPropagation(); // This stops the click event from reaching the parent
@@ -15,7 +14,6 @@ export default function TravelerSelectPopup({
 
   return (
     <div
-      ref={ref}
       className={`searching-popup ${popupState ? "popup-active" : ""}`}
       onClick={handlePopupClick}
     >

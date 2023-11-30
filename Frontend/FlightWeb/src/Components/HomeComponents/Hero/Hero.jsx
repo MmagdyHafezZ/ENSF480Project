@@ -22,7 +22,7 @@ const Hero = () => {
               }}
               className="deals-button"
             >
-              See travel hacks
+              Shop Deals
             </button>
           </div>
         </div>

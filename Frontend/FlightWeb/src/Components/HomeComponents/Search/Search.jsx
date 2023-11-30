@@ -23,19 +23,11 @@ const Search = () => {
   const {
     userFlightData,
     setUserFlightData,
-    saveFlightDataToLocalStorage,
-    searchState,
     setSearchState,
     isLoggedInContext,
+    saveFlightDataTosessionStorage,
+    handleButtonClick,
   } = useUserDataContext();
-  console.log("Logged In?", isLoggedInContext);
-  useEffect(() => {
-    // Retrieve the userFlightData from localStorage
-    const storedData = localStorage.getItem("userFlightData");
-    if (storedData) {
-      setUserFlightData(JSON.parse(storedData));
-    }
-  }, []);
   // const [isLoggedIn, setIsLoggedIn] = useState(
   //   localStorage.getItem("isLoggedIn") || false
   // );
@@ -132,13 +124,14 @@ const Search = () => {
   // Function to update URL with userFlightData
 
   const handleSearchFlight = () => {
-    setSearchState((prev) => !prev);
-    // localStorage.setItem("userFlightData", JSON.stringify(userFlightData));
-    const updatedUserFlightData = { ...userFlightData };
+    setSearchState((prev) => !prev); // Toggle search state
+    handleButtonClick();
+    sessionStorage.setItem("userFlightData", JSON.stringify(userFlightData));
+    // const updatedUserFlightData = { ...userFlightData };
     // Update userFlightData with the copy
-    setUserFlightData(userFlightData);
-    saveFlightDataToLocalStorage();
-    navigate("/flights");
+    // setUserFlightData(userFlightData);
+    // saveFlightDataToLocalStorage();
+    navigate("/flights", { state: { userFlightData } });
   };
   return (
     <div className="search container section">

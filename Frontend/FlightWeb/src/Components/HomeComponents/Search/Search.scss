@@ -25,15 +25,20 @@
             }
         }
         .chosen-location{
-            font-size: 1rem;
+            white-space: nowrap;  
+            overflow: hidden;    
+            text-overflow: ellipsis;  
+            font-size: 0.9rem;
         }
         .search-location-popup{
 
-            left: 0;
-            bottom: 0;
-            transform: scale(0);
-            transform-origin: bottom left;
+            // left: 0;
+            // bottom: 0;
+            // transform: scale(0);
+            // transform-origin: bottom left;
             transition: transform 0.2s ease-in-out;
+            top:0;
+            left:0;
             width: 25rem;
             height: 25rem;
             z-index: 10;
@@ -47,7 +52,7 @@
             border-radius: 1rem;
             box-shadow: 0px 2px 0.3rem 1px rgba(0,0,0,0.5);
             &.location-popup-active{
-                transform: scale(1);
+                // transform: scale(1);
             }
             .search-location-popup__container{
                 border-bottom: 1px solid black;
@@ -111,6 +116,8 @@
 
     // background-color: var(--SecondaryColor);
     padding: 1.5rem 1rem;
+    // margin-left: 5rem;
+    // margin-right: 5rem;
     // justify-content: space-evenly;
     justify-content: center;
     // margin: 1rem;
@@ -167,10 +174,10 @@
             // overflow: hidden;
         .searching-popup{
 
-       left: 0;
-       bottom: 0;
+       right: 0;
+       top: 0;
        transform: scale(0);
-       transform-origin: bottom left;
+       transform-origin: top right;
        transition: transform 0.2s ease-in-out;
 
             width: 25rem;

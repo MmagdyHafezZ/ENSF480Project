@@ -16,7 +16,6 @@ const CalendarInput = ({
     const formattedDate = format(new Date(date), "MM/dd");
     return formattedDate;
   };
-  console.log();
   if (value.return) {
     // console.log("vale", value);
   }
@@ -40,16 +39,17 @@ const CalendarInput = ({
       ) : (
         <></>
       )}
-
-      <CalendarPopup
-        ref={refProp}
-        value={value}
-        setData={setData}
-        onChange={onChange}
-        togglePopup={togglePopup}
-        label={label}
-        popupState={popupState}
-      />
+      <div ref={refProp}>
+        {" "}
+        <CalendarPopup
+          value={value}
+          setData={setData}
+          onChange={onChange}
+          togglePopup={togglePopup}
+          label={label}
+          popupState={popupState}
+        />
+      </div>
     </div>
   );
 };

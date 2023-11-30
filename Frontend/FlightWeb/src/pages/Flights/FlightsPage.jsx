@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { useUserDataContext } from "../../context/UserDataContext";
 import Navbar from "../../Components/Navbar/Navbar";
 import Search from "../../Components/HomeComponents/Search/Search";
@@ -9,11 +9,11 @@ import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
 
 const FlightsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const location = useLocation();
   // State declaration
-  const { userFlightData, searchState, isLoggedIn } = useUserDataContext();
-  console.log(isLoggedIn ? "Still logged in" : "not logged in");
+  const { searchState, isLoggedIn } = useUserDataContext();
 
+  const userFlightData = location.state?.userFlightData;
   if (!userFlightData.return && !userFlightData.leaving.city) {
     return (
       <>
@@ -21,6 +21,8 @@ const FlightsPage = () => {
       </>
     );
   }
+  // console.log(userFlightData);
+
   return (
     <>
       <Navbar />
@@ -33,7 +35,7 @@ const FlightsPage = () => {
           <div className="flights-list__container">
             {/* List of Flights Here */}
 
-            <FlightsList />
+            <FlightsList userFlightData={userFlightData} />
           </div>
           <div className="flights-main__right">Right</div>
         </div>
