@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "user_profile")
+@Table(name = "userProfile")
 public class UserProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
@@ -25,5 +24,74 @@ public class UserProfile {
     private Boolean emailNotification;
 
     // Constructors, Getters and Setters
-}
+    public UserProfile( String username, String userRole, String membershipType, Integer loyaltyPoints, List<String> recentBookings, List<String> upcomingFlights, Boolean emailNotification) {
+        this.username = username;
+        this.userRole = userRole;
+        this.membershipType = membershipType;
+        this.loyaltyPoints = loyaltyPoints;
+        this.recentBookings = recentBookings;
+        this.upcomingFlights = upcomingFlights;
+        this.emailNotification = emailNotification;
+    }
+    public UserProfile() {
+    }
+    public String getUsername() {
+        return username;
+    }
+    public String getUserRole() {
+        return userRole;
+    }
+    public String getMembershipType() {
+        return membershipType;
+    }
+    public Integer getLoyaltyPoints() {
+        return loyaltyPoints;
+    }
+    public List<String> getRecentBookings() {
+        return recentBookings;
+    }
+    public List<String> getUpcomingFlights() {
+        return upcomingFlights;
+    }
+    public Boolean getEmailNotification() {
+        return emailNotification;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
+    public void setMembershipType(String membershipType) {
+        this.membershipType = membershipType;
+    }
+    public void setLoyaltyPoints(Integer loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
+    }
+    public void setRecentBookings(List<String> recentBookings) {
+        this.recentBookings = recentBookings;
+    }
+    public void setUpcomingFlights(List<String> upcomingFlights) {
+        this.upcomingFlights = upcomingFlights;
+    }
+    public void setEmailNotification(Boolean emailNotification) {
+        this.emailNotification = emailNotification;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", userRole='" + userRole + '\'' +
+                ", membershipType='" + membershipType + '\'' +
+                ", loyaltyPoints=" + loyaltyPoints +
+                ", recentBookings=" + recentBookings +
+                ", upcomingFlights=" + upcomingFlights +
+                ", emailNotification=" + emailNotification +
+                '}';
+    }
 
+}
