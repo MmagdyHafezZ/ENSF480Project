@@ -18,7 +18,7 @@ public class UserPreferencesService {
 
         preferences.setMealPreference(dto.getMealPreference());
         preferences.setSeatPreference(dto.getSeatPreference());
-        // preferences.setUserProfile(dto.getUserProfile());
+        preferences.setUserProfile(dto.getUserProfile());
 
         return userPreferencesRepository.save(preferences);
     }
