@@ -23,11 +23,10 @@ public class AircraftModelSeed implements CommandLineRunner{
 
     private void loadAircraftModelData() {
         if (aircraftModelRepository.count() == 0) {
-            AircraftModelEntity a1 = new AircraftModelEntity("Embraer E175-E2", 90, 19, 4);
-            AircraftModelEntity a2 = new AircraftModelEntity("Boeing 737-8 MAX", 90, 28, 6);
+            AircraftModelEntity a1 = new AircraftModelEntity("Embraer", 90, 19, 4);
+            AircraftModelEntity a2 = new AircraftModelEntity("Boeing", 90, 28, 6);
             aircraftModelRepository.save(a1);
             aircraftModelRepository.save(a2);
-
         }
     }
 }
