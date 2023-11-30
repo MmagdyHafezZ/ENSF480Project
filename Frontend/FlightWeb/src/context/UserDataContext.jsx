@@ -59,6 +59,7 @@ export const UserDataProvider = ({ children }) => {
   };
   const location = useLocation();
   useEffect(() => {
+    document.body.classList.remove("no-scroll");
     // Retrieve the userFlightData from sessionStorage
     const storedData = sessionStorage.getItem("userFlightData");
     if (storedData) {

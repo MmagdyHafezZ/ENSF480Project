@@ -10,10 +10,11 @@ import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
 const FlightsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
+  const state = location.state;
   // State declaration
   const { searchState, isLoggedIn } = useUserDataContext();
 
-  const userFlightData = location.state?.userFlightData;
+  const userFlightData = state.userFlightData || state.cardFlightData;
   if (!userFlightData.return && !userFlightData.leaving.city) {
     return (
       <>
@@ -21,7 +22,7 @@ const FlightsPage = () => {
       </>
     );
   }
-  // console.log(userFlightData);
+  console.log(userFlightData);
 
   return (
     <>
