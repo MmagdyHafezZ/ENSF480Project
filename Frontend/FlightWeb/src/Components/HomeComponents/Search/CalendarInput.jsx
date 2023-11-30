@@ -40,16 +40,17 @@ const CalendarInput = ({
       ) : (
         <></>
       )}
-
-      <CalendarPopup
-        ref={refProp}
-        value={value}
-        setData={setData}
-        onChange={onChange}
-        togglePopup={togglePopup}
-        label={label}
-        popupState={popupState}
-      />
+      <div ref={refProp}>
+        {" "}
+        <CalendarPopup
+          value={value}
+          setData={setData}
+          onChange={onChange}
+          togglePopup={togglePopup}
+          label={label}
+          popupState={popupState}
+        />
+      </div>
     </div>
   );
 };
