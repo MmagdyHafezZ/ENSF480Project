@@ -29,13 +29,11 @@ public class User {
     }
 
     // All-argument constructor
-    public User(Long id, String email, String password, String first_name, String last_name) {
-        this.id = id;
+    public User(String email, String password, String first_name, String last_name) {
         this.email = email;
         this.password = password;
         this.first_name = first_name;
         this.last_name = last_name;
-
     }
 
     // Getters and Setters

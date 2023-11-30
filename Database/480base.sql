@@ -24,8 +24,8 @@ CREATE TABLE airportdata (
     country  	VARCHAR(100)
 );
 
-DROP TABLE IF EXISTS userProfile;
-CREATE TABLE userProfile (
+DROP TABLE IF EXISTS userprofile;
+CREATE TABLE userprofile (
     id BIGINT NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
     userRole VARCHAR(255),
@@ -36,8 +36,8 @@ CREATE TABLE userProfile (
     emailNotification BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id) REFERENCES users(id)
 );
-DROP TABLE IF EXISTS userCreditCard;
-CREATE TABLE userCreditCard (
+DROP TABLE IF EXISTS usercreditcard;
+CREATE TABLE usercreditcard (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     userId BIGINT NOT NULL,
     cardNumber VARCHAR(255),
@@ -45,15 +45,62 @@ CREATE TABLE userCreditCard (
     cvv VARCHAR(10),
     cardholderName VARCHAR(255),
     address TEXT,
-    FOREIGN KEY (userId) REFERENCES userProfile(id)
+    FOREIGN KEY (userId) REFERENCES userprofile(id)
 );
 
-CREATE TABLE userPreferences (
+
+CREATE TABLE IF NOT EXISTS `aircraftmodel` (
+	`id`			INT NOT NULL AUTO_INCREMENT,
+    `model`			VARCHAR(50),
+    `seatcapacity`	SMALLINT UNSIGNED,
+    `row`			SMALLINT UNSIGNED,
+    `column`		SMALLINT UNSIGNED,
+    CONSTRAINT UC_Model	UNIQUE (`modelname`),
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `aircraft` (
+	`id`		INT NOT NULL AUTO_INCREMENT,
+    `modelid`	INT NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT FK_AircraftModel FOREIGN KEY (`modelid`)
+    REFERENCES `aircraftmodel`(`id`) ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `region` (
+	`id`		INT NOT NULL AUTO_INCREMENT,
+    `city`		VARCHAR(50) NOT NULL,
+    `state`		VARCHAR(50) NOT NULL,
+    `country` 	VARCHAR(2)	NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `airport` (
+	`id` 				INT NOT NULL AUTO_INCREMENT,
+    `iata`				VARCHAR(3),
+    `parentregionid`	INT NOT NULL,
+    CONSTRAINT FK_ParentRegionID FOREIGN KEY (`parentregionid`)
+    REFERENCES `region`(`id`) ON UPDATE CASCADE
+);
+	
+CREATE TABLE IF NOT EXISTS `route` (
+	`id`			INT NOT NULL AUTO_INCREMENT,
+    `origin`		INT NOT NULL,
+    `destination`	INT NOT NULL,
+    PRIMARY KEY(`id`),
+    CONSTRAINT FK_Origin FOREIGN KEY (`origin`)
+    REFERENCES `airport`(`id`) ON UPDATE CASCADE,
+    CONSTRAINT FK_Destination FOREIGN KEY (`destination`)
+    REFERENCES `airport`(`id`) ON UPDATE CASCADE,
+    CONSTRAINT UC_Route UNIQUE (`origin`, `destination`)
+);
+
+   
+CREATE TABLE userpreferences (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     userId BIGINT NOT NULL,
     mealPreference VARCHAR(255),
     seatPreference ENUM('aisle', 'window'),
-    FOREIGN KEY (userId) REFERENCES userProfile(id)
+    FOREIGN KEY (userId) REFERENCES userprofile(id)
 );	
 
 INSERT INTO airportdata (iata, city, state, country) VALUES 

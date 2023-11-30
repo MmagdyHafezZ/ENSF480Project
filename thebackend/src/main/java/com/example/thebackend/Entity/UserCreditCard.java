@@ -2,11 +2,10 @@ package com.example.thebackend.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "userCreditCard")
+@Table(name = "usercreditcard")
 public class UserCreditCard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String cardNumber;
@@ -15,9 +14,10 @@ public class UserCreditCard {
     private String cardholderName;
     private String address;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserProfile userProfile;
+
 
     // Constructors, Getters and Setters
     public UserCreditCard(String cardNumber, String expiryDate, String cvv, String cardholderName, String address) {

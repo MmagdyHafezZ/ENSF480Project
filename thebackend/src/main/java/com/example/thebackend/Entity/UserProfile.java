@@ -2,9 +2,8 @@ package com.example.thebackend.Entity;
 
 import jakarta.persistence.*;
 import java.util.List;
-
 @Entity
-@Table(name = "userProfile")
+@Table(name = "userprofile")
 public class UserProfile {
 
     @Id
@@ -16,8 +15,12 @@ public class UserProfile {
     private User user;
 
     private String username;
+
     private String userRole;
-    private String membershipType;
+
+    @Enumerated(EnumType.STRING)
+    private MembershipType membershipType;
+
     private Integer loyaltyPoints;
 
     @ElementCollection
@@ -25,11 +28,12 @@ public class UserProfile {
 
     @ElementCollection
     private List<String> upcomingFlights;
-    
+
     private Boolean emailNotification;
 
+
     // Constructors, Getters and Setters
-    public UserProfile( String username, String userRole, String membershipType, Integer loyaltyPoints, List<String> recentBookings, List<String> upcomingFlights, Boolean emailNotification, User user) {
+    public UserProfile( String username, String userRole, MembershipType membershipType, Integer loyaltyPoints, List<String> recentBookings, List<String> upcomingFlights, Boolean emailNotification, User user) {
         this.username = username;
         this.userRole = userRole;
         this.membershipType = membershipType;
@@ -39,6 +43,8 @@ public class UserProfile {
         this.emailNotification = emailNotification;
         this.user = user;
     }
+
+    
     public UserProfile() {
     }
     public String getUsername() {
@@ -47,7 +53,7 @@ public class UserProfile {
     public String getUserRole() {
         return userRole;
     }
-    public String getMembershipType() {
+    public MembershipType getMembershipType() {
         return membershipType;
     }
     public Integer getLoyaltyPoints() {
@@ -68,7 +74,7 @@ public class UserProfile {
     public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
-    public void setMembershipType(String membershipType) {
+    public void setMembershipType(MembershipType membershipType) {
         this.membershipType = membershipType;
     }
     public void setLoyaltyPoints(Integer loyaltyPoints) {

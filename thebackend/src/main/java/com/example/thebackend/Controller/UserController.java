@@ -59,7 +59,7 @@ public class UserController {
     // Add/Edit UserPreferences
     @PostMapping("/preferences")
     public ResponseEntity<?> addOrUpdateUserPreferences(@RequestBody UserPreferencesDTO preferencesDTO) {
-        UserPreferences updatedPreferences = userPreferencesService.addOrUpdateUserPreferences(preferencesDTO);
+        UserPreferences updatedPreferences = userPreferencesService.addOrUpdateUserPreferences(preferencesDTO.getId(), preferencesDTO.getMealPreference(), preferencesDTO.getSeatPreference());
         return ResponseEntity.ok(updatedPreferences);
     }
 

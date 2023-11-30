@@ -2,18 +2,18 @@ package com.example.thebackend.Entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "userPreferences")
+@Table(name = "userpreferences")
 public class UserPreferences {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String mealPreference;
     private String seatPreference;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
     private UserProfile userProfile;
 
     // Constructors, Getters and Setters

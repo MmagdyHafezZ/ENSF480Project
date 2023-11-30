@@ -23,8 +23,8 @@ const PaymentForm = () => {
   const { price, flightDetails, selectedSeats } = location.state || {}; // Extracting price from the state <----FlightDetails should have the flight data, selectedSeats is the userSelectedSeats
   console.log(selectedSeats);
   // Mock data - replace with actual data from the user's profile
-  const totalLoyaltyPoints =
-    parseInt(localStorage.getItem("loyaltyPoints")) || 200;
+  const totalLoyaltyPoints = 100;
+  parseInt(localStorage.getItem("loyaltyPoints")) || 100;
   const totalAmount = price; // Replace with actual amount
 
   const handleLoyaltyChange = (event, newValue) => {

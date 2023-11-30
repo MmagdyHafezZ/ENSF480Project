@@ -1,11 +1,13 @@
 package com.example.thebackend.DTO;
 import java.util.*;
 
+import com.example.thebackend.Entity.MembershipType;
+
 public class UserProfileDTO {
     private Long id;
     private String username;
     private String userRole;
-    private String membershipType;
+    private MembershipType membershipType;
     private Integer loyaltyPoints;
     private List<String> recentBookings;
     private List<String> upcomingFlights;
@@ -18,8 +20,8 @@ public class UserProfileDTO {
     public void setUsername(String username) { this.username = username; }
     public String getUserRole() { return userRole; }
     public void setUserRole(String userRole) { this.userRole = userRole; }
-    public String getMembershipType() { return membershipType; }
-    public void setMembershipType(String membershipType) { this.membershipType = membershipType; }
+    public MembershipType getMembershipType() { return membershipType; }
+    public void setMembershipType(MembershipType membershipType) { this.membershipType = membershipType; }
     public Integer getLoyaltyPoints() { return loyaltyPoints; }
     public void setLoyaltyPoints(Integer loyaltyPoints) { this.loyaltyPoints = loyaltyPoints; }
     public List<String> getRecentBookings() { return recentBookings; }
