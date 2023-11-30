@@ -1,45 +1,148 @@
 .hero-wrapper{
     padding: 1rem 10rem 5rem 10rem;
+    .deals-image-container {
+      display: flex;
+      // justify-content: center;
+      // align-items: center;
+      background-image: url('../../../assets/hero-main-image.jpeg'); // Replace with your image path
+      background-size: cover;
+      background-position: center;
+      height: 30rem;
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      // padding: 20px;
+    
+      .deals-content {
+        max-width: 600px;
+        background: linear-gradient(to right, rgba(0, 0, 0, 1), transparent);
+        // background-color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1.5rem;
+        // border-radius: 8px;
+        // text-align: center;
+    
+        h1 {
 
-    .hero-container{
-        // padding: 3rem;
-        // background-color: red;
-        position: relative;
-        overflow: hidden;
-        padding: 1rem 0rem 5rem 0rem;
-        
+          color: white;
+          font-size: 2.5em;
+        }
+    
+        p {
+          color: white;
+          font-size: 1.2em;
+          margin: 20px 0;
+        }
+    
+        .deals-button {
+          background-color: #0063e5;
+          width: 50%;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 1rem;
+          font-size: 1em;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+    
+          &:hover {
+            background-color: darken(#0063e5, 10%);
+          }
+        }
+      }
+    }
+    
+  .hero-container{
+    overflow: hidden;
+    padding: 1rem 0rem 5rem 0rem;
+    .hero-container__header{
+      font-weight: 500;
+      font-size: 1.75rem;
     }
     .swiper-horizontal{
-        overflow: visible;
-        background-color: green;s
-        .swiper-wrapper{
-            width: 50%;
-            background-color: green;
+      position: relative;
+      overflow: visible;
+      padding: 1rem;
+      .r-buttons{
+        position: absolute;
+        // flex-direction: row;
+        // width: 100%;
+        display: flex;
+        gap: 2rem;
+        bottom: -4.5rem;
+        left: 1rem;
+  // top: -4rem;
 
-        }
-    }
-}
-.swiper-slide{
-
-    height: 100%;
-}
-.r-card{
-    border: 0.5px solid black;
-    height: 100%;
-    &>img {
-        width: 100%;
-        max-width: 50rem;
-        height: 10rem;
-    
       }
+      .swiper-button-prev, .swiper-button-next {
+        background-color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 0.2rem 0.8rem;
+        cursor: pointer;
+        z-index: 10;
+        height: 3rem;
+        width: 3rem;
+        display: grid;
+      place-items: center;  
+      border-radius: 50%;
+      box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.25);
+      
+        &:hover {
+            background-color: #eeeeff;
+        }
+      }
+      
+
+      .swiper-wrapper{
+          width: 50%;
+
+          .swiper-slide{
+            height: 100%;
+
+            .r-card{
+              // border: 0.25px solid black;
+              box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+              height: 100%;
+              border-radius: 1rem;
+              overflow: hidden;
+              &>img {
+                  width: 100%;
+                  max-width: 50rem;
+                  height: 10rem;
+                  object-fit: cover;
+              
+                }
+                .card-destination{
+                  display: flex;
+                  flex-direction: column;
+                  padding: 0.25rem 0.5rem;
+                  &> :nth-child(1) {
+                    font-size: 1.5rem;
+                  }
+                  &> :nth-child(2) {
+                    font-size: 1rem;
+                  }
+                }
+          }
+          
+        }
+
+      }
+  }
+  
 }
 
 
+}
+
+
+
+
   
   
-  .r-card > :nth-child(2) {
-    font-size: 1.5rem;
-  }
   
 
   
@@ -60,7 +163,7 @@
 }
 
 .r-buttons {
-    position: absolute;
+    // position: absolute;
     // gap: 2rem;
     bottom: -4rem;
     left: 0;
@@ -73,13 +176,6 @@
         border-radius: 5px;
         background-color: white;
         cursor: pointer;
-      }
-    &>:nth-child(1) {
-        background-color: #eeeeff;
-      }
-      &>:nth-child(2) {
-        /* background-color: red; */
-        box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.25);
       }
   }
 

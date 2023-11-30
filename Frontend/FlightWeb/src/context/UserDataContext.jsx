@@ -41,6 +41,9 @@ export const UserDataProvider = ({ children }) => {
       setUserFlightData(parsedData);
     }
   }, [location.pathname]);
+  const [isLoggedInContext, setIsLoggedInContext] = useState(
+    JSON.parse(localStorage.getItem("isLoggedIn")) || false
+  );
 
   // Use useEffect to clear local storage when the URL is at '/'
   useEffect(() => {
@@ -62,6 +65,8 @@ export const UserDataProvider = ({ children }) => {
     setSelectedSeats,
     price,
     setPrice,
+    isLoggedInContext,
+    setIsLoggedInContext,
   };
   return (
     <UserDataContext.Provider value={values}>

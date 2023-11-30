@@ -1,7 +1,15 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-const CalendarPopup = ({ value, onChange, togglePopup, label, setData }) => {
+const CalendarPopup = ({
+  value,
+  onChange,
+  togglePopup,
+  label,
+  setData,
+  popupState,
+  ref,
+}) => {
   console.log("hello", value);
   const handlePopupClick = (event) => {
     event.stopPropagation(); // This stops the click event from reaching the parent
@@ -37,7 +45,11 @@ const CalendarPopup = ({ value, onChange, togglePopup, label, setData }) => {
   console.log("VALUESS", value);
 
   return (
-    <div onClick={handlePopupClick} className="searching-popup">
+    <div
+      ref={ref}
+      onClick={handlePopupClick}
+      className={`searching-popup ${popupState ? "popup-active" : ""}`}
+    >
       <button onClick={togglePopup}>close</button>
       <DatePicker
         selected={value.depart}

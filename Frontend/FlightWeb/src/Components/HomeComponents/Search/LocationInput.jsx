@@ -27,21 +27,23 @@ const LocationInput = ({
       >
         {label}
       </div>
-      {value[type] && <div className="chosen-location">{value[type].iata} - {value[type].city}</div>}
-
-      {popupState && (
-        <div ref={refProp}>
-          <SearchLocationPopup
-            placeholder={label}
-            type={type}
-            value={value}
-            setData={setData}
-            setPopup={() => {
-              togglePopup(); // Toggle the associated popup when closing
-            }}
-          />
+      {value[type] && (
+        <div className="chosen-location">
+          {value[type].iata} - {value[type].city}
         </div>
       )}
+
+      <SearchLocationPopup
+        ref={refProp}
+        popupState={popupState}
+        placeholder={label}
+        type={type}
+        value={value}
+        setData={setData}
+        setPopup={() => {
+          togglePopup(); // Toggle the associated popup when closing
+        }}
+      />
     </span>
   );
 };

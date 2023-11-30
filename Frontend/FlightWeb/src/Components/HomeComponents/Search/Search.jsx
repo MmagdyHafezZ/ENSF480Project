@@ -26,8 +26,9 @@ const Search = () => {
     saveFlightDataToLocalStorage,
     searchState,
     setSearchState,
+    isLoggedInContext,
   } = useUserDataContext();
-
+  console.log("Logged In?", isLoggedInContext);
   useEffect(() => {
     // Retrieve the userFlightData from localStorage
     const storedData = localStorage.getItem("userFlightData");
@@ -35,9 +36,9 @@ const Search = () => {
       setUserFlightData(JSON.parse(storedData));
     }
   }, []);
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn") || false
-  );
+  // const [isLoggedIn, setIsLoggedIn] = useState(
+  //   localStorage.getItem("isLoggedIn") || false
+  // );
   const navigate = useNavigate();
 
   const [popupStates, setPopupStates] = useState({
