@@ -40,7 +40,6 @@ const CalendarPopup = ({
 
   const formattedDepartDate = formatDate(value.depart);
   const formattedReturnDate = formatDate(value.return);
-
   return (
     <div
       onClick={handlePopupClick}

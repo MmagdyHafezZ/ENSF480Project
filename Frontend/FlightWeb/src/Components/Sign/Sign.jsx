@@ -4,6 +4,7 @@ import axios from "axios";
 import "./signup.css"; // Make sure this path is correct
 import { GoogleLoginButton } from "react-social-login-buttons";
 import "./background.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SignUpSignIn = () => {
   const [isGx, setIsGx] = useState(false);
@@ -16,6 +17,11 @@ const SignUpSignIn = () => {
   const [isSignIn, setIsSignIn] = useLocalStorage("isSignIn", false);
   const [username, setUsername] = useLocalStorage("username", "");
   const [email, setEmail] = useLocalStorage("email", "");
+  /* This is for when the user tries to pay when not logged in*/
+  const location = useLocation();
+  const navigate = useNavigate();
+  const redirectState = location.state;
+  /* --------------------------------------- */
 
   const jumpToHome = useCallback(() => {
     // to jump to home page after login
@@ -98,7 +104,11 @@ const SignUpSignIn = () => {
         localStorage.setItem("isLoggedIn", true);
         setUsername(res.data.username); // Ensure `setUsername` is defined and working as expected
         setEmail(email); // Ensure `setEmail` is defined and working as expected
-        jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
+        if (redirectState && redirectState.from === "ticketDetails") {
+          navigate("/payment", { state: redirectState.ticketDetailsState });
+        } else {
+          jumpToHome(); // Default redirect if no specific state is present
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -134,7 +144,17 @@ const SignUpSignIn = () => {
           localStorage.setItem("isLoggedIn", true);
           localStorage.setItem("token", access_token);
 
-          jumpToHome();
+          if (redirectState && redirectState.from === "ticketDetails") {
+            // <--- I added this to check if the user was redirected her to log in before payment
+            navigate("/tickets", {
+              state: {
+                ...redirectState.ticketDetailsState,
+                showCheckmark: true,
+              },
+            });
+          } else {
+            jumpToHome(); // Default redirect if no specific state is present
+          }
         } catch (err) {
           console.error("Error fetching Google user info:", err);
         }

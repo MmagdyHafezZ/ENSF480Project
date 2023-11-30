@@ -109,16 +109,16 @@ const SearchLocationPopup = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [destinations, setDestinations] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/getAirport")
-      .then((response) => {
-        setDestinations(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:8080/getAirport")
+  //     .then((response) => {
+  //       setDestinations(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data: ", error);
+  //     });
+  // }, []);
 
   const dummyData = [
     { city: "New York", iata: "JFK" },
@@ -135,7 +135,6 @@ const SearchLocationPopup = ({
   ];
 
   function handleSelectLocation(location) {
-    console.log(location);
     setData((prevData) => ({
       ...prevData,
       [type]: location, // 'type' can be 'leaving' or 'going'
