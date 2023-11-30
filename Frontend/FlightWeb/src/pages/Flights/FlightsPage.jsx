@@ -11,8 +11,9 @@ const FlightsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // State declaration
-  const { userFlightData, searchState } = useUserDataContext();
-  console.log("STATE", searchState);
+  const { userFlightData, searchState, isLoggedIn } = useUserDataContext();
+  console.log(isLoggedIn ? "Still logged in" : "not logged in");
+
   if (!userFlightData.return && !userFlightData.leaving.city) {
     return (
       <>

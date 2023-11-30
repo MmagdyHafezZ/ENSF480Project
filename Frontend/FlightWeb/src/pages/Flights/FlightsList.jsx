@@ -5,6 +5,7 @@ import { useUserDataContext } from "../../context/UserDataContext";
 import { useState, useEffect } from "react";
 import flightsData from "../../data/flightsData.json";
 import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 const FlightsList = () => {
   const navigate = useNavigate();
   const { userFlightData, searchState } = useUserDataContext();
@@ -40,6 +41,7 @@ const FlightsList = () => {
   };
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [filteredFlights, setFilteredFlights] = useState([]);
+
   useEffect(() => {
     const originalDepartDate = new Date(userFlightData.depart);
     const formattedOriginalDate = originalDepartDate.toISOString().slice(0, 19);
@@ -64,6 +66,7 @@ const FlightsList = () => {
       setIsSearchActive(searchState);
     }
   }, [searchState, userFlightData]);
+
   return (
     <div className="flights-list">
       {filteredFlights.map((flight) => {

@@ -1,0 +1,200 @@
+// Define colors as variables for easy maintenance
+$backgroundColorBody: #69D2E7;
+$backgroundColorNight: #1D2F41;
+$sunColor: #f1c40f;
+$moonColor: #F1EFA5;
+$cloudShadowColor: #FFFF75;
+$moonShadowColor: #FFFFE7;
+
+// Define common animation duration
+$animationDuration: 33.5s;
+
+.airlplane-loading-wrapper {
+  // height: 100vh;
+  position: absolute;
+  height: 100%;
+  bottom:0;
+  background-color: $backgroundColorBody;
+  width: 100%;
+  overflow: hidden;
+  animation: body $animationDuration infinite linear;
+}
+.loading-airplane-body{
+  width: 90%;
+
+}
+.loading-message{
+    position: absolute;
+  background-color: white;
+  // margin-top: 8rem;
+  // top: 50%;
+  overflow: visible;
+  z-index: 3;
+  border-radius: 1.5rem;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+  width: 50%;
+  height: 25%;
+  left: 27%;
+  bottom: 0;
+  padding: 2rem;
+  border: 0.5px solid black;
+  // width: 100%;
+
+  h3{
+    font-size: 1.5rem;
+  }
+}
+
+// Define common styles for celestial bodies
+%celestial-body {
+  position: absolute;
+  height: 80px;
+  width: 80px;
+  border-radius: 80px;
+  margin-top: 20px;
+}
+
+.sun {
+  @extend %celestial-body;
+  background-color: $sunColor;
+  margin-left: 300px;
+  box-shadow: 0px 0px 180px 2px $cloudShadowColor;
+  animation: sun $animationDuration infinite linear;
+}
+
+.moon {
+  @extend %celestial-body;
+  background-color: $moonColor;
+  box-shadow: 0px 0px 180px 2px $moonShadowColor;
+  animation: moon $animationDuration infinite linear;
+  margin-left: 1250px;
+  z-index: -2;
+}
+
+.plane {
+  margin-left: 50%;
+  // height: 80px;
+  width: 24rem;
+  height: 12rem;
+  margin-top: 70px;
+  position: absolute;
+  z-index: 2;
+  animation: plane 6s infinite;
+}
+
+// Define a mixin for clouds
+@mixin cloud-style($height, $width, $borderRadius: 50%, $marginTop, $marginRight, $animationTime) {
+  height: $height;
+  width: $width;
+  border-radius: $borderRadius;
+  float: right;
+  margin-top: $marginTop;
+  margin-right: $marginRight;
+  animation: clouds $animationTime infinite linear;
+}
+
+// Example adjustments to cloud dimensions
+.cloud1 { @include cloud-style(60px, 200px, 50%, 20px, 102%, 10s); }
+.cloud2 { @include cloud-style(50px, 100px, 50%, 20px, 115%, 12s); }
+.cloud3 { @include cloud-style(150px, 300px, 50%, 20px, 120%, 11.5s); }
+.cloud4 { @include cloud-style(45px, 90px, 50%, 20px, 110%, 17s); }
+.cloud5 { @include cloud-style(35px, 80px, 50%, 20px, 120%, 31s); }
+
+/* Animations */
+@keyframes clouds {
+  from { transform: translateX(-5%); }
+  to { transform: translateX(2900px); }
+}
+
+@keyframes plane {
+  0% { /**/ }
+  25% { margin-top: 85px; }
+  50% { margin-left: 48%; }
+  75% { margin-left: 46%; margin-top: 60px; }
+  100% { margin-top: 70px; margin-left: 50%; }
+}
+
+@keyframes body {
+  0%, 5% { background-color: $backgroundColorBody; }
+  25%, 75% { background-color: $backgroundColorNight; }
+  100% { background-color: $backgroundColorBody; }
+}
+
+@keyframes sun {
+  0%, 10% { margin-top: 20px; }
+  30%, 75% { margin-top: 101%; }
+  100% { margin-top: 20px; }
+}
+
+@keyframes moon {
+  0% { margin-top: 101%; }
+  25%, 75% { margin-top: 20px; }
+  100% { margin-top: 101%; }
+}
+.loader {
+  animation: rotate 1s infinite;
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top:50%;
+  left: 50%;
+}
+
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 20px;
+  width: 20px;
+}
+.loader:before {
+  animation: ball1 1s infinite;
+  background-color: #fff;
+  box-shadow: 30px 0 0 #ff3d00;
+  margin-bottom: 10px;
+}
+.loader:after {
+  animation: ball2 1s infinite;
+  background-color: #ff3d00;
+  box-shadow: 30px 0 0 #fff;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg) scale(0.8) }
+  50% { transform: rotate(360deg) scale(1.2) }
+  100% { transform: rotate(720deg) scale(0.8) }
+}
+
+@keyframes ball1 {
+  0% {
+    box-shadow: 30px 0 0 #ff3d00;
+  }
+  50% {
+    box-shadow: 0 0 0 #ff3d00;
+    margin-bottom: 0;
+    transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #ff3d00;
+    margin-bottom: 10px;
+  }
+}
+
+@keyframes ball2 {
+  0% {
+    box-shadow: 30px 0 0 #fff;
+  }
+  50% {
+    box-shadow: 0 0 0 #fff;
+    margin-top: -20px;
+    transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #fff;
+    margin-top: 0;
+  }
+}

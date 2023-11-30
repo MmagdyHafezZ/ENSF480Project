@@ -1,26 +1,42 @@
 [
   {
     "country": "Philippines",
+    "city": "Manila",
     "img": "./images/philippines.jpeg"
   },
   {
-    "country": "Vancouver",
+    "country": "Canada",
+    "city": "Vancouver",
     "img": "./images/vancouver.jpeg"
   },
   {
     "country": "Bosnia",
+    "city": "Sarajevo",
     "img": "./images/bosnia.jpeg"
   },
   {
-    "country": "Seattle",
+    "country": "United States",
+    "city": "Seattle",
     "img": "./images/seattle.jpeg"
   },
   {
-    "country": "Seattle",
-    "img": "./images/seattle.jpeg"
+    "country": "United States",
+    "city": "Los Angeles",
+    "img": "./images/LA.avif"
   },
   {
-    "country": "Seattle",
-    "img": "./images/seattle.jpeg"
+    "country": "United States",
+    "city": "Honolulu",
+    "img": "./images/honolulu.jpeg"
+  },
+  {
+    "country": "United States",
+    "city": "New York",
+    "img": "./images/ny.jpeg"
+  },
+  {
+    "country": "Australia",
+    "city": "Sydney",
+    "img": "./images/Sydney.avif"
   }
 ]

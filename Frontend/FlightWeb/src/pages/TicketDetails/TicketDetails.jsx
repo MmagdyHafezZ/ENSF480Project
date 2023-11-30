@@ -3,15 +3,57 @@ import Navbar from "../../Components/Navbar/Navbar";
 import "./TicketDetails.scss";
 import { useSearchParams } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUserDataContext } from "../../context/UserDataContext";
 import SeatContainer from "../../Components/SeatMaps/SeatsContainer";
 import SmallPlane from "../../Components/SeatMapSelect/SmallPlane";
 import MediumPlane from "../../Components/SeatMapSelect/MediumPlane";
 import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
+import AirplaneRedirectLoading from "../../Components/LoadingScreens/AirplaneRedirectLogin";
+import AirplaneLoading from "../../Components/LoadingScreens/AirplaneLoading";
+import { useUserDataContext } from "../../context/UserDataContext";
 const TicketDetails = () => {
   // const [flightId, setFlightId] = useState();
-  const { userFlightData, setUserFlightData, selectedSeats, price, setPrice } =
-    useUserDataContext();
+  const {
+    userFlightData,
+    setUserFlightData,
+    selectedSeats,
+    price,
+    setPrice,
+    isLoggedInContext,
+  } = useUserDataContext();
+
+  console.log(
+    isLoggedInContext
+      ? "Ticket Details Logged In"
+      : "Ticket Details not Logged In"
+  );
+  // useEffect(() => {
+  //   // Check the login status when the component mounts
+  //   const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
+  //   setIsLoggedIn(loggedInStatus);
+  // }, []);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const handleNavigation = () => {
+    setIsLoading(true); // Show loading screen
+
+    setTimeout(() => {
+      if (isLoggedInContext) {
+        // User is logged in, navigate to payment
+        navigate("/payment", {
+          state: { price, flightDetails, selectedSeats },
+        });
+      } else {
+        // User is not logged in, navigate to login and pass current state
+        navigate("/signin", {
+          state: {
+            from: "ticketDetails",
+            ticketDetailsState: { price, flightDetails, selectedSeats },
+          },
+        });
+      }
+    }, 3000); // Replace 3000 with the number of milliseconds you want the loading screen to appear
+  };
+
   const location = useLocation();
   const flightDetails = location.state?.flightDetails;
   const seats = Object.keys(selectedSeats).filter(
@@ -48,11 +90,27 @@ const TicketDetails = () => {
   const isSeatSelectionComplete =
     Object.keys(selectedSeats).length === userFlightData.travellers;
   // console.log(Object.keys(selectedSeats).length);
-  console.log(selectedSeats);
   const SeatMapComponent =
     flightDetails?.details?.aircraft === "Embraer E175-E2"
       ? SmallPlane
       : MediumPlane;
+  console.log(!flightDetails);
+
+  if (isLoading) {
+    if (isLoggedInContext) {
+      return (
+        <>
+          <AirplaneLoading />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <AirplaneRedirectLoading />
+        </>
+      ); // Your loading screen here
+    }
+  }
   if (!flightDetails) {
     return (
       <>
@@ -120,11 +178,7 @@ const TicketDetails = () => {
               </div>
               <button
                 disabled={!isSeatSelectionComplete}
-                onClick={() => {
-                  navigate("/payment", {
-                    state: { price, flightDetails, selectedSeats },
-                  });
-                }}
+                onClick={handleNavigation}
                 className="ticket-next-button"
               >
                 Next

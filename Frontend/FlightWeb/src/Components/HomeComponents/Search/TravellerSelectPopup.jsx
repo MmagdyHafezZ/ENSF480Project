@@ -6,13 +6,19 @@ export default function TravelerSelectPopup({
   travellers,
   value,
   setData,
+  popupState,
+  ref,
 }) {
   const handlePopupClick = (event) => {
     event.stopPropagation(); // This stops the click event from reaching the parent
   };
 
   return (
-    <div className="searching-popup" onClick={handlePopupClick}>
+    <div
+      ref={ref}
+      className={`searching-popup ${popupState ? "popup-active" : ""}`}
+      onClick={handlePopupClick}
+    >
       <div className="flex select-travellers-container">
         <span>Adults</span>
         <div className="flex select-travellers-container__btns">
