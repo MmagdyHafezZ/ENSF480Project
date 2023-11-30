@@ -57,7 +57,7 @@ CREATE TABLE
     `iataorigin`    VARCHAR(3) NOT NULL,
     `iatadest`      VARCHAR(3) NOT NULL,
     `travellers`    INT NOT NULL,
-    `departing`        TIMESTAMP NOT NULL,
+    `departing`     TIMESTAMP NOT NULL,
     `returning`     TIMESTAMP NOT NULL,
     PRIMARY KEY (`searchbook`)
     )
