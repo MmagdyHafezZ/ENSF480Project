@@ -4,12 +4,11 @@ import TravellerSelectPopup from "./TravellerSelectPopup.jsx";
 import { useUserDataContext } from "../../../context/UserDataContext.jsx";
 const TravellersInput = ({
   label,
-
   popupState,
   togglePopup,
-  refProp,
   setData,
   value,
+  refProp,
 }) => {
   return (
     <div
@@ -32,16 +31,16 @@ const TravellersInput = ({
       ) : (
         <div className="chosen-input">{value.travellers}</div>
       )}
-
-      <TravellerSelectPopup
-        ref={refProp}
-        value={value}
-        setData={setData}
-        popupState={popupState}
-        setPopup={() => {
-          togglePopup(); // Toggle the associated popup when closing
-        }}
-      />
+      <div ref={refProp}>
+        <TravellerSelectPopup
+          value={value}
+          setData={setData}
+          popupState={popupState}
+          setPopup={() => {
+            togglePopup(); // Toggle the associated popup when closing
+          }}
+        />
+      </div>
     </div>
   );
 };

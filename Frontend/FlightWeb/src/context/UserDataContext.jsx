@@ -8,8 +8,25 @@ export function useUserDataContext() {
 }
 // Create a provider component
 export const UserDataProvider = ({ children }) => {
+  const getFromSessionStorage = () => {
+    const storedData = sessionStorage.getItem("userFlightData");
+    if (!storedData) return null;
+
+    const parsedData = JSON.parse(storedData);
+
+    // Convert date strings back to Date objects
+    if (parsedData.depart) {
+      parsedData.depart = new Date(parsedData.depart);
+    }
+    if (parsedData.return) {
+      parsedData.return = new Date(parsedData.return);
+    }
+
+    return parsedData;
+  };
+
   const [userFlightData, setUserFlightData] = useState(
-    JSON.parse(localStorage.getItem("userFlightData")) || {
+    getFromSessionStorage() || {
       leaving: { name: "", iata: "" },
       going: { name: "", iata: "" },
       travellers: 0,
@@ -20,17 +37,30 @@ export const UserDataProvider = ({ children }) => {
   const [selectedSeats, setSelectedSeats] = useState({});
   const [price, setPrice] = useState(0); // Initialize price with 0
   const [searchState, setSearchState] = useState(false);
-  const saveFlightDataToLocalStorage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleButtonClick = () => {
+    setIsLoading(true); // Start loading
+
+    // Set a timeout to simulate loading time
+    setTimeout(() => {
+      setIsLoading(false); // End loading after a delay
+    }, 1000); // 2000 milliseconds = 2 seconds
+  };
+  const saveFlightDataTosessionStorage = () => {
     const userFlightDataCopy = { ...userFlightData };
     userFlightDataCopy.depart = userFlightDataCopy.depart.toString();
     userFlightDataCopy.return = userFlightDataCopy.return.toString();
 
-    localStorage.setItem("userFlightData", JSON.stringify(userFlightDataCopy));
+    sessionStorage.setItem(
+      "userFlightData",
+      JSON.stringify(userFlightDataCopy)
+    );
   };
   const location = useLocation();
   useEffect(() => {
-    // Retrieve the userFlightData from localStorage
-    const storedData = localStorage.getItem("userFlightData");
+    // Retrieve the userFlightData from sessionStorage
+    const storedData = sessionStorage.getItem("userFlightData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
 
@@ -42,23 +72,15 @@ export const UserDataProvider = ({ children }) => {
     }
   }, [location.pathname]);
   const [isLoggedInContext, setIsLoggedInContext] = useState(
-    JSON.parse(localStorage.getItem("isLoggedIn")) || false
+    JSON.parse(sessionStorage.getItem("isLoggedIn")) || false
   );
 
   // Use useEffect to clear local storage when the URL is at '/'
-  useEffect(() => {
-    if (location.pathname === "/") {
-      // Clear local storage here
-      localStorage.removeItem("userFlightData");
-      // Optionally, you can also clear other data from local storage if needed
-      // localStorage.removeItem("isLoggedIn");
-    }
-  }, [location.pathname]);
 
   const values = {
     userFlightData,
     setUserFlightData,
-    saveFlightDataToLocalStorage,
+    saveFlightDataTosessionStorage,
     searchState,
     setSearchState,
     selectedSeats,
@@ -67,6 +89,9 @@ export const UserDataProvider = ({ children }) => {
     setPrice,
     isLoggedInContext,
     setIsLoggedInContext,
+    handleButtonClick,
+    isLoading,
+    setIsLoading,
   };
   return (
     <UserDataContext.Provider value={values}>

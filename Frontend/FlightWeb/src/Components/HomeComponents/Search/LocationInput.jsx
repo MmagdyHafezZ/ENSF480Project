@@ -11,8 +11,6 @@ const LocationInput = ({
   value,
   setData,
 }) => {
-  const { userFlightData, setUserFlightData } = useUserDataContext();
-  // console.log(userFlightData[type] && userFlightData[type]);
   return (
     <span
       onClick={() => {
@@ -27,23 +25,25 @@ const LocationInput = ({
       >
         {label}
       </div>
-      {value[type] && (
+      {value[type].city && (
         <div className="chosen-location">
           {value[type].iata} - {value[type].city}
         </div>
       )}
 
-      <SearchLocationPopup
-        ref={refProp}
-        popupState={popupState}
-        placeholder={label}
-        type={type}
-        value={value}
-        setData={setData}
-        setPopup={() => {
-          togglePopup(); // Toggle the associated popup when closing
-        }}
-      />
+      {popupState && (
+        <div ref={refProp}>
+          <SearchLocationPopup
+            placeholder={label}
+            type={type}
+            value={value}
+            setData={setData}
+            setPopup={() => {
+              togglePopup(); // Toggle the associated popup when closing
+            }}
+          />
+        </div>
+      )}
     </span>
   );
 };

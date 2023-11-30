@@ -8,15 +8,13 @@ const CalendarPopup = ({
   label,
   setData,
   popupState,
-  ref,
 }) => {
-  console.log("hello", value);
   const handlePopupClick = (event) => {
     event.stopPropagation(); // This stops the click event from reaching the parent
   };
   const handleDateChange = (dates) => {
     const [start, end] = Array.isArray(dates) ? dates : [dates, value.return];
-    console.log();
+
     setData((prevData) => ({
       ...prevData,
       depart: start,
@@ -42,11 +40,9 @@ const CalendarPopup = ({
 
   const formattedDepartDate = formatDate(value.depart);
   const formattedReturnDate = formatDate(value.return);
-  console.log("VALUESS", value);
 
   return (
     <div
-      ref={ref}
       onClick={handlePopupClick}
       className={`searching-popup ${popupState ? "popup-active" : ""}`}
     >

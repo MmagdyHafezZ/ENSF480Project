@@ -105,11 +105,7 @@ const SearchLocationPopup = ({
   type,
   value,
   setData,
-  ref,
-  popupState,
 }) => {
-  const outClick = useRef();
-
   const [searchQuery, setSearchQuery] = useState("");
   const [destinations, setDestinations] = useState([]);
 
@@ -123,20 +119,6 @@ const SearchLocationPopup = ({
         console.error("Error fetching data: ", error);
       });
   }, []);
-
-  useEffect(() => {
-    function handleClickOutsidePopup(event) {
-      if (outClick.current && !outClick.current.contains(event.target)) {
-        setPopup(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutsidePopup);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsidePopup);
-    };
-  }, [setPopup]);
 
   const dummyData = [
     { city: "New York", iata: "JFK" },
@@ -184,13 +166,7 @@ const SearchLocationPopup = ({
   };
 
   return (
-    <div
-      className={`search-location-popup ${
-        popupState ? "location-popup-active" : ""
-      }`}
-      ref={outClick}
-      onClick={handlePopupClick}
-    >
+    <div className="search-location-popup" onClick={handlePopupClick}>
       <div className="search-location-popup__container">
         <input
           className="location-popup-placeholder"
