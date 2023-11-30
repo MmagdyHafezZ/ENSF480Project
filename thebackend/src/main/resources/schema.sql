@@ -24,16 +24,28 @@ CREATE TABLE
         `id` BIGINT NOT NULL AUTO_INCREMENT,
         `modelid` VARCHAR(10) NOT NULL,
         PRIMARY KEY (`id`),
-        CONSTRAINT FK_AircraftModel FOREIGN KEY (`modelid`) REFERENCES `aircraftmodel` (`id`) ON UPDATE CASCADE
+        CONSTRAINT FK_AircraftModel FOREIGN KEY (`id`) REFERENCES `aircraftmodel` (`id`) ON UPDATE CASCADE
     );
 
 CREATE TABLE
     IF NOT EXISTS `region` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT,
-        `city` VARCHAR(50) NOT NULL,
-        `state` VARCHAR(50) NOT NULL,
-        `country` VARCHAR(2) NOT NULL,
+        `id`        BIGINT NOT NULL AUTO_INCREMENT,
+        `city`      VARCHAR(50) NOT NULL,
+        `state`     VARCHAR(50) NOT NULL,
+        `country`   VARCHAR(2) NOT NULL,
         CONSTRAINT FK_RegionCity FOREIGN KEY (`city`) REFERENCES `airportdata` (`city`) ON UPDATE CASCADE,
         CONSTRAINT FK_RegionState FOREIGN KEY (`state`) REFERENCES `airportdata` (`state`) ON UPDATE CASCADE,
         CONSTRAINT FK_RegionCountry FOREIGN KEY (`country`) REFERENCES `airportdata` (`country`) ON UPDATE CASCADE
     );
+
+CREATE TABLE 
+    IF NOT EXISTS `airportlocation` (
+	`id` 				BIGINT NOT NULL AUTO_INCREMENT,
+    `iata`				VARCHAR(3) NOT NULL,
+    `parentregionid`	INT NOT NULL,
+    PRIMARY KEY (`parentregionid`),
+    CONSTRAINT FK_iataCode FOREIGN KEY (`iata`)
+    REFERENCES `airportdata`(`iata`) ON UPDATE CASCADE
+    -- CONSTRAINT FK_ParentRegionID FOREIGN KEY (`parentregionid`)
+    -- REFERENCES `region`(`id`) ON UPDATE CASCADE
+);

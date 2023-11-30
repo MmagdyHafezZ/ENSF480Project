@@ -42,20 +42,7 @@ CREATE TABLE userCreditCard (
 );
 
 
-CREATE TABLE IF NOT EXISTS `region` (
-	`id`		INT NOT NULL AUTO_INCREMENT,
-    `city`		VARCHAR(50) NOT NULL,
-    `state`		VARCHAR(50) NOT NULL,
-    `country` 	VARCHAR(2)	NOT NULL
-);
 
-CREATE TABLE IF NOT EXISTS `airport` (
-	`id` 				INT NOT NULL AUTO_INCREMENT,
-    `iata`				VARCHAR(3),
-    `parentregionid`	INT NOT NULL,
-    CONSTRAINT FK_ParentRegionID FOREIGN KEY (`parentregionid`)
-    REFERENCES `region`(`id`) ON UPDATE CASCADE
-);
 	
 CREATE TABLE IF NOT EXISTS `route` (
 	`id`			INT NOT NULL AUTO_INCREMENT,
@@ -63,9 +50,9 @@ CREATE TABLE IF NOT EXISTS `route` (
     `destination`	INT NOT NULL,
     PRIMARY KEY(`id`),
     CONSTRAINT FK_Origin FOREIGN KEY (`origin`)
-    REFERENCES `airport`(`id`) ON UPDATE CASCADE,
+    REFERENCES `airportlocation`(`id`) ON UPDATE CASCADE,
     CONSTRAINT FK_Destination FOREIGN KEY (`destination`)
-    REFERENCES `airport`(`id`) ON UPDATE CASCADE,
+    REFERENCES `airportlocation`(`id`) ON UPDATE CASCADE,
     CONSTRAINT UC_Route UNIQUE (`origin`, `destination`)
 );
 

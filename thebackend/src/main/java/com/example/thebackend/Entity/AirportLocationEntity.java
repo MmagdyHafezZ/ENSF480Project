@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -22,16 +24,20 @@ public class AirportLocationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
+    
     @Column(name = "iata")
     private String iata;
-
-    @Column(name = "parentregion")
-    private String parentRegion;
-
-    public AirportLocationEntity(String iata, String parentRegion){
+    
+    @Column(name = "parentregionid")
+    private int parentregionid;
+    
+    @ManyToOne
+    @JoinColumn(name = "parentregionid", referencedColumnName = "id")
+    private Region parentRegion;
+    
+    public AirportLocationEntity(String iata, int parentregionid){
         this.iata = iata;
-        this.parentRegion = parentRegion;
+        this.parentregionid = parentregionid;
     }
 
     public Long getID(){
@@ -50,12 +56,13 @@ public class AirportLocationEntity {
         this.iata = iata;
     }
 
-    public String getParentRegion(){
-        return parentRegion;
+    public int getParentRegion(){
+        return parentregionid;
     }
 
-    public void setParentRegion(String parentRegion){
-        this.parentRegion = parentRegion;
+    public void setParentRegion(int parentregionid){
+        this.parentregionid = parentregionid;
     }
+
     
 }
