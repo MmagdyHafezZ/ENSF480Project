@@ -28,7 +28,7 @@ public class RegionController {
         return regionService.getRegionData();
     }
 
-    @GetMapping(path = "/getBooking/{id}")
+    @GetMapping(path = "/getRegion/{id}")
     public RegionEntity getSingleRegion(@PathVariable Long id){
         return regionService.singleGet(id);
     }
