@@ -16,3 +16,11 @@ CREATE TABLE IF NOT EXISTS `aircraftmodel` (
     CONSTRAINT UC_Model	UNIQUE (`model`),
     PRIMARY KEY (`id`)
 );
+
+CREATE TABLE IF NOT EXISTS `aircraft` (
+	`id`		BIGINT NOT NULL AUTO_INCREMENT,
+    `modelid`	INT NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT FK_AircraftModel FOREIGN KEY (`modelid`)
+    REFERENCES `aircraftmodel`(`id`) ON UPDATE CASCADE
+);

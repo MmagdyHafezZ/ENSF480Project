@@ -42,16 +42,6 @@ CREATE TABLE userCreditCard (
 );
 
 
-
-
-CREATE TABLE IF NOT EXISTS `aircraft` (
-	`id`		INT NOT NULL AUTO_INCREMENT,
-    `modelid`	INT NOT NULL,
-    PRIMARY KEY (`id`),
-    CONSTRAINT FK_AircraftModel FOREIGN KEY (`modelid`)
-    REFERENCES `aircraftmodel`(`id`) ON UPDATE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS `region` (
 	`id`		INT NOT NULL AUTO_INCREMENT,
     `city`		VARCHAR(50) NOT NULL,
