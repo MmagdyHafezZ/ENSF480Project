@@ -11,9 +11,6 @@ const LocationInput = ({
   value,
   setData,
 }) => {
-  const { userFlightData, setUserFlightData } = useUserDataContext();
-  // console.log(userFlightData[type] && userFlightData[type]);
-
   return (
     <span
       onClick={() => {
@@ -28,7 +25,7 @@ const LocationInput = ({
       >
         {label}
       </div>
-      {value[type] && (
+      {value[type].city && (
         <div className="chosen-location">
           {value[type].iata} - {value[type].city}
         </div>

@@ -16,7 +16,6 @@ const CalendarInput = ({
     const formattedDate = format(new Date(date), "MM/dd");
     return formattedDate;
   };
-  console.log();
   if (value.return) {
     // console.log("vale", value);
   }
