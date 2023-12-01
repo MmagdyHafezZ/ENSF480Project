@@ -3,7 +3,7 @@ package com.example.thebackend.Entity;
 import jakarta.persistence.*;
 import java.util.List;
 
-import com.example.thebackend.DTO.MembershipDTO;
+// import com.example.thebackend.DTO.MembershipDTO;
 
 @Entity
 @Table(name = "userProfile")

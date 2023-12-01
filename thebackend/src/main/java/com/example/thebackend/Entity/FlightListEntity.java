@@ -1,7 +1,5 @@
 package com.example.thebackend.Entity;
 
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,16 +8,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * FlightListEntity
  */
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -33,11 +28,21 @@ public class FlightListEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "searchbookingid", referencedColumnName = "id")
-    private SearchBookingEntity searchBooking;
+    private SearchBookingEntity searchbookingid;
 
-    // @ManyToOne(targetEntity = SearchBookingEntity.class, cascade = CascadeType.ALL)
-    // @JoinColumn(name = "aircraft_id", referencedColumnName = "id")
-    // private AircraftEntity aircraft;
+    public void setId(Long id){
+        this.id = id;
+    }
 
+    public Long getId(){
+        return id;
+    }
 
+    public void setSearchbookingid(SearchBookingEntity searchbookingid){
+        this.searchbookingid = searchbookingid;
+    }
+
+    public SearchBookingEntity getSearchbookingid(){
+        return searchbookingid;
+    }
 }

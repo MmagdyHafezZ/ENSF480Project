@@ -1,28 +1,33 @@
 package com.example.thebackend.DTO;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * FlightListResponse
  */
-@Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class FlightListResponse {
 
-    private String iataorigin;
+    private Long id;
 
-    private String iatadest;
+    private Long searchbookingid;
 
-    private String departing;
-
-    private String returning;
-
-    public FlightListResponse(String iataorigin, String iatadest, String departing, String returning) {
-        this.iataorigin = iataorigin;
-        this.iatadest = iatadest;
-        this.departing = departing;
-        this.returning = returning;
+    public void setId(Long id){
+        this.id = id;
     }
+
+    public Long getId(){
+        return id;
+    }
+
+    public void setSearchbookingid(Long searchbookingid){
+        this.searchbookingid = searchbookingid;
+    }
+
+    public Long getSearchbookingid(){
+        return searchbookingid;
+    }
+
 }

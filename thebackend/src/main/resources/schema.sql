@@ -53,7 +53,9 @@ CREATE TABLE
     PRIMARY KEY (`id`)
 );
 
--- DROP TABLE IF EXISTS `searchbooking`;
+DROP TABLE IF EXISTS `flightlist`;
+
+DROP TABLE IF EXISTS `searchbooking`;
 
 CREATE TABLE    
     IF NOT EXISTS `searchbooking` (
@@ -66,14 +68,12 @@ CREATE TABLE
     PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS `flightlist`;
-
 CREATE TABLE 
     IF NOT EXISTS `flightlist` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `searchbookingid` BIGINT NOT NULL,
     -- `aircraft_id` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`searchbookingid`) REFERENCES `searchbooking`(`id`),
+    FOREIGN KEY (`searchbookingid`) REFERENCES `searchbooking`(`id`)
     -- FOREIGN KEY (`aircraft_id`) REFERENCES `aircraft`(`id`)
 );
