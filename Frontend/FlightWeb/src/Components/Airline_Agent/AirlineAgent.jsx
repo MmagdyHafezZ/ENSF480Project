@@ -159,7 +159,6 @@ const AirlineAgentPage = () => {
       seat: putSeat,
       meal: putMeal
     };
-    console.log(newBooking);
     try {
       const response = await
         axios

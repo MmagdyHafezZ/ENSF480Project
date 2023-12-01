@@ -17,13 +17,13 @@ public class AircraftEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @@Column(name = "id")
+    @Column(name = "id")
     private Long id;    
 
     @Column(name = "modelid")
-    private int modelid;
+    private String modelid;
 
-    public AircraftEntity(int modelid){
+    public AircraftEntity(String modelid){
         this.modelid = modelid;
     }
 
@@ -35,12 +35,12 @@ public class AircraftEntity {
         this.id = id;
     }
 
-    public int getModelID(){
+    public String getModelID(){
         return modelid;
     }
 
-    public void setModelID(int modelid){
-        this.modelid;
+    public void setModelID(String modelid){
+        this.modelid = modelid;
     }
 
 }

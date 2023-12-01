@@ -1,10 +1,12 @@
 package com.example.thebackend.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.thebackend.DTO.UserPreferencesDTO;
+import com.example.thebackend.Entity.User;
 import com.example.thebackend.Entity.UserPreferences;
 import com.example.thebackend.Repository.UserPreferencesRepository;
-import com.example.thebackend.DTO.UserPreferencesDTO;
+import com.example.thebackend.Repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserPreferencesService {
@@ -12,14 +14,24 @@ public class UserPreferencesService {
     @Autowired
     private UserPreferencesRepository userPreferencesRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public UserPreferences addOrUpdateUserPreferences(UserPreferencesDTO dto) {
-        UserPreferences preferences = userPreferencesRepository.findById(dto.getId())
-                .orElse(new UserPreferences());
+        // Fetch the associated User
+        Long userId = dto.getId(); // Assuming getId() returns the User ID
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        // Find existing UserPreferences for this User or create a new one
+        UserPreferences preferences = userPreferencesRepository.findByUserId(userId)
+            .orElse(new UserPreferences());
 
         preferences.setMealPreference(dto.getMealPreference());
         preferences.setSeatPreference(dto.getSeatPreference());
-        // preferences.setUserProfile(dto.getUserProfile());
+        preferences.setUser(user); // Set the user to the preferences
 
+        // Save the UserPreferences
         return userPreferencesRepository.save(preferences);
     }
 
@@ -27,3 +39,4 @@ public class UserPreferencesService {
         userPreferencesRepository.deleteById(id);
     }
 }
+

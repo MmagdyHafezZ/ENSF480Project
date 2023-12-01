@@ -2,6 +2,7 @@ package com.example.thebackend.DTO;
 
 public class UserCreditCardDTO {
     private Long id;
+    private Long userId; // User ID, not UserProfile ID
     private String cardNumber;
     private String expiryDate;
     private String cvv;
@@ -21,6 +22,12 @@ public class UserCreditCardDTO {
     public void setCardholderName(String cardholderName) { this.cardholderName = cardholderName; }
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+    public Long getUserId() {
+        return userId;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     
 }
