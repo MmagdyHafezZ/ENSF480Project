@@ -1,10 +1,12 @@
 package com.example.thebackend.Service;
 
 
+import com.example.thebackend.Entity.Memberships;
 import com.example.thebackend.Entity.User;
 import com.example.thebackend.Repository.UserRepository;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+
 import org.springframework.stereotype.Service;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
@@ -31,7 +33,7 @@ public class AuthService {
         return instance;
     }
 
-    public void signup(String email, String password, String firstName, String lastName) {
+    public Long signup(String email, String password, String firstName, String lastName, Memberships membershipType) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("User already exists with email: " + email);
         }
@@ -41,20 +43,22 @@ public class AuthService {
         newUser.setPassword(password); // In real applications, consider encrypting the password
         newUser.setfirst_name(firstName);
         newUser.setlast_name(lastName);
+        newUser.setmembership_type(membershipType);
         userRepository.save(newUser);
+        return newUser.getId();
 
     }
-    public boolean login(String email, String password) {
+    public Long login(String email, String password) {
         User user = userRepository.findByEmail(email);
         System.out.println("user: " + user);
         System.out.println("password: " + password);
         System.out.println("user.getPassword(): " + user.getPassword());
         if (user != null && user.getPassword().equals(password)) {
-            return true; // Login successful
+            return user.getId(); // Login successful
         }
-        return false; // Login failed
+        return null; // Login failed
     }
-    public boolean googleLogin(String googleToken) throws IllegalArgumentException {
+    public Long googleLogin(String googleToken) throws IllegalArgumentException {
         try {
             System.out.println("in");
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
@@ -64,7 +68,7 @@ public class AuthService {
             GoogleIdToken idToken = verifier.verify(googleToken);
             if (googleToken == null || googleToken.trim().isEmpty()) {
                 System.out.println("Token is null or empty");
-                return false;
+                return null;
             }
             
             System.out.println("verifier: " + verifier);
@@ -79,17 +83,17 @@ public class AuthService {
                     user.setEmail(email);
                     userRepository.save(user);
                 }
-                return true; // Google login successful
+                return user.getId();
             } else {
                 System.out.println("Invalid ID token.");
-                return false;
+                return null;
             }
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         } catch (Exception e) {
             e.printStackTrace(); // Catch any other exceptions
-            return false;
+            return null;
         }
         
     }

@@ -23,6 +23,9 @@ public class User {
     private String first_name;
     @Column(name = "last_name")
     private String last_name;    
+    @Column(name = "membership_type")
+    private Memberships membership_type;
+    
     
 
     // No-argument constructor
@@ -67,4 +70,11 @@ public class User {
     public String getfirst_name() { return first_name; }
     public void setlast_name(String last_name) { this.last_name = last_name; }
     public String getlast_name() { return last_name; }
+
+    public void setmembership_type(Memberships membershipType) {
+        this.membership_type = membershipType;
+    }
+    public Memberships getmembership_type() {
+        return membership_type;
+    }
 }

@@ -43,25 +43,35 @@
   border-radius: 0.5rem;
   border: 1px solid black;
   background-color: rgb(206, 206, 206);
+  transition: 0.2s;
   cursor: pointer;
-}
-.seatMap .seat:hover {
-  background-color: antiquewhite;
 }
 .seatMap .seat.seat-map-header {
   background-color: transparent;
   border: none;
 }
 .seatMap .seat.selected {
-  background-color: antiquewhite;
+  background-color: antiquewhite !important;
+}
+.seatMap .seat.unavailable {
+  background-color: #c1c1c1 !important;
+  color: black !important;
+  cursor: not-allowed;
 }
 .seatMap .seat.business {
   background-color: #483D8B;
   color: lightgray;
 }
+.seatMap .seat.business:hover {
+  background-color: rgba(71, 61, 139, 0.4549019608);
+}
 .seatMap .seat.comfort {
   background-color: #5F9EA0; /* Medium Blue */
   color: rgb(55, 55, 55);
+  /* Alternatively: medium green (#3CB371) */
+}
+.seatMap .seat.comfort:hover {
+  background-color: rgba(95, 158, 160, 0.4431372549);
 }
 .seatMap .seat.ordinary {
   background-color: #e8e8e8; /* Light Grey */

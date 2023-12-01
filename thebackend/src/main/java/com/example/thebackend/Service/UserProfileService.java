@@ -36,6 +36,10 @@ public class UserProfileService {
         userProfile.setRecentBookings(dto.getRecentBookings());
         userProfile.setUpcomingFlights(dto.getUpcomingFlights());
         userProfile.setEmailNotification(dto.getEmailNotification());
+        userProfile.setEmail(dto.getEmail());
+        userProfile.setPhoneNumber(dto.getPhoneNumber());
+
+
         userProfile.setUser(user);
 
         return userProfileRepository.save(userProfile);
@@ -43,5 +47,13 @@ public class UserProfileService {
 
     public void deleteUserProfile(Long id) {
         userProfileRepository.deleteById(id);
+    }
+    public UserProfile getUserProfile(Long id) {
+        return userProfileRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User profile not found with id: " + id));
+    }
+
+    public void addOrUpdateUserProfile(UserProfile userProfile) {
+        userProfileRepository.save(userProfile);
     }
 }

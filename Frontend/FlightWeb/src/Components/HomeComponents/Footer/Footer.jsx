@@ -22,7 +22,7 @@ const Footer = () => {
             <h4>Register With Us Today</h4>
             <button
               onClick={() => {
-                window.location.href = "/signin";
+                window.location.href = "/membership";
               }}
             >
               Register

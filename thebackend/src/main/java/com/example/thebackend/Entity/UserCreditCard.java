@@ -15,8 +15,8 @@ public class UserCreditCard {
     private String cardholderName;
     private String address;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "id")  // Updated to "user_id"
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     // Constructors, Getters and Setters

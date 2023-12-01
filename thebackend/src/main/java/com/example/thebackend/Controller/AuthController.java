@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.thebackend.Service.AuthService;
 import com.example.thebackend.DTO.SignupRequest;
 import com.example.thebackend.DTO.LoginRequest;
+import com.example.thebackend.DTO.ResponseDTO;
 import com.example.thebackend.DTO.GoogleLoginRequest;
 
 
@@ -20,19 +21,23 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
         try {
-            authService.signup(request.getEmail(), request.getPassword(), request.getFirstName(), request.getLastName());
-            return ResponseEntity.ok("Signup successful");
+            Long userId = authService.signup(request.getEmail(), request.getPassword(), request.getFirstName(), request.getLastName(), request.getMembershipType());
+            ResponseDTO response = new ResponseDTO(userId);
+            return ResponseEntity.ok(response); // Return as JSON object
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Signup failed: " + e.getMessage());
         }
     }
+    
+    
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            boolean isLoginSuccessful = authService.login(request.getEmail(), request.getPassword());
-            if (isLoginSuccessful) {
-                return ResponseEntity.ok("Login successful");
+            Long userId = authService.login(request.getEmail(), request.getPassword());
+            ResponseDTO response = new ResponseDTO(userId);
+            if (userId != null) {
+                return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).body("Invalid credentials");
             }
@@ -41,18 +46,20 @@ public class AuthController {
         }
     }
     
+    
 
     @PostMapping("/google-login")
-public ResponseEntity<?> googleLogin(@RequestBody GoogleLoginRequest request) {
-    try {
-        System.out.println("Received token: " + request.getToken());
-        authService.googleLogin(request.getToken());
-        return ResponseEntity.ok().body("Google login successful");
-    } catch (Exception e) {
-        e.printStackTrace();  // Print stack trace for more details
-        return ResponseEntity.badRequest().body("Google login failed: " + e.getClass().getSimpleName() + " - " + e.getMessage() + " - " + request.getToken());
+    public ResponseEntity<?> googleLogin(@RequestBody GoogleLoginRequest request) {
+        try {
+            System.out.println("Received token: " + request.getToken());
+            Long userId = authService.googleLogin(request.getToken());
+            return ResponseEntity.ok().body("Google login successful. User ID: " + userId);
+        } catch (Exception e) {
+            e.printStackTrace();  // Print stack trace for more details
+            return ResponseEntity.badRequest().body("Google login failed: " + e.getClass().getSimpleName() + " - " + e.getMessage() + " - " + request.getToken());
+        }
     }
-}
+    
 
 
 }
