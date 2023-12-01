@@ -13,22 +13,28 @@
   padding-right: 2rem;
   width: 12.5rem;
   height: 3rem;
-  border: 1px solid black !important;
+  border: 0.5px solid rgb(99, 99, 99) !important;
+  border-radius: 1.5rem;
   flex: 1;
 }
 .choose-locations .location-input .location-input-placeholder.chose-city {
   font-size: 0.75rem;
 }
 .choose-locations .location-input .chosen-location {
-  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
 }
 .choose-locations .location-input .search-location-popup {
-  left: -0.25rem;
+  transition: transform 0.2s ease-in-out;
+  top: 0;
+  left: 0;
   width: 25rem;
   height: 25rem;
   z-index: 10;
   position: absolute;
-  top: -0.25rem;
+  bottom: 0;
   background-color: white;
   overflow-y: auto;
   border-radius: 1rem;
@@ -79,8 +85,8 @@
 }
 
 .main-search-container {
-  outline: 1px solid black;
-  border-radius: 1rem;
+  border: 0.5px solid rgb(99, 99, 99) !important;
+  border-radius: 1.5rem;
   padding: 1.5rem 1rem;
   justify-content: center;
 }
@@ -94,7 +100,7 @@
 
 .search-pop {
   position: absolute;
-  top: 10rem;
+  top: 0rem;
   left: 5rem;
   width: 50rem;
   background-color: grey;
@@ -112,7 +118,8 @@
   padding-right: 2rem;
   width: 12.5rem;
   height: 3rem;
-  border: 1px solid black !important;
+  border: 0.5px solid rgb(99, 99, 99) !important;
+  border-radius: 1.5rem;
 }
 .singleInput .texts .searching-input .searching-input-placeholder.input-chosen {
   font-size: 0.75rem;
@@ -121,15 +128,21 @@
   font-size: 1rem;
 }
 .singleInput .texts .searching-input .searching-popup {
-  left: -0.25rem;
+  right: 0;
+  top: 0;
+  transform: scale(0);
+  transform-origin: top right;
+  transition: transform 0.2s ease-in-out;
   width: 25rem;
   z-index: 10;
   position: absolute;
-  top: -0.25rem;
   background-color: white;
   border-radius: 1rem;
   box-shadow: 0px 2px 0.3rem 1px rgba(0, 0, 0, 0.5);
   padding: 1.5rem;
+}
+.singleInput .texts .searching-input .searching-popup.popup-active {
+  transform: scale(1);
 }
 .singleInput .texts .searching-input .searching-popup .select-travellers-container {
   justify-content: space-between;

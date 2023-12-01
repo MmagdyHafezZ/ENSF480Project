@@ -1,0 +1,247 @@
+.airlplane-loading-wrapper {
+  position: absolute;
+  height: 100%;
+  bottom: 0;
+  background-color: #69D2E7;
+  width: 100%;
+  overflow: hidden;
+  animation: body 33.5s infinite linear;
+}
+
+.loading-airplane-body {
+  width: 90%;
+}
+
+.loading-message {
+  position: absolute;
+  background-color: white;
+  overflow: visible;
+  z-index: 3;
+  border-radius: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  height: 25%;
+  left: 27%;
+  bottom: 0;
+  padding: 2rem;
+  border: 0.5px solid black;
+}
+.loading-message h3 {
+  font-size: 1.5rem;
+}
+
+.moon, .sun {
+  position: absolute;
+  height: 80px;
+  width: 80px;
+  border-radius: 80px;
+  margin-top: 20px;
+}
+
+.sun {
+  background-color: #f1c40f;
+  margin-left: 300px;
+  box-shadow: 0px 0px 180px 2px #FFFF75;
+  animation: sun 33.5s infinite linear;
+}
+
+.moon {
+  background-color: #F1EFA5;
+  box-shadow: 0px 0px 180px 2px #FFFFE7;
+  animation: moon 33.5s infinite linear;
+  margin-left: 1250px;
+  z-index: -2;
+}
+
+.plane {
+  margin-left: 50%;
+  width: 24rem;
+  height: 12rem;
+  margin-top: 70px;
+  position: absolute;
+  z-index: 2;
+  animation: plane 6s infinite;
+}
+
+.cloud1 {
+  height: 60px;
+  width: 200px;
+  border-radius: 50%;
+  float: right;
+  margin-top: 20px;
+  margin-right: 102%;
+  animation: clouds 10s infinite linear;
+}
+
+.cloud2 {
+  height: 50px;
+  width: 100px;
+  border-radius: 50%;
+  float: right;
+  margin-top: 20px;
+  margin-right: 115%;
+  animation: clouds 12s infinite linear;
+}
+
+.cloud3 {
+  height: 150px;
+  width: 300px;
+  border-radius: 50%;
+  float: right;
+  margin-top: 20px;
+  margin-right: 120%;
+  animation: clouds 11.5s infinite linear;
+}
+
+.cloud4 {
+  height: 45px;
+  width: 90px;
+  border-radius: 50%;
+  float: right;
+  margin-top: 20px;
+  margin-right: 110%;
+  animation: clouds 17s infinite linear;
+}
+
+.cloud5 {
+  height: 35px;
+  width: 80px;
+  border-radius: 50%;
+  float: right;
+  margin-top: 20px;
+  margin-right: 120%;
+  animation: clouds 31s infinite linear;
+}
+
+/* Animations */
+@keyframes clouds {
+  from {
+    transform: translateX(-5%);
+  }
+  to {
+    transform: translateX(2900px);
+  }
+}
+@keyframes plane {
+  0% { /**/ }
+  25% {
+    margin-top: 85px;
+  }
+  50% {
+    margin-left: 48%;
+  }
+  75% {
+    margin-left: 46%;
+    margin-top: 60px;
+  }
+  100% {
+    margin-top: 70px;
+    margin-left: 50%;
+  }
+}
+@keyframes body {
+  0%, 5% {
+    background-color: #69D2E7;
+  }
+  25%, 75% {
+    background-color: #1D2F41;
+  }
+  100% {
+    background-color: #69D2E7;
+  }
+}
+@keyframes sun {
+  0%, 10% {
+    margin-top: 20px;
+  }
+  30%, 75% {
+    margin-top: 101%;
+  }
+  100% {
+    margin-top: 20px;
+  }
+}
+@keyframes moon {
+  0% {
+    margin-top: 101%;
+  }
+  25%, 75% {
+    margin-top: 20px;
+  }
+  100% {
+    margin-top: 101%;
+  }
+}
+.loader {
+  animation: rotate 1s infinite;
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 20px;
+  width: 20px;
+}
+
+.loader:before {
+  animation: ball1 1s infinite;
+  background-color: #fff;
+  box-shadow: 30px 0 0 #ff3d00;
+  margin-bottom: 10px;
+}
+
+.loader:after {
+  animation: ball2 1s infinite;
+  background-color: #ff3d00;
+  box-shadow: 30px 0 0 #fff;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg) scale(0.8);
+  }
+  50% {
+    transform: rotate(360deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(720deg) scale(0.8);
+  }
+}
+@keyframes ball1 {
+  0% {
+    box-shadow: 30px 0 0 #ff3d00;
+  }
+  50% {
+    box-shadow: 0 0 0 #ff3d00;
+    margin-bottom: 0;
+    transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #ff3d00;
+    margin-bottom: 10px;
+  }
+}
+@keyframes ball2 {
+  0% {
+    box-shadow: 30px 0 0 #fff;
+  }
+  50% {
+    box-shadow: 0 0 0 #fff;
+    margin-top: -20px;
+    transform: translate(15px, 15px);
+  }
+  100% {
+    box-shadow: 30px 0 0 #fff;
+    margin-top: 0;
+  }
+}/*# sourceMappingURL=AirplaneLoading.css.map */
