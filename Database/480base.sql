@@ -43,17 +43,7 @@ CREATE TABLE user_credit_card (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE IF NOT EXISTS `route` (
-	`id`			INT NOT NULL AUTO_INCREMENT,
-    `origin`		INT NOT NULL,
-    `destination`	INT NOT NULL,
-    PRIMARY KEY(`id`),
-    CONSTRAINT FK_Origin FOREIGN KEY (`origin`)
-    REFERENCES `airportlocation`(`id`) ON UPDATE CASCADE,
-    CONSTRAINT FK_Destination FOREIGN KEY (`destination`)
-    REFERENCES `airportlocation`(`id`) ON UPDATE CASCADE,
-    CONSTRAINT UC_Route UNIQUE (`origin`, `destination`)
-);
+
 
    
 CREATE TABLE userPreferences (

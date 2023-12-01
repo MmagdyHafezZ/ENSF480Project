@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,19 +43,17 @@ public class SearchBookingService {
         searchBookingEntity = searchBookingRepository.save(searchBookingEntity);
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH");
 
         String isoDepartingDate = searchBookingEntity.getDeparting();
         ZonedDateTime zonedDepartingDateTime = ZonedDateTime.parse(isoDepartingDate);
         LocalDateTime localDepartingDateTime = zonedDepartingDateTime.toLocalDateTime();            
         String departdate = localDepartingDateTime.format(dateFormatter);
-        String departtime = localDepartingDateTime.format(timeFormatter);
 
         String isoReturningDate = searchBookingEntity.getReturning();
         ZonedDateTime zonedReturningDateTime = ZonedDateTime.parse(isoReturningDate);
         LocalDateTime localReturninggDateTime = zonedReturningDateTime.toLocalDateTime();
         String returndate = localReturninggDateTime.format(dateFormatter);
-        String returntime = localDepartingDateTime.format(timeFormatter);
 
         
         for(int i = 0; i < 3; i++){
@@ -64,14 +63,22 @@ public class SearchBookingService {
             flightListEntity.setIatadest(searchBookingEntity.getIATADest());
             flightListEntity.setDepartdate(departdate);
             flightListEntity.setReturndate(returndate);
-            flightListEntity.setDeparttime(departtime);
-            flightListEntity.setReturntime(returntime);
 
+            String departtime = Integer.toString(new Random().nextInt(24 - 5 + 1) + 5);
+            String returntime = Integer.toString(new Random().nextInt(24 - 5 + 1) + 5);
 
+            flightListEntity.setDeparttime(departtime + ":00");
+            flightListEntity.setReturntime(returntime + ":00");
 
             flightListRepository.save(flightListEntity);
         }
         return searchBookingEntity;
+    }
+
+    // DELETE All
+    public void deleteSearchBookingAll(){
+        flightListRepository.deleteAllInBatch();
+        searchBookingRepository.deleteAllInBatch();
     }
 
 }

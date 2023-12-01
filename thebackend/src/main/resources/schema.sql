@@ -16,19 +16,10 @@ CREATE TABLE
     IF NOT EXISTS `aircraftmodel` (
         `id` BIGINT NOT NULL AUTO_INCREMENT,
         `model` VARCHAR(50),
+        `modelid` VARCHAR(10) NOT NULL,
         `seatcapacity` INT UNSIGNED,
         `rownumber` INT UNSIGNED,
         `columnnumber` INT UNSIGNED,
-        CONSTRAINT UC_Model UNIQUE (`model`),
-        PRIMARY KEY (`id`)
-    );
-
-DROP TABLE IF EXISTS `aircraft`;
-
-CREATE TABLE
-    IF NOT EXISTS `aircraft` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT,
-        `modelid` VARCHAR(10) NOT NULL,
         PRIMARY KEY (`id`)
     );
 
