@@ -3,6 +3,8 @@ package com.example.thebackend.Entity;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.example.thebackend.DTO.MembershipDTO;
+
 @Entity
 @Table(name = "userProfile")
 public class UserProfile {
@@ -10,15 +12,19 @@ public class UserProfile {
     @Id
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id")
     private User user;
 
     private String username;
     private String userRole;
-    private String membershipType;
+    private Memberships membershipType;
     private Integer loyaltyPoints;
+    private Integer balance;
+    private String email;
+    private String phoneNumber;
+
 
     @ElementCollection
     private List<String> recentBookings;
@@ -29,7 +35,7 @@ public class UserProfile {
     private Boolean emailNotification;
 
     // Constructors, Getters and Setters
-    public UserProfile( String username, String userRole, String membershipType, Integer loyaltyPoints, List<String> recentBookings, List<String> upcomingFlights, Boolean emailNotification, User user) {
+    public UserProfile( String username, String userRole, Memberships membershipType, Integer loyaltyPoints, List<String> recentBookings, List<String> upcomingFlights, Boolean emailNotification, User user, String email, String phoneNumber) {
         this.username = username;
         this.userRole = userRole;
         this.membershipType = membershipType;
@@ -38,8 +44,23 @@ public class UserProfile {
         this.upcomingFlights = upcomingFlights;
         this.emailNotification = emailNotification;
         this.user = user;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+
     }
     public UserProfile() {
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setEmail(String email2) {
+        this.email = email2;
+    }
+    public void setPhoneNumber(String phoneNumber2) {
+        this.phoneNumber = phoneNumber2;
     }
     public String getUsername() {
         return username;
@@ -47,7 +68,7 @@ public class UserProfile {
     public String getUserRole() {
         return userRole;
     }
-    public String getMembershipType() {
+    public Memberships getMembershipType() {
         return membershipType;
     }
     public Integer getLoyaltyPoints() {
@@ -68,8 +89,8 @@ public class UserProfile {
     public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
-    public void setMembershipType(String membershipType) {
-        this.membershipType = membershipType;
+    public void setMembershipType(Memberships memberships) {
+        this.membershipType = memberships;
     }
     public void setLoyaltyPoints(Integer loyaltyPoints) {
         this.loyaltyPoints = loyaltyPoints;
@@ -107,6 +128,12 @@ public class UserProfile {
     }
     public User getUser() {
         return user;
+    }
+    public Object getbalance() {
+        return balance;
+    }
+    public void setbalance(Integer balance) {
+        this.balance = balance;
     }
 
 }

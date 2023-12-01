@@ -12,7 +12,7 @@ const Navbar = () => {
   const [noBg, addBg] = useState("navBarTwo");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn")
+    localStorage.getItem("isLoggedIn") || false
   );
 
   const handleResize = () => {
