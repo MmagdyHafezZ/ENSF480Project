@@ -66,7 +66,7 @@ const FlightsList = ({ userFlightData, apiFlight }) => {
   }, [searchState, flightData, userFlightData]); // Add flightData as a dependency
   const originalDepartDate = new Date(userFlightData.depart);
   const formattedOriginalDate = originalDepartDate.toISOString().slice(0, 19);
-  console.log(formattedOriginalDate); // Convert
+  // console.log(formattedOriginalDate); // Convert
   return (
     <div className="flights-list">
       {isLoading ? (

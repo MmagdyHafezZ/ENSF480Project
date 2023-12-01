@@ -126,40 +126,58 @@ const Search = () => {
     );
   };
 
-  const handleSendData = (userData) => {
-    setSendData({
-      iataorigin : userData.leaving.iata,
-      iatadest : userData.going.iata,
-      travellers : userData.travellers,
-      departing : userData.depart,
-      returning : userData.return
-    });
-  };
+  // Function to update URL with userFlightData
 
-  const handlePostSearchBooking = async () => {
-    try{
-      const response = await
-        axios
-          .post(`http://localhost:8080/postSearchBooking`, sendData);
-      if(response.status !== 200 || response.status !== 201){
-        console.log("Error adding search booking: ", response.data);
-      }
-    } catch (error) {
-      console.error("Error adding booking: ", error);
+  function getType(value) {
+    if (Array.isArray(value)) {
+      return 'array';
+    } else if (value === null) {
+      return 'null';
+    } else if (value instanceof Date) {
+      return 'date';
+    } else {
+      return typeof value;
     }
   }
 
-  // Function to update URL with userFlightData
-
-  const handleSearchFlight = () => {
-    // apiFlight = createAPIData(userFlightData);
+  const handleSearchFlight = async () => {
     setSearchState((prev) => !prev); // Toggle search state
-    handleButtonClick();
-    handlePostSearchBooking();
-    navigate("/flights", { state: { userFlightData, sendData } });
+
     
+
+
+    const dataToSend = {
+      iataorigin: userFlightData.leaving.iata,
+      iatadest: userFlightData.going.iata,
+      travellers: userFlightData.travellers,
+      departing: userFlightData.depart.toISOString(),
+      returning: userFlightData.return.toISOString()
   };
 
+  const types = Object.fromEntries(
+    Object.entries(dataToSend).map(([key, value]) => [key, getType(value)])
+  );
+  
+  console.log(types);
+
+
+
+
+    handleButtonClick();
+    console.log(typeof{dataToSend});
+    try{
+      const response = await 
+        axios
+          .post("http://localhost:8080/postSearchBooking", dataToSend);
+          console.log(typeof(response.data));
+          navigate("/flights", { state: { userFlightData, sendData : dataToSend } });
+    } catch (error){
+      console.error('Error posting data: ', error);
+    }
+
+    
+    
+  };
 
 
   return (
@@ -243,9 +261,8 @@ const Search = () => {
           </div>
           <button
             onClick={() => {
-              handleSendData(userFlightData);
-              console.log(sendData);
               handleSearchFlight();
+
             }}
             className="search-flight-button btn btnBlock flex"
             disabled={!isAllDummyFilled()}

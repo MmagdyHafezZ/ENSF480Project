@@ -1,15 +1,13 @@
 package com.example.thebackend.DTO;
 
-import com.example.thebackend.Entity.UserProfile;
-
 public class UserCreditCardDTO {
     private Long id;
+    private Long userId; // User ID, not UserProfile ID
     private String cardNumber;
     private String expiryDate;
     private String cvv;
     private String cardholderName;
     private String address;
-    private UserProfile userProfile;
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -24,9 +22,11 @@ public class UserCreditCardDTO {
     public void setCardholderName(String cardholderName) { this.cardholderName = cardholderName; }
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
-    public UserProfile getUserProfile() {
-        return userProfile;
-
+    public Long getUserId() {
+        return userId;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     

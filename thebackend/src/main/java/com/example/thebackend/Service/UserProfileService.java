@@ -2,8 +2,11 @@ package com.example.thebackend.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.thebackend.Entity.User;
 import com.example.thebackend.Entity.UserProfile;
 import com.example.thebackend.Repository.UserProfileRepository;
+import com.example.thebackend.Repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -15,18 +18,17 @@ public class UserProfileService {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
-    public UserProfile addOrUpdateUserProfile(UserProfileDTO dto) {
-        UserProfile userProfile;
-        if (dto.getId() != null) {
-            // It's an update
-            userProfile = userProfileRepository.findById(dto.getId())
-                    .orElseThrow(() -> new EntityNotFoundException("UserProfile not found with id " + dto.getId()));
-        } else {
-            // It's a new entity
-            userProfile = new UserProfile();
-        }
+    @Autowired
+    private UserRepository userRepository;
 
-        // Set properties from DTO
+    public UserProfile addOrUpdateUserProfile(UserProfileDTO dto) {
+        long userId = dto.getId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        
+        UserProfile userProfile = userProfileRepository.findByUserId(userId)
+                .orElse(new UserProfile());
+
         userProfile.setUsername(dto.getUsername());
         userProfile.setUserRole(dto.getUserRole());
         userProfile.setMembershipType(dto.getMembershipType());
@@ -34,11 +36,24 @@ public class UserProfileService {
         userProfile.setRecentBookings(dto.getRecentBookings());
         userProfile.setUpcomingFlights(dto.getUpcomingFlights());
         userProfile.setEmailNotification(dto.getEmailNotification());
+        userProfile.setEmail(dto.getEmail());
+        userProfile.setPhoneNumber(dto.getPhoneNumber());
+
+
+        userProfile.setUser(user);
 
         return userProfileRepository.save(userProfile);
     }
 
     public void deleteUserProfile(Long id) {
         userProfileRepository.deleteById(id);
+    }
+    public UserProfile getUserProfile(Long id) {
+        return userProfileRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User profile not found with id: " + id));
+    }
+
+    public void addOrUpdateUserProfile(UserProfile userProfile) {
+        userProfileRepository.save(userProfile);
     }
 }

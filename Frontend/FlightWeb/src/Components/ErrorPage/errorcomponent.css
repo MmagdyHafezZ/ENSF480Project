@@ -1,0 +1,38 @@
+.error-container {
+  text-align: center;
+  padding: 40px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  width: 350px;
+  margin: 100px auto;
+  font-family: "Arial", sans-serif;
+}
+.error-container h1 {
+  color: #ff4757;
+  margin-bottom: 24px;
+  font-size: 26px;
+}
+.error-container p {
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 18px;
+}
+.error-container button {
+  padding: 12px 25px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+.error-container button:hover {
+  background-color: #0077cc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.3);
+}
+.error-container button:active {
+  transform: translateY(1px);
+}/*# sourceMappingURL=errorcomponent.css.map */

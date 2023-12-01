@@ -15,9 +15,9 @@ public class UserCreditCard {
     private String cardholderName;
     private String address;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "userId", referencedColumnName = "id")
-    private UserProfile userProfile;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     // Constructors, Getters and Setters
     public UserCreditCard(String cardNumber, String expiryDate, String cvv, String cardholderName, String address) {
@@ -45,9 +45,7 @@ public class UserCreditCard {
     public String getAddress() {
         return address;
     }
-    public UserProfile getUserProfile() {
-        return userProfile;
-    }
+
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
@@ -63,16 +61,23 @@ public class UserCreditCard {
     public void setAddress(String address) {
         this.address = address;
     }
-    public void setUserProfile(UserProfile userProfile) {
-        this.userProfile = userProfile;
-    }
+
     public void deleteById(Long id2) {
 
     }
     public void setId(Long id2) {
         this.id = id2;
     }
-
+    public Long getId() {
+        return id;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public User getUser() {
+        return user;
+    }
+    
     
 }
 
