@@ -48,7 +48,7 @@ const SignUpSignIn = () => {
       lastName: last_name,
       email,
       password: password1, // Changed from password1 to password
-      membership: "none",
+      membership: "Basic",
     });
     console.log(body);
     axios

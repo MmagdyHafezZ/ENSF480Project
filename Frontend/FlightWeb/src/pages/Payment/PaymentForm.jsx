@@ -61,17 +61,28 @@ const PaymentForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (totalAmount === 0) {
+      return;
+    }
     const userId = parseInt(localStorage.getItem("id"));
 
+    const totalDiscount =
+      loyaltyPoints + (discountCode ? parseInt(discountCode) : 0);
+    const finalAmount = totalAmount - totalDiscount;
     try {
+      const addbalance = await axios.post(
+        `http://localhost:8080/api/user/SetBalance/${userId}`,
+        { balance: finalAmount }, // Send the data as JSON with 'balance' field
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const balanceResponse = await axios.get(
         `http://localhost:8080/api/user/GetBalance/${userId}`
       );
       const currentBalance = balanceResponse.data;
-
-      const totalDiscount =
-        loyaltyPoints + (discountCode ? parseInt(discountCode) : 0);
-      const finalAmount = totalAmount - totalDiscount;
 
       if (currentBalance < finalAmount) {
         alert("Insufficient Balance");

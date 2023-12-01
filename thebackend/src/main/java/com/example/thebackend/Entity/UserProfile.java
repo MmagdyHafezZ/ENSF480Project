@@ -3,8 +3,6 @@ package com.example.thebackend.Entity;
 import jakarta.persistence.*;
 import java.util.List;
 
-import com.example.thebackend.DTO.MembershipDTO;
-
 @Entity
 @Table(name = "userProfile")
 public class UserProfile {
@@ -12,7 +10,7 @@ public class UserProfile {
     @Id
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id")
     private User user;
