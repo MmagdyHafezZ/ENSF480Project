@@ -1,7 +1,5 @@
 package com.example.thebackend.Entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,17 +10,17 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**
- * SearchBooking
+ * FlightListEntity
  */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "searchbooking")
-public class SearchBookingEntity {
+@Table(name = "flightlist")
+public class FlightListEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "iataorigin")
@@ -31,14 +29,17 @@ public class SearchBookingEntity {
     @Column(name = "iatadest")
     private String iatadest;
 
-    @Column(name = "travellers")
-    private int travellers;
-
     @Column(name = "departing")
     private String departing;
 
     @Column(name = "returning")
     private String returning;
+
+    @Column(name = "model")
+    private String model;
+
+    @Column(name = "modelid")
+    private String modelid;
 
     public Long getID(){
         return id;
@@ -64,14 +65,6 @@ public class SearchBookingEntity {
         this.iatadest = iatadest;
     }
 
-    public int getTravellers(){
-        return travellers;
-    }
-
-    public void setTravellers(int travellers){
-        this.travellers = travellers;
-    }
-
     public String getDeparting(){
         return departing;
     }
@@ -86,5 +79,21 @@ public class SearchBookingEntity {
 
     public void setReturning(String returning){
         this.returning = returning;
+    }
+
+    public String getModel(){
+        return model;
+    }
+
+    public void setModel(String model){
+        this.model = model;
+    }
+
+    public String getModelID(){
+        return modelid;
+    }
+
+    public void setModelID(String modelid){
+        this.modelid = modelid;
     }
 }

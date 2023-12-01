@@ -3,11 +3,11 @@ package com.example.thebackend.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.thebackend.Entity.SearchBookingEntity;
 import com.example.thebackend.Service.SearchBookingService;
@@ -15,7 +15,7 @@ import com.example.thebackend.Service.SearchBookingService;
 /**
  * SearchBookingController
  */
-@Controller
+@RestController
 public class SearchBookingController {
 
     @Autowired

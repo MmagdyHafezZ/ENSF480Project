@@ -2,18 +2,59 @@ import React, { useState } from "react";
 // import "./planes.css";
 import "../SeatMaps/planes.scss";
 import { BsXLg } from "react-icons/bs";
-import seatData from "./mp_seatAvailability.json";
+import seatData from "../../data/mp_seatAvailability.json";
+import { useUserDataContext } from "../../context/UserDataContext";
 const MediumPlane = ({ isBooking }) => {
-  const [selectedSeats, setSelectedSeats] = useState({});
+  const [allSeatData, setAllSeatData] = useState(seatData); // <----- This is the seat data of the chosen flight
+  const { userFlightData, selectedSeats, setSelectedSeats, price, setPrice } =
+    useUserDataContext();
 
   // Function to handle the click event on seats
-  const handleSeatClick = (seatId) => {
+  const handleSeatClick = (seatId, seatContent) => {
     if (isBooking) {
-      console.log("1");
-      setSelectedSeats((prevSelectedSeats) => ({
-        ...prevSelectedSeats,
-        [seatId]: !prevSelectedSeats[seatId], // Toggle the selected state
-      }));
+      setSelectedSeats((prevSelectedSeats) => {
+        const currentlySelected = Object.keys(prevSelectedSeats).filter(
+          (key) => prevSelectedSeats[key]
+        ).length;
+
+        // Toggle the selected state for the seat
+        let updatedSelectedSeats;
+        if (prevSelectedSeats[seatId]) {
+          // Seat is currently selected, so remove it
+          updatedSelectedSeats = { ...prevSelectedSeats };
+          delete updatedSelectedSeats[seatId];
+        } else {
+          // Seat is not selected and we have room for more, so add it
+          if (currentlySelected < userFlightData.travellers) {
+            updatedSelectedSeats = {
+              ...prevSelectedSeats,
+              [seatId]: true,
+            };
+          } else {
+            // No room for more selections, return previous state
+            return prevSelectedSeats;
+          }
+        }
+
+        // Calculate the total price based on the selected seats
+        const totalPrice = Object.keys(updatedSelectedSeats).reduce(
+          (total, seatId) => {
+            if (updatedSelectedSeats[seatId]) {
+              const seatInfo = seatData[seatId];
+              if (seatInfo && seatInfo.available) {
+                total += seatInfo.price;
+              }
+            }
+            return total;
+          },
+          0
+        );
+
+        // Update the price state
+        setPrice(totalPrice);
+
+        return updatedSelectedSeats;
+      });
     }
   };
 

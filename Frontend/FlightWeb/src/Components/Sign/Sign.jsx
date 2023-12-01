@@ -4,6 +4,7 @@ import axios from "axios";
 import "./signup.css"; // Make sure this path is correct
 import { GoogleLoginButton } from "react-social-login-buttons";
 import "./background.css";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SignUpSignIn = () => {
   const [isGx, setIsGx] = useState(false);
@@ -16,6 +17,11 @@ const SignUpSignIn = () => {
   const [isSignIn, setIsSignIn] = useLocalStorage("isSignIn", false);
   const [username, setUsername] = useLocalStorage("username", "");
   const [email, setEmail] = useLocalStorage("email", "");
+  /* This is for when the user tries to pay when not logged in*/
+  const location = useLocation();
+  const navigate = useNavigate();
+  const redirectState = location.state;
+  /* --------------------------------------- */
 
   const jumpToHome = useCallback(() => {
     // to jump to home page after login
@@ -97,7 +103,9 @@ const SignUpSignIn = () => {
         setIsSignIn(true);
         localStorage.setItem("id", parseInt(res.data.id));
         localStorage.setItem("isLoggedIn", true);
+
         jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
+
       })
       .catch((err) => {
         console.log(err);
@@ -130,6 +138,7 @@ const SignUpSignIn = () => {
           //   jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
           // }
           // )
+
           fetchAndStoreUserProfile(userId);
           jumpToHome();
         } catch (err) {
