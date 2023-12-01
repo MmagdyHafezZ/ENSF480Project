@@ -29,6 +29,7 @@ public class SearchBookingService {
 
     // POST
     public SearchBookingEntity postSearchBooking(SearchBookingEntity searchBookingEntity){
+        System.out.println(searchBookingEntity.getDeparting().getClass().getSimpleName());
         return searchBookingRepository.save(searchBookingEntity);
     }
 

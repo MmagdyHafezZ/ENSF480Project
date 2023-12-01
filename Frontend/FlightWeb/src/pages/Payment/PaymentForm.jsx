@@ -25,7 +25,7 @@ const PaymentForm = () => {
   // Mock data - replace with actual data from the user's profile
   const totalLoyaltyPoints =
     parseInt(localStorage.getItem("loyaltyPoints")) || 200;
-  const totalAmount = price; // Replace with actual amount
+  const totalAmount = price || 100; // Replace with actual amount
 
   const handleLoyaltyChange = (event, newValue) => {
     setLoyaltyPoints(newValue);

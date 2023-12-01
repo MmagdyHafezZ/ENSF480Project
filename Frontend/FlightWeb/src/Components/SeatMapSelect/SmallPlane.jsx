@@ -5,7 +5,7 @@ import { BsXLg } from "react-icons/bs";
 import seatData from "../../data/sm_seatAvailability.json";
 import { useUserDataContext } from "../../context/UserDataContext";
 const SmallPlane = ({ isBooking, flightDetails }) => {
-  const [allSeatData, setAllSeatData] = useState(seatData);
+  const [allSeatData, setAllSeatData] = useState(seatData); // <----- This is the seat data of the chosen flight
   const { userFlightData, selectedSeats, setSelectedSeats, price, setPrice } =
     useUserDataContext();
   // Function to handle the click event on seats

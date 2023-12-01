@@ -2,42 +2,73 @@
   {
     "country": "Philippines",
     "city": "Manila",
-    "img": "./images/philippines.jpeg"
-    
+    "img": "./images/philippines.jpeg",
+    "iata": "MNL",
+    "depart_date": "Tue Jan 05 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "return_date": "Sun Jan 15 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "homepage":"https://manila.gov.ph/"
   },
   {
     "country": "Canada",
     "city": "Vancouver",
-    "img": "./images/vancouver.jpeg"
+    "img": "./images/vancouver.jpeg",
+    "iata": "YVR",
+    "depart_date": "Tue Dec 5 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "return_date": "Mon Dec 25 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+        "homepage":"https://vancouver.ca/"
   },
   {
     "country": "Bosnia",
     "city": "Sarajevo",
-    "img": "./images/bosnia.jpeg"
+    "img": "./images/bosnia.jpeg",
+    "iata": "SJJ",
+    "depart_date": "Wed Mar 15 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "return_date": "Sun Mar 25 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+        "homepage":"https://www.visitsarajevo.ba/"
   },
   {
     "country": "United States",
     "city": "Seattle",
-    "img": "./images/seattle.jpeg"
+    "img": "./images/seattle.jpeg",
+    "iata": "SEA",
+    "depart_date": "Thu Apr 20 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "return_date": "Sun Apr 30 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "homepage":"https://www.seattle.gov/"
   },
   {
     "country": "United States",
     "city": "Los Angeles",
-    "img": "./images/LA.avif"
+    "img": "./images/LA.avif",
+    "iata": "LAX",
+    "depart_date": "Thu May 25 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "return_date": "Mon Jun 05 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+        "homepage":"https://lacity.gov/"
   },
   {
     "country": "United States",
     "city": "Honolulu",
-    "img": "./images/honolulu.jpeg"
+    "img": "./images/honolulu.jpeg",
+    "iata": "HNL",
+    "depart_date": "Mon Jul 10 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "return_date": "Thu Jul 20 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+        "homepage":"https://www.gohawaii.com/islands/oahu/regions/honolulu"
   },
   {
     "country": "United States",
     "city": "New York",
-    "img": "./images/ny.jpeg"
+    "img": "./images/ny.jpeg",
+    "iata": "JFK",
+    "depart_date": "Tue Aug 15 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "return_date": "Fri Aug 25 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+        "homepage":"https://www.nyc.gov/"
   },
   {
     "country": "Australia",
     "city": "Sydney",
-    "img": "./images/Sydney.avif"
+    "img": "./images/Sydney.avif",
+    "iata": "SYD",
+    "depart_date": "Sat Sep 30 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+    "return_date": "Tue Oct 10 2023 00:00:00 GMT-0700 (Mountain Standard Time)",
+        "homepage":"https://int.sydney.com/"
   }
 ]
