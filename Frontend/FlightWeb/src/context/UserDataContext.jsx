@@ -27,8 +27,8 @@ export const UserDataProvider = ({ children }) => {
 
   const [userFlightData, setUserFlightData] = useState(
     getFromSessionStorage() || {
-      Changeme: { name: "", iata: "" },
-      going: { name: "", iata: "" },
+      leaving: { city: "", iata: "" },
+      going: { city: "", iata: "" },
       travellers: 0,
       depart: "",
       return: "",
@@ -69,7 +69,7 @@ export const UserDataProvider = ({ children }) => {
       // Convert date strings back to Date objects
       parsedData.depart = new Date(parsedData.depart);
       parsedData.return = new Date(parsedData.return);
-      // console.log(parsedData.depart);
+      console.log(parsedData.depart);
       setUserFlightData(parsedData);
     }
   }, [location.pathname]);

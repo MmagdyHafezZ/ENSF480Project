@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS `airportdata`;
+
+DROP TABLE IF EXISTS `searchbooking`;
+
 CREATE TABLE
     IF NOT EXISTS `airportdata` (
         `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -51,13 +55,14 @@ CREATE TABLE
     -- REFERENCES `region`(`id`) ON UPDATE CASCADE
 );
 
+
 CREATE TABLE    
     IF NOT EXISTS `searchbooking` (
     `id`            BIGINT NOT NULL AUTO_INCREMENT,
     `iataorigin`    VARCHAR(3) NOT NULL,
     `iatadest`      VARCHAR(3) NOT NULL,
     `travellers`    INT NOT NULL,
-    `departing`     TIMESTAMP NOT NULL,
-    `returning`     TIMESTAMP NOT NULL,
-    PRIMARY KEY (`searchbook`)
+    `departing`     VARCHAR(50) NOT NULL,
+    `returning`     VARCHAR(50) NOT NULL,
+    PRIMARY KEY (`id`)
     )

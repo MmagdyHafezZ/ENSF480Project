@@ -35,10 +35,10 @@ public class SearchBookingEntity {
     private int travellers;
 
     @Column(name = "departing")
-    private LocalDateTime departing;
+    private String departing;
 
     @Column(name = "returning")
-    private LocalDateTime returning;
+    private String returning;
 
     public Long getID(){
         return id;
@@ -72,19 +72,19 @@ public class SearchBookingEntity {
         this.travellers = travellers;
     }
 
-    public LocalDateTime getDeparting(){
+    public String getDeparting(){
         return departing;
     }
 
-    public void setDeparting(LocalDateTime departing){
+    public void setDeparting(String departing){
         this.departing = departing;
     }
 
-    public LocalDateTime getReturning(){
+    public String getReturning(){
         return returning;
     }
 
-    public void setReturning(LocalDateTime returning){
+    public void setReturning(String returning){
         this.returning = returning;
     }
 }
