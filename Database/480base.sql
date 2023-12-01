@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS users (
     last_name VARCHAR(255),
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255), -- NULL for Google OAuth users
-    google_id VARCHAR(255) -- Unique ID from Google, NULL for regular users
+    google_id VARCHAR(255), -- Unique ID from Google, NULL for regular users
+    membershipType ENUM('bronze', 'silver', 'gold','none'),
+    
 );
 INSERT INTO users (email, password, first_name, last_name) VALUES 
 ('johndoe@example.com', 'encrypted_password', 'John','Doe');
@@ -22,7 +24,7 @@ CREATE TABLE user_profile (
     id BIGINT NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
     userRole VARCHAR(255),
-    membershipType ENUM('bronze', 'silver', 'gold'),
+    membershipType ENUM('bronze', 'silver', 'gold','none'),
     loyaltyPoints INT DEFAULT 0,
     recentBookings TEXT,  -- This can be JSON or a delimited string
     upcomingFlights TEXT, -- This can be JSON or a delimited string
@@ -41,17 +43,7 @@ CREATE TABLE user_credit_card (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE IF NOT EXISTS `route` (
-	`id`			INT NOT NULL AUTO_INCREMENT,
-    `origin`		INT NOT NULL,
-    `destination`	INT NOT NULL,
-    PRIMARY KEY(`id`),
-    CONSTRAINT FK_Origin FOREIGN KEY (`origin`)
-    REFERENCES `airportlocation`(`id`) ON UPDATE CASCADE,
-    CONSTRAINT FK_Destination FOREIGN KEY (`destination`)
-    REFERENCES `airportlocation`(`id`) ON UPDATE CASCADE,
-    CONSTRAINT UC_Route UNIQUE (`origin`, `destination`)
-);
+
 
    
 CREATE TABLE userPreferences (

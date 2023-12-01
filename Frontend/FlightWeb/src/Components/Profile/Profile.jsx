@@ -24,14 +24,15 @@ import {
 } from "@mui/icons-material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Navbar from "../Navbar/Navbar";
+import axios from "axios";
+import { fetchAndStoreUserProfile } from "../../utils/userProfileHelper";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState({
-    name: "",
-    role: "",
-    membershipStatus: "",
+    username: "",
+    userRole: "",
+    membershipType: "",
     recentBookings: [],
-    profilePictureUrl: "",
     email: "",
     phone: "",
   });
@@ -46,6 +47,9 @@ const ProfilePage = () => {
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [seatPreference, setSeatPreference] = useState("Aisle"); // Assuming it's either "Aisle" or "Window"
+  const profileImage =
+    "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png";
+
   const toggleSettings = () => {
     setIsSettingsOpen(!isSettingsOpen);
   };
@@ -65,40 +69,64 @@ const ProfilePage = () => {
   const handleContactInfoToggle = () => {
     setIsContactInfoExpanded(!isContactInfoExpanded);
   };
-  const saveProfile = () => {
-    // Here, we would send data to the server.
-    // For now, just close the form
-    setIsEditFormOpen(false);
-  };
 
   const upcomingFlights = [
     { flight: "Los Angeles to Tokyo", date: "2023-04-05" },
     { flight: "Berlin to New York", date: "2023-05-11" },
   ];
-  const fetchUserData = async () => {
+
+  useEffect(() => {
+    const userId = parseInt(localStorage.getItem("id"));
+    if (userId) {
+      fetchUserData(userId);
+    }
+  }, []);
+
+  const fetchUserData = async (userId) => {
     try {
-      // Simulating an API call
-      const response = await fetch("https://api.example.com/user/profile");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setUserData(data);
+      const userProfile = await fetchAndStoreUserProfile(userId);
+      setUserData(userProfile);
     } catch (error) {
       console.error("Error fetching user data:", error);
-      // Using dummy data in case of an error or while the backend is not available
-      setUserData({
-        name: "John Doe",
-        role: "Software Developer",
-        membershipStatus: "Gold Member",
-        recentBookings: [
-          { flight: "New York to London", date: "2023-01-15" },
-          { flight: "Paris to Tokyo", date: "2023-02-20" },
-        ],
-        profilePictureUrl:
-          "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png",
-      });
+      const response = await axios.post(
+        `http://localhost:8080/api/user/profile`,
+        {
+          ...userData,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setUserData(response.data);
     }
+  };
+
+  const saveProfile = async () => {
+    try {
+      const userId = localStorage.getItem("id");
+      const response = await axios.post(
+        `http://localhost:8080/api/user/profile`,
+        {
+          ...userData,
+          id: userId, // Include userId if your API expects it in the body
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // Update the user profile in the state and localStorage
+      setUserData(response.data);
+      localStorage.setItem("userProfile", JSON.stringify(response.data));
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      alert("Error updating profile");
+    }
+    setIsEditFormOpen(false);
   };
 
   return (
@@ -115,16 +143,16 @@ const ProfilePage = () => {
             <Grid item xs={12} style={{ textAlign: "center" }}>
               <Avatar
                 alt="Profile Picture"
-                src={userData.profilePictureUrl}
+                src={profileImage}
                 sx={{ width: 100, height: 100 }}
                 style={{ margin: "auto" }}
               />
             </Grid>
             <Grid item xs={12} style={{ textAlign: "center" }}>
-              <Typography variant="h4">{userData.name}</Typography>
-              <Typography variant="subtitle1">{userData.role}</Typography>
+              <Typography variant="h4">{userData.username}</Typography>
+              <Typography variant="subtitle1">{userData.userRole}</Typography>
               <Typography variant="subtitle1" style={{ marginTop: "10px" }}>
-                {userData.membershipStatus}
+                {userData.membershipType}
               </Typography>
 
               <Typography variant="subtitle1" style={{ marginTop: "20px" }}>
@@ -152,20 +180,26 @@ const ProfilePage = () => {
                       <Grid item xs={12}>
                         <TextField
                           fullWidth
-                          label="Name"
-                          value={userData.name}
+                          label="username"
+                          value={userData.username}
                           onChange={(e) =>
-                            setUserData({ ...userData, name: e.target.value })
+                            setUserData({
+                              ...userData,
+                              username: e.target.value,
+                            })
                           }
                         />
                       </Grid>
                       <Grid item xs={12}>
                         <TextField
                           fullWidth
-                          label="Role"
-                          value={userData.role}
+                          label="userRole"
+                          value={userData.userRole}
                           onChange={(e) =>
-                            setUserData({ ...userData, role: e.target.value })
+                            setUserData({
+                              ...userData,
+                              userRole: e.target.value,
+                            })
                           }
                         />
                       </Grid>

@@ -135,7 +135,8 @@ const MediumPlane = ({ isBooking }) => {
         const isWingSeat = 16 <= seatData[seatId] <= 23 ? "wing-row" : "";
         let seatContent = isBooking ? (
           isAvailable ? (
-            `$${seatInfo?.price}`
+            // `$${seatInfo?.price}`
+            seatId
           ) : (
             <BsXLg />
           )
@@ -191,7 +192,8 @@ const MediumPlane = ({ isBooking }) => {
         const isWingSeat = rowNumber >= 16 && rowNumber <= 23 ? "wing-row" : "";
         let seatContent = isBooking ? (
           isAvailable ? (
-            `$${seatInfo?.price}`
+            // `$${seatInfo?.price}`
+            seatId
           ) : (
             <BsXLg />
           )

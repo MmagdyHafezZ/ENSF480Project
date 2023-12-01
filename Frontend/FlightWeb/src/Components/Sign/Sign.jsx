@@ -54,6 +54,7 @@ const SignUpSignIn = () => {
       lastName: last_name,
       email,
       password: password1, // Changed from password1 to password
+      membership: "none",
     });
     console.log(body);
     axios
@@ -66,13 +67,13 @@ const SignUpSignIn = () => {
         console.log(res);
         setIsSignIn(true);
         localStorage.setItem("isLoggedIn", true);
+        console.log(res.data);
         localStorage.setItem("id", res.data.id);
-        setUsername(username); // Ensure `username` is defined elsewhere in your code
-        setEmail(email);
-        jumpToHome(); // Ensure `jumpToHome` is defined and implements the required action
+        jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
       })
       .catch((err) => {
         console.log(err);
+        alert("User already exists");
       });
   };
 
@@ -100,15 +101,11 @@ const SignUpSignIn = () => {
       .then((res) => {
         console.log(res);
         setIsSignIn(true);
-        localStorage.setItem("id", res.data.id);
+        localStorage.setItem("id", parseInt(res.data.id));
         localStorage.setItem("isLoggedIn", true);
-        setUsername(res.data.username); // Ensure `setUsername` is defined and working as expected
-        setEmail(email); // Ensure `setEmail` is defined and working as expected
-        if (redirectState && redirectState.from === "ticketDetails") {
-          navigate("/payment", { state: redirectState.ticketDetailsState });
-        } else {
-          jumpToHome(); // Default redirect if no specific state is present
-        }
+
+        jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
+
       })
       .catch((err) => {
         console.log(err);
@@ -141,20 +138,9 @@ const SignUpSignIn = () => {
           //   jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
           // }
           // )
-          localStorage.setItem("isLoggedIn", true);
-          localStorage.setItem("token", access_token);
 
-          if (redirectState && redirectState.from === "ticketDetails") {
-            // <--- I added this to check if the user was redirected her to log in before payment
-            navigate("/tickets", {
-              state: {
-                ...redirectState.ticketDetailsState,
-                showCheckmark: true,
-              },
-            });
-          } else {
-            jumpToHome(); // Default redirect if no specific state is present
-          }
+          fetchAndStoreUserProfile(userId);
+          jumpToHome();
         } catch (err) {
           console.error("Error fetching Google user info:", err);
         }

@@ -11,12 +11,9 @@ import axios from "axios";
 const FlightsList = ({ userFlightData, apiFlight }) => {
   const navigate = useNavigate();
   const { searchState, isLoading, setIsLoading } = useUserDataContext();
-  
 
   //Put flight data with all times and stuff here
   const [flightData, setFlightData] = useState(dummyFlightsData);
-
-  
 
   const handleViewDetailsClick = (id) => {
     const flightDetails = flightData.find((flight) => flight.id === id);
@@ -65,10 +62,11 @@ const FlightsList = ({ userFlightData, apiFlight }) => {
         setFilteredFlights(newFilteredFlights);
         setIsSearchActive(searchState);
       }
+    }
   }, [searchState, flightData, userFlightData]); // Add flightData as a dependency
   const originalDepartDate = new Date(userFlightData.depart);
   const formattedOriginalDate = originalDepartDate.toISOString().slice(0, 19);
-  console.log(formattedOriginalDate); // Convert
+  // console.log(formattedOriginalDate); // Convert
   return (
     <div className="flights-list">
       {isLoading ? (

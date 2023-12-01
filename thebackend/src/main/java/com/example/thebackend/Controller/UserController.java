@@ -1,10 +1,13 @@
 package com.example.thebackend.Controller;
 
+// import org.aspectj.weaver.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.thebackend.DTO.UserProfileDTO;
 import com.example.thebackend.Entity.UserProfile;
+import com.example.thebackend.DTO.BalanceDTO;
+import com.example.thebackend.DTO.MembershipDTO;
 import com.example.thebackend.DTO.UserCreditCardDTO;
 import com.example.thebackend.DTO.UserPreferencesDTO;
 import com.example.thebackend.Service.UserProfileService;
@@ -40,6 +43,11 @@ public class UserController {
         userProfileService.deleteUserProfile(id);
         return ResponseEntity.ok("User profile deleted");
     }
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<?> getUserProfile(@PathVariable Long id) {
+        UserProfile userProfile = userProfileService.getUserProfile(id);
+        return ResponseEntity.ok(userProfile);
+    }
 
     // Add/Edit UserCreditCard
     @PostMapping("/creditcard")
@@ -69,4 +77,26 @@ public class UserController {
         userPreferencesService.deleteUserPreferences(id);
         return ResponseEntity.ok("Preferences deleted");
     }
+
+    @GetMapping("/GetBalance/{id}")
+    public ResponseEntity<?> getBalance(@PathVariable Long id) {
+        UserProfile userProfile = userProfileService.getUserProfile(id);
+        return ResponseEntity.ok(userProfile.getbalance());
+    }
+    @PostMapping("/SetBalance/{id}")
+    public ResponseEntity<?> setBalance(@PathVariable Long id, @RequestBody BalanceDTO balanceDto) {
+        UserProfile userProfile = userProfileService.getUserProfile(id);
+        userProfile.setbalance(balanceDto.getBalance());
+        userProfileService.addOrUpdateUserProfile(userProfile);
+        return ResponseEntity.ok(userProfile.getbalance());
+    }
+    @PutMapping("/UpdateMembership/{id}")
+    public ResponseEntity<?> updateMembership(@PathVariable Long id, @RequestBody MembershipDTO membershipDto) {
+        UserProfile userProfile = userProfileService.getUserProfile(id);
+        userProfile.setMembershipType(membershipDto.getMembershipType());
+        userProfileService.addOrUpdateUserProfile(userProfile);
+        return ResponseEntity.ok(userProfile.getMembershipType());
+    }
+    
+    
 }
