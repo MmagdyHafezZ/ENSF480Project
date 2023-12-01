@@ -51,6 +51,9 @@ public class FlightListEntity {
     @Column(name = "model")
     private String model;
 
+    @Column(name = "modelid")
+    private String modelid;
+
     public void setId(Long id){
         this.id = id;
     }
@@ -121,5 +124,13 @@ public class FlightListEntity {
 
     public void setModel(String model){
         this.model = model;
+    }
+
+    public String getModelid(){
+        return modelid;
+    }
+
+    public void setModelid(String modelid){
+        this.modelid = modelid;
     }
 }

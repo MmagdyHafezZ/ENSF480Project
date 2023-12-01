@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.thebackend.Entity.AircraftModelEntity;
 import com.example.thebackend.Entity.FlightListEntity;
 import com.example.thebackend.Entity.SearchBookingEntity;
+import com.example.thebackend.Repository.AircraftModelRepository;
 import com.example.thebackend.Repository.FlightListRepository;
 import com.example.thebackend.Repository.SearchBookingRepository;
 
@@ -26,6 +28,9 @@ public class SearchBookingService {
 
     @Autowired
     private FlightListRepository flightListRepository;
+
+    @Autowired
+    private AircraftModelRepository aircraftModelRepository;
 
     // GET
     public List<SearchBookingEntity> getSearchBookingData(){
@@ -68,6 +73,17 @@ public class SearchBookingService {
 
             flightListEntity.setDeparttime(departtime + ":00");
             flightListEntity.setReturntime(returntime + ":00");
+
+            long aircraftpicker = new Random().nextLong(aircraftModelRepository.count());
+
+            AircraftModelEntity aircraftModelEntity = aircraftModelRepository.findAll().get((int) aircraftpicker);
+
+            System.out.println(aircraftModelEntity);
+            System.out.println(aircraftModelEntity.getModel());
+            System.out.println(aircraftModelEntity.getModelid());
+
+            flightListEntity.setModel(aircraftModelEntity.getModel());
+            flightListEntity.setModelid(aircraftModelEntity.getModelid());
 
             flightListRepository.save(flightListEntity);
         }

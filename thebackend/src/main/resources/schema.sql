@@ -70,9 +70,7 @@ CREATE TABLE
     `departtime`        VARCHAR(50) NOT NULL,
     `returntime`        VARCHAR(50) NOT NULL,
     `model`             VARCHAR(50) NOT NULL,
-
-    -- `aircraft_id` BIGINT NOT NULL,
+    `modelid`           VARCHAR(10) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`searchbookingid`) REFERENCES `searchbooking`(`id`)
-    -- FOREIGN KEY (`aircraft_id`) REFERENCES `aircraft`(`id`)
 );
