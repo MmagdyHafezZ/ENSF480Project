@@ -69,6 +69,7 @@ CREATE TABLE
     `returndate`        VARCHAR(50) NOT NULL,
     `departtime`        VARCHAR(50) NOT NULL,
     `returntime`        VARCHAR(50) NOT NULL,
+    `model`             VARCHAR(50) NOT NULL,
 
     -- `aircraft_id` BIGINT NOT NULL,
     PRIMARY KEY (`id`),

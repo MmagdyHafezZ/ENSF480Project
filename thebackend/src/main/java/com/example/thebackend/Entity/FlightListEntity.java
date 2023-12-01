@@ -48,6 +48,9 @@ public class FlightListEntity {
     @Column(name = "returntime")
     private String returntime;
 
+    @Column(name = "model")
+    private String model;
+
     public void setId(Long id){
         this.id = id;
     }
@@ -110,5 +113,13 @@ public class FlightListEntity {
 
     public void setReturntime(String returntime){
         this.returntime = returntime;
+    }
+
+    public String getModel(){
+        return model;
+    }
+
+    public void setModel(String model){
+        this.model = model;
     }
 }

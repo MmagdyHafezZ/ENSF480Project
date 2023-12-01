@@ -43,7 +43,6 @@ public class SearchBookingService {
         searchBookingEntity = searchBookingRepository.save(searchBookingEntity);
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH");
 
         String isoDepartingDate = searchBookingEntity.getDeparting();
         ZonedDateTime zonedDepartingDateTime = ZonedDateTime.parse(isoDepartingDate);
