@@ -122,35 +122,33 @@ const SearchLocationPopup = ({
       });
   }, []);
 
-
   useEffect(() => {
-    function handleClickOutsidePopup(event){
+    function handleClickOutsidePopup(event) {
       if (outClick.current && !outClick.current.contains(event.target)) {
         setPopup(false);
+      }
     }
-  }
 
     document.addEventListener("mousedown", handleClickOutsidePopup);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutsidePopup);
     };
-
   }, [setPopup]);
 
-  // const dummyData = [
-  //   { city: "New York", iata: "JFK" },
-  //   { city: "Los Angeles", iata: "LAX" },
-  //   { city: "London", iata: "LHR" },
-  //   { city: "Paris", iata: "CDG" },
-  //   { city: "Tokyo", iata: "HND" },
-  //   { city: "Calgary", iata: "YYC" },
-  //   { city: "Fort McMurray", iata: "YMM" }, // Fort McMurray, Alberta, Canada
-  //   { city: "Vancouver", iata: "YVR" }, // Vancouver, British Columbia, Canada
-  //   { city: "Seattle", iata: "SEA" }, // Seattle, Washington, USA
-  //   { city: "Birmingham", iata: "BHX" }, // Birmingham, England, UK
-  //   // Add more cities and codes as needed
-  // ];
+  const dummyData = [
+    { city: "New York", iata: "JFK" },
+    { city: "Los Angeles", iata: "LAX" },
+    { city: "London", iata: "LHR" },
+    { city: "Paris", iata: "CDG" },
+    { city: "Tokyo", iata: "HND" },
+    { city: "Calgary", iata: "YYC" },
+    { city: "Fort McMurray", iata: "YMM" }, // Fort McMurray, Alberta, Canada
+    { city: "Vancouver", iata: "YVR" }, // Vancouver, British Columbia, Canada
+    { city: "Seattle", iata: "SEA" }, // Seattle, Washington, USA
+    { city: "Birmingham", iata: "BHX" }, // Birmingham, England, UK
+    // Add more cities and codes as needed
+  ];
 
   function handleSelectLocation(location) {
     setData((prevData) => ({
@@ -163,7 +161,7 @@ const SearchLocationPopup = ({
   const handleSearch = (query) => {
     setSearchQuery(query);
     if (query) {
-      const filteredResults = searchResults.filter(
+      const filteredResults = dummyData.filter(
         (item) =>
           item.city.toLowerCase().includes(query.toLowerCase()) ||
           item.iata.toLowerCase().includes(query.toLowerCase())
@@ -183,7 +181,11 @@ const SearchLocationPopup = ({
   };
 
   return (
-    <div className="search-location-popup" ref={outClick} onClick={handlePopupClick}>
+    <div
+      className="search-location-popup"
+      ref={outClick}
+      onClick={handlePopupClick}
+    >
       <div className="search-location-popup__container">
         <input
           className="location-popup-placeholder"

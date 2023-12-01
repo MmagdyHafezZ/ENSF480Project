@@ -27,14 +27,14 @@ export const UserDataProvider = ({ children }) => {
 
   const [userFlightData, setUserFlightData] = useState(
     getFromSessionStorage() || {
-      Changeme: { name: "", iata: "" },
+      leaving: { name: "", iata: "" },
       going: { name: "", iata: "" },
       travellers: 0,
       depart: "",
       return: "",
     }
   );
-  
+
   const [selectedSeats, setSelectedSeats] = useState({});
   const [price, setPrice] = useState(0); // Initialize price with 0
   const [searchState, setSearchState] = useState(false);
@@ -73,7 +73,9 @@ export const UserDataProvider = ({ children }) => {
       setUserFlightData(parsedData);
     }
   }, [location.pathname]);
+  console.log("");
   useEffect(() => {
+    console.log("resetting");
     if (location.pathname === "/") {
       // Reset userFlightData to its initial state
       setUserFlightData({
@@ -87,7 +89,7 @@ export const UserDataProvider = ({ children }) => {
       // Also, clear it from sessionStorage
       sessionStorage.removeItem("userFlightData");
     }
-  }, [location.pathname]);
+  }, []);
 
   const [isLoggedInContext, setIsLoggedInContext] = useState(
     JSON.parse(localStorage.getItem("isLoggedIn")) || false
