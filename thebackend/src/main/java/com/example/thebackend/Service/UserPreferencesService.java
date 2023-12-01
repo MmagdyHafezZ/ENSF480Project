@@ -1,30 +1,42 @@
 package com.example.thebackend.Service;
 
 import com.example.thebackend.DTO.UserPreferencesDTO;
+import com.example.thebackend.Entity.User;
 import com.example.thebackend.Entity.UserPreferences;
 import com.example.thebackend.Repository.UserPreferencesRepository;
+import com.example.thebackend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserPreferencesService {
 
-  @Autowired
-  private UserPreferencesRepository userPreferencesRepository;
+    @Autowired
+    private UserPreferencesRepository userPreferencesRepository;
 
-  public UserPreferences addOrUpdateUserPreferences(UserPreferencesDTO dto) {
-    UserPreferences preferences = userPreferencesRepository
-      .findById(dto.getId())
-      .orElse(new UserPreferences());
+    @Autowired
+    private UserRepository userRepository;
 
-    preferences.setMealPreference(dto.getMealPreference());
-    preferences.setSeatPreference(dto.getSeatPreference());
-    preferences.setUserProfile(dto.getUserProfile());
+    public UserPreferences addOrUpdateUserPreferences(UserPreferencesDTO dto) {
+        // Fetch the associated User
+        Long userId = dto.getId(); // Assuming getId() returns the User ID
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-    return userPreferencesRepository.save(preferences);
-  }
+        // Find existing UserPreferences for this User or create a new one
+        UserPreferences preferences = userPreferencesRepository.findByUserId(userId)
+            .orElse(new UserPreferences());
 
-  public void deleteUserPreferences(Long id) {
-    userPreferencesRepository.deleteById(id);
-  }
+        preferences.setMealPreference(dto.getMealPreference());
+        preferences.setSeatPreference(dto.getSeatPreference());
+        preferences.setUser(user); // Set the user to the preferences
+
+        // Save the UserPreferences
+        return userPreferencesRepository.save(preferences);
+    }
+
+    public void deleteUserPreferences(Long id) {
+        userPreferencesRepository.deleteById(id);
+    }
 }
+
