@@ -21,13 +21,12 @@ public class FlightListService {
     @Autowired
     private SearchBookingRepository searchBookingRepository;
 
-
     public FlightListEntity postFlightList(FlightListResponse flightListResponse){
         Long searchbookingid = flightListResponse.getId();
 
         SearchBookingEntity searchBookingEntity = searchBookingRepository.findById(searchbookingid).orElseThrow(() -> new RuntimeException("Search Booking ID not found with id: " + searchbookingid));
 
-        FlightListEntity flightListEntity = flightListRepository.findBySearchbookingid_Id(searchbookingid).orElse(new FlightListEntity());
+        FlightListEntity flightListEntity = new FlightListEntity();
 
         flightListEntity.setSearchbookingid(searchBookingEntity);
 

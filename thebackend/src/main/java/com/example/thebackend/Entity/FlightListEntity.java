@@ -30,6 +30,24 @@ public class FlightListEntity {
     @JoinColumn(name = "searchbookingid", referencedColumnName = "id")
     private SearchBookingEntity searchbookingid;
 
+    @Column(name = "iataorigin")
+    private String iataorigin;
+
+    @Column(name = "iatadest")
+    private String iatadest;
+
+    @Column(name = "departdate")
+    private String departdate;
+
+    @Column(name = "returndate")
+    private String returndate;
+
+    @Column(name = "departtime")
+    private String departtime;
+
+    @Column(name = "returntime")
+    private String returntime;
+
     public void setId(Long id){
         this.id = id;
     }
@@ -44,5 +62,53 @@ public class FlightListEntity {
 
     public SearchBookingEntity getSearchbookingid(){
         return searchbookingid;
+    }
+
+    public void setIataorigin(String iataorigin){
+        this.iataorigin = iataorigin;
+    }
+
+    public String getIataorigin(){
+        return iataorigin;
+    }
+
+    public String getIatadest(){
+        return iatadest;
+    }
+
+    public void setIatadest(String iatadest){
+        this.iatadest = iatadest;
+    }
+
+    public String getDepartdate(){
+        return departdate;
+    }
+
+    public void setDepartdate(String departdate){
+        this.departdate = departdate;
+    }
+
+    public String getReturndate(){
+        return returndate;
+    }
+
+    public void setReturndate(String returndate){
+        this.returndate = returndate;
+    }
+
+    public String getDeparttime(){
+        return departtime;
+    }
+
+    public void setDeparttime(String departtime){
+        this.departtime = departtime;
+    }
+
+    public String getReturntime(){
+        return returntime;
+    }
+
+    public void setReturntime(String returntime){
+        this.returntime = returntime;
     }
 }

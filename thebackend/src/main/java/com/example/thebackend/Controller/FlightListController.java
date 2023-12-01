@@ -16,13 +16,6 @@ import com.example.thebackend.Service.FlightListService;
 @RestController
 public class FlightListController {
 
-    @Autowired
-    private FlightListService flightListService;
-
-    @PostMapping("/postFlightList")
-    public ResponseEntity<?> postFlightList(@RequestBody FlightListResponse flightListResponse){
-        FlightListEntity postFlightList = flightListService.postFlightList(flightListResponse);
-        return ResponseEntity.ok(postFlightList);
-    }
+    
 
 }

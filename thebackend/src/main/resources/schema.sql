@@ -70,8 +70,15 @@ CREATE TABLE
 
 CREATE TABLE 
     IF NOT EXISTS `flightlist` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `searchbookingid` BIGINT NOT NULL,
+    `id`                BIGINT NOT NULL AUTO_INCREMENT,
+    `searchbookingid`   BIGINT NOT NULL,
+    `iataorigin`        VARCHAR(3) NOT NULL,
+    `iatadest`          VARCHAR(3) NOT NULL,
+    `departdate`        VARCHAR(50) NOT NULL,
+    `returndate`        VARCHAR(50) NOT NULL,
+    `departtime`        VARCHAR(50) NOT NULL,
+    `returntime`        VARCHAR(50) NOT NULL,
+
     -- `aircraft_id` BIGINT NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`searchbookingid`) REFERENCES `searchbooking`(`id`)
