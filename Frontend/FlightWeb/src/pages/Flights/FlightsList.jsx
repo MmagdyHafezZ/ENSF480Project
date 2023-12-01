@@ -11,12 +11,9 @@ import axios from "axios";
 const FlightsList = ({ userFlightData, apiFlight }) => {
   const navigate = useNavigate();
   const { searchState, isLoading, setIsLoading } = useUserDataContext();
-  
 
   //Put flight data with all times and stuff here
   const [flightData, setFlightData] = useState(dummyFlightsData);
-
-  
 
   const handleViewDetailsClick = (id) => {
     const flightDetails = flightData.find((flight) => flight.id === id);
