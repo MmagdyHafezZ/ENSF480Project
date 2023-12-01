@@ -23,6 +23,7 @@ public class User {
     private String first_name;
     @Column(name = "last_name")
     private String last_name;    
+    
 
     // No-argument constructor
     public User() {
