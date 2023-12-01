@@ -1,9 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import { Select, MenuItem } from "@mui/material";
 import {
   Table,
   TableBody,
@@ -17,10 +17,10 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  InputLabel,
 } from "@mui/material";
 
 const SystemAdmin = () => {
-
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [isNewFlightFormVisible, setNewFlightFormVisible] = useState(false);
   const [newFlightDetails, setNewFlightDetails] = useState({
@@ -30,6 +30,10 @@ const SystemAdmin = () => {
     arrivalTime: "",
     departureAirport: "",
     arrivalAirport: "",
+    aircraft: {
+      id: "",
+      aircraftType: "",
+    },
   });
   const [searchDate, setSearchDate] = useState("");
   const [searchedFlights, setSearchedFlights] = useState([]);
@@ -41,12 +45,12 @@ const SystemAdmin = () => {
     }
   }, []);
   const [flightsData, setFlightsData] = useState([]);
+  const [editAircraftMode, setEditAircraftMode] = useState(false);
 
   useEffect(() => {
     axios
       .get("http://localhost:8080/getFlight")
       .then((response) => {
-        // Map the API data to the format you need
         const formattedData = response.data.map(apiFlight => ({
           id: apiFlight.id.toString(),
           details: {
@@ -56,6 +60,10 @@ const SystemAdmin = () => {
             arrivalTime: apiFlight.arrivalTime,
             departureAirport: apiFlight.departureAirport,
             arrivalAirport: apiFlight.arrivalAirport,
+            aircraft: {
+              id: apiFlight.aircraft ? apiFlight.aircraft.id.toString() : null,
+            aircraftType: apiFlight.aircraft ? apiFlight.aircraft.aircraftType : null,
+          },
           },
         }));
 
@@ -86,6 +94,14 @@ const SystemAdmin = () => {
     if (flightToModify) {
       setSelectedFlight(flightToModify);
       setNewFlightFormVisible(false);
+    }
+
+    if (searchClicked) {
+      const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
+      const results = flightsData.filter(
+        (flight) => flight.details.departureDate === formattedSearchDate
+      );
+      setSearchedFlights(results);
     }
   };
   
@@ -145,6 +161,15 @@ const SystemAdmin = () => {
             console.error('Error updating flight: ', error);
           });
       }
+
+      if (searchClicked) {
+        const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
+        const results = flightsData.filter(
+          (flight) => flight.details.departureDate === formattedSearchDate
+        );
+        setSearchedFlights(results);
+      }
+      
       return flight;
     });
   
@@ -165,29 +190,67 @@ const SystemAdmin = () => {
 
   const handleNewFlightInputChange = (event) => {
     const { name, value } = event.target;
-    setNewFlightDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
-  };
-
-  const handleAddNewFlight = () => {
-    // Make a POST request to add a new flight
-    axios
-      .post("http://localhost:8080/postFlight", newFlightDetails)
-      .then((response) => {
-        // Assuming the server successfully adds the new flight, update the state
-        const newFlight = {
-          id: response.data.id.toString(),
-          details: { ...newFlightDetails },
-        };
   
-        setFlightsData([...flightsData, newFlight]);
-        setNewFlightFormVisible(false);
-      })
-      .catch((error) => {
-        console.error("Error adding new flight: ", error);
-      });
+    if (name === "aircraft") {
+      let aircraftType;
+
+      switch (value) {
+        case 1:
+          aircraftType = "Embraer E175-E2";
+          break;
+        case 2:
+          aircraftType = "Boeing 737 MAX 8";
+          break;
+        default:
+          aircraftType = "";
+      }
+  
+      // Update newFlightDetails with the selected aircraft details
+      setNewFlightDetails((prevDetails) => ({
+        ...prevDetails,
+        aircraft: {
+          id: value,
+          aircraftType: aircraftType,
+        },
+      }));
+    } else {
+      // Handle other input changes
+      setNewFlightDetails((prevDetails) => ({
+        ...prevDetails,
+        [name]: value,
+      }));
+    }
+  };  
+
+  const handleAddNewFlight = async () => {
+    try {
+      if (!newFlightDetails.aircraft || !newFlightDetails.aircraft.id) {
+        alert("Please select an aircraft.");
+        return;
+      }
+      const response = await axios.post("http://localhost:8080/postFlight", newFlightDetails);
+  
+      // Assuming the server successfully adds the new flight
+      const newFlight = {
+        id: response.data.id.toString(),
+        details: { ...response.data }, // Use the data returned from the server
+      };
+  
+      // Update the state with the new flight details
+      setFlightsData([...flightsData, newFlight]);
+      setNewFlightFormVisible(false);
+
+      if (searchClicked) {
+        const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
+        const results = flightsData.filter(
+          (flight) => flight.details.departureDate === formattedSearchDate
+        );
+        setSearchedFlights(results);
+      }
+      
+    } catch (error) {
+      console.error("Error adding new flight: ", error);
+    }
   };
 
   return (
@@ -244,7 +307,7 @@ const SystemAdmin = () => {
                     <TableCell>{flight.details.departureAirport}</TableCell>
                     <TableCell>{flight.details.arrivalAirport}</TableCell>
                     <TableCell>{flight.details.crew}</TableCell>
-                    <TableCell>{flight.details.aircraft}</TableCell>
+                    <TableCell>{flight.details.aircraft.aircraftType}</TableCell>
                     <TableCell>
                       <Button onClick={() => handleModifyFlight(flight.id)}>
                         Modify
@@ -296,7 +359,7 @@ const SystemAdmin = () => {
                 <TableCell>{flight.details.departureAirport}</TableCell>
                 <TableCell>{flight.details.arrivalAirport}</TableCell>
                 <TableCell>{flight.details.crew}</TableCell>
-                <TableCell>{flight.details.aircraft}</TableCell>
+                <TableCell>{flight.details.aircraft.aircraftType}</TableCell>
                 <TableCell>
                   <Button onClick={() => handleModifyFlight(flight.id)}>
                     Modify
@@ -392,14 +455,16 @@ const SystemAdmin = () => {
               />
             </div>
             <div>
-              <TextField
-                label="Aircraft"
-                type="text"
-                name="aircraft"
-                value={newFlightDetails.aircraft}
-                onChange={handleNewFlightInputChange}
-                placeholder="Enter aircraft"
-              />
+                <InputLabel>Aircraft</InputLabel>
+                <Select
+                    label="Aircraft"
+                    name="aircraft"
+                    value={newFlightDetails.aircraft.id}
+                    onChange={handleNewFlightInputChange}
+                >
+                <MenuItem value={1}>Embraer E175-E2</MenuItem>
+                <MenuItem value={2}>Boeing 737 MAX 8</MenuItem>
+                </Select>
             </div>
             <Button
               variant="contained"
@@ -485,16 +550,6 @@ const SystemAdmin = () => {
                   value={selectedFlight.details.crew}
                   onChange={handleInputChange}
                   placeholder="Enter crew"
-                />
-              </div>
-              <div>
-                <TextField
-                  label="Aircraft"
-                  type="text"
-                  name="aircraft"
-                  value={selectedFlight.details.aircraft}
-                  onChange={handleInputChange}
-                  placeholder="Enter aircraft"
                 />
               </div>
               <Button
