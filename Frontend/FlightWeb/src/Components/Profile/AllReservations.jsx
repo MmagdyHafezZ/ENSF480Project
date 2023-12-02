@@ -1,4 +1,3 @@
-// src/components/AllReservations.js
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -10,21 +9,42 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Button,
 } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
+import axios from "axios"; // Make sure to install axios if not already installed
 
 const AllReservations = () => {
   const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
-    // Fetch reservations data from API and set it to state
-    // For demonstration, using dummy data
-    setReservations([
-      { id: 1, flight: "New York to London", date: "2023-01-15" },
-      { id: 2, flight: "Paris to Tokyo", date: "2023-02-20" },
-      // ... more reservations ...
-    ]);
+    fetchReservations();
   }, []);
+
+  const fetchReservations = async () => {
+    try {
+      // Replace with your API endpoint
+      const response = await axios.get(
+        "http://localhost:8080/api/reservations"
+      );
+      setReservations(response.data);
+    } catch (error) {
+      console.error("Error fetching reservations:", error);
+    }
+  };
+
+  const handleCancelReservation = async (reservationId) => {
+    try {
+      // Replace with your API endpoint
+      await axios.delete(
+        `http://localhost:8080/api/reservations/${reservationId}`
+      );
+      // Refresh the reservations list
+      fetchReservations();
+    } catch (error) {
+      console.error("Error canceling reservation:", error);
+    }
+  };
 
   return (
     <>
@@ -39,6 +59,7 @@ const AllReservations = () => {
               <TableRow>
                 <TableCell>Flight</TableCell>
                 <TableCell align="right">Date</TableCell>
+                <TableCell align="right">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -48,6 +69,15 @@ const AllReservations = () => {
                     {row.flight}
                   </TableCell>
                   <TableCell align="right">{row.date}</TableCell>
+                  <TableCell align="right">
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleCancelReservation(row.id)}
+                    >
+                      Cancel
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

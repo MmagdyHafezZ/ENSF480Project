@@ -50,8 +50,25 @@ const FlightsList = ({ userFlightData }) => {
   }, [userFlightData, setIsLoading]);
 
   const handleViewDetailsClick = (id) => {
-    const flightDetails = filteredFlights.find((flight) => flight.id === id);
-    navigate("/tickets", { state: { flightDetails } });
+    const flightDetails = filteredFlights.find((flight) => {
+      return (
+        flight.id === id &&
+        flight.iata1 === userFlightData.leaving.iata &&
+        flight.iata2 === userFlightData.going.iata &&
+        flight.departure_day ===
+          userFlightData.depart.toISOString().split("T")[0]
+      );
+    });
+    console.log("Flight detailsss: ", flightDetails);
+
+    if (flightDetails) {
+      navigate("/tickets", { state: { flightDetails } });
+    } else {
+      console.error(
+        "Flight details not found or don't match the search criteria for id:",
+        id
+      );
+    }
   };
 
   return (
