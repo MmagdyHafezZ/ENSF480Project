@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255), -- NULL for Google OAuth users
     google_id VARCHAR(255), -- Unique ID from Google, NULL for regular users
-    membershipType ENUM('Basic', 'Bronze', 'Silver','Gold'),
+    membershipType ENUM('Basic', 'Bronze', 'Silver','Gold')
     
 );
 INSERT INTO users (email, password, first_name, last_name) VALUES 

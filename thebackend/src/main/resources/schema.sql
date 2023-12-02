@@ -84,12 +84,11 @@ CREATE TABLE
         `columnnumber` INT UNSIGNED,
         PRIMARY KEY (`id`)
     );
--- CREATE TABLE list_of_flights (
---     flight_id INT AUTO_INCREMENT PRIMARY KEY,
---     iata1 VARCHAR(3),
---     iata2 VARCHAR(3),
---     ArrivalDay DATE,
---     DepartureDay DATE,
---     ArrivalTime TIME,
---     DepartureTime TIME
--- );
+CREATE TABLE IF NOT EXISTS `list_of_seats` (
+    id VARCHAR(255) PRIMARY KEY,   -- Composite ID made up of row and number (e.g., A1, B5)
+    flight_id BIGINT NOT NULL,     -- Foreign key to the flights table
+    seat_type VARCHAR(50),         -- Seat type (business, comfort, ordinary)
+    seat_availability BOOLEAN NOT NULL, -- Seat availability status
+    seat_id VARCHAR(255) NOT NULL, 
+    FOREIGN KEY (flight_id) REFERENCES list_of_flights(id) -- Foreign key constraint
+);
