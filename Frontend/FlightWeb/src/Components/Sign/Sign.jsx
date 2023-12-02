@@ -54,7 +54,7 @@ const SignUpSignIn = () => {
       lastName: last_name,
       email,
       password: password1, // Changed from password1 to password
-      membership: "none",
+      membership: "Basic",
     });
     console.log(body);
     axios
@@ -101,11 +101,8 @@ const SignUpSignIn = () => {
       .then((res) => {
         console.log(res);
         setIsSignIn(true);
-        localStorage.setItem("id", parseInt(res.data.id));
         localStorage.setItem("isLoggedIn", true);
-
         jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
-
       })
       .catch((err) => {
         console.log(err);

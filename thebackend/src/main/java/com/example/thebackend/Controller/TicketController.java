@@ -16,7 +16,7 @@ public class TicketController {
     @PostMapping("/generateAndSendTicket")
     public String generateAndSendTicket(@RequestBody TicketRequest request) {
         try {
-            ticketService.generateAndSendTicket(request.getUserEmail(), request.getFlightDetails());
+            ticketService.generateAndSendTicket(request.getUserEmail(), request.getFlightDetails(), request.getBalancePaid(), request.getCurrentbalance());
             return "E-ticket sent successfully to " + request.getUserEmail();
         } catch (Exception e) {
             // Handle exceptions (e.g., email service failure)
@@ -28,6 +28,9 @@ public class TicketController {
     public static class TicketRequest {
         private String userEmail;
         private FlightsDetails flightDetails;
+        private int balancePaid;
+        private int currentbalance;
+
 
         // Getters and setters for userEmail and flightDetails
         public String getUserEmail() {
@@ -44,6 +47,18 @@ public class TicketController {
 
         public void setFlightDetails(FlightsDetails flightDetails) {
             this.flightDetails = flightDetails;
+        }
+        public int getBalancePaid() {
+            return balancePaid;
+        }
+        public void setBalancePaid(int balancePaid) {
+            this.balancePaid = balancePaid;
+        }
+        public int getCurrentbalance() {
+            return currentbalance;
+        }
+        public void setCurrentbalance(int currentbalance) {
+            this.currentbalance = currentbalance;
         }
     }
 }

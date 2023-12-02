@@ -71,6 +71,12 @@ public class UserController {
         return ResponseEntity.ok(updatedPreferences);
     }
 
+    @GetMapping("/preferences/{id}")
+    public ResponseEntity<?> getUserPreferences(@PathVariable Long id) {
+        UserPreferences userPreferences = userPreferencesService.getUserPreferences(id);
+        return ResponseEntity.ok(userPreferences);
+    }
+
     // Delete UserPreferences
     @DeleteMapping("/preferences/{id}")
     public ResponseEntity<?> deleteUserPreferences(@PathVariable Long id) {
@@ -95,6 +101,11 @@ public class UserController {
         UserProfile userProfile = userProfileService.getUserProfile(id);
         userProfile.setMembershipType(membershipDto.getMembershipType());
         userProfileService.addOrUpdateUserProfile(userProfile);
+        return ResponseEntity.ok(userProfile.getMembershipType());
+    }
+    @GetMapping("/GetMembership/{id}")
+    public ResponseEntity<?> getMembership(@PathVariable Long id) {
+        UserProfile userProfile = userProfileService.getUserProfile(id);
         return ResponseEntity.ok(userProfile.getMembershipType());
     }
     
