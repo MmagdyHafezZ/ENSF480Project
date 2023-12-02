@@ -61,7 +61,7 @@ const SystemAdmin = () => {
           departdate: apiFlight.departdate,
           returndate: apiFlight.returndate,
           departtime: apiFlight.departtime,
-          returntime: apiFlight.returndate,
+          returntime: apiFlight.returntime,
           iataorigin: apiFlight.iataorigin,
           iatadest: apiFlight.iatadest,
           model: apiFlight.model,
