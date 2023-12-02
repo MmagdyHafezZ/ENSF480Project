@@ -44,6 +44,18 @@ CREATE TABLE
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE 
+    IF NOT EXISTS `promo` (
+    `id`            BIGINT NOT NULL AUTO_INCREMENT,
+    `user_id`       BIGINT NOT NULL,
+    `promo_offer`   VARCHAR(50) NOT NULL,
+    `promo_code`    VARCHAR(5),
+    `discount`      INT NOT NULL,
+    `is_claim`       INT(0) DEFAULT 0 NOT NULL,
+    PRIMARY KEY(`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
+)
+
 DROP TABLE IF EXISTS `flightlist`;
 
 DROP TABLE IF EXISTS `searchbooking`;

@@ -83,7 +83,6 @@ const AllReservations = () => {
 
   const handleConfirmationEmail = async () => {
     try{
-
       const emailObj = {
         userEmail: "",
         flightDetails: {
