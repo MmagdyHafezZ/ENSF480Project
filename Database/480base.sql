@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255), -- NULL for Google OAuth users
     google_id VARCHAR(255), -- Unique ID from Google, NULL for regular users
-    membershipType ENUM('bronze', 'silver', 'gold','none'),
+    membershipType ENUM('Basic', 'Bronze', 'Silver','Gold'),
     
 );
 INSERT INTO users (email, password, first_name, last_name) VALUES 
@@ -24,7 +24,7 @@ CREATE TABLE user_profile (
     id BIGINT NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
     userRole VARCHAR(255),
-    membershipType ENUM('bronze', 'silver', 'gold','none'),
+    membershipType ENUM('Basic', 'Bronze', 'Silver','Gold'),
     loyaltyPoints INT DEFAULT 0,
     recentBookings TEXT,  -- This can be JSON or a delimited string
     upcomingFlights TEXT, -- This can be JSON or a delimited string
