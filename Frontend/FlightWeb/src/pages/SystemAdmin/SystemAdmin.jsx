@@ -24,16 +24,22 @@ const SystemAdmin = () => {
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [isNewFlightFormVisible, setNewFlightFormVisible] = useState(false);
   const [newFlightDetails, setNewFlightDetails] = useState({
-    departureDate: "",
-    arrivalDate: "",
-    departureTime: "",
-    arrivalTime: "",
-    departureAirport: "",
-    arrivalAirport: "",
-    aircraft: {
+    searchbookingid: {
       id: "",
-      aircraftType: "",
+      iataorigin: "",
+      iatadest: "",
+      travellers: 0,
+      departing: "",
+      returning: ""
     },
+    departdate: "",
+    returndate: "",
+    departtime: "",
+    returntime: "",
+    iataorigin: "",
+    iatadest: "",
+    model: "",
+    modelid: ""
   });
   const [searchDate, setSearchDate] = useState("");
   const [searchedFlights, setSearchedFlights] = useState([]);
@@ -45,26 +51,22 @@ const SystemAdmin = () => {
     }
   }, []);
   const [flightsData, setFlightsData] = useState([]);
-  const [editAircraftMode, setEditAircraftMode] = useState(false);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/getFlight")
+      .get("http://localhost:8080/getFlightList")
       .then((response) => {
         const formattedData = response.data.map(apiFlight => ({
           id: apiFlight.id.toString(),
-          details: {
-            departureDate: apiFlight.departureDate,
-            arrivalDate: apiFlight.arrivalDate,
-            departureTime: apiFlight.departureTime,
-            arrivalTime: apiFlight.arrivalTime,
-            departureAirport: apiFlight.departureAirport,
-            arrivalAirport: apiFlight.arrivalAirport,
-            aircraft: {
-              id: apiFlight.aircraft ? apiFlight.aircraft.id.toString() : null,
-            aircraftType: apiFlight.aircraft ? apiFlight.aircraft.aircraftType : null,
-          },
-          },
+          searchbookingid: apiFlight.searchbookingid,
+          departdate: apiFlight.departdate,
+          returndate: apiFlight.returndate,
+          departtime: apiFlight.departtime,
+          returntime: apiFlight.returndate,
+          iataorigin: apiFlight.iataorigin,
+          iatadest: apiFlight.iatadest,
+          model: apiFlight.model,
+          modelid: apiFlight.modelid,
         }));
 
         setFlightsData(formattedData);
@@ -81,7 +83,7 @@ const SystemAdmin = () => {
     } else {
       const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
       const results = flightsData.filter(
-        (flight) => flight.details.departureDate === formattedSearchDate
+        (flight) => flight.departdate === formattedSearchDate
       );
       setSearchedFlights(results);
       setSearchClicked(true);
@@ -99,7 +101,7 @@ const SystemAdmin = () => {
     if (searchClicked) {
       const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
       const results = flightsData.filter(
-        (flight) => flight.details.departureDate === formattedSearchDate
+        (flight) => flight.departdate === formattedSearchDate
       );
       setSearchedFlights(results);
     }
@@ -131,127 +133,92 @@ const SystemAdmin = () => {
     }
   };  
 
-  const handleSaveChanges = () => {
-    const updatedFlightsData = flightsData.map((flight) => {
-      if (flight.id === selectedFlight.id) {
-        // Assuming details is an object
-        flight.details = selectedFlight.details;
+  const handleSaveChanges = async () => {
+    try {
+      // Move the Axios PUT request here, outside the loop
+      const response = await axios.put(`http://localhost:8080/putFlightList/${selectedFlight.id}`, {
+        searchbookingid: selectedFlight.searchbookingid,
+        departdate: selectedFlight.departdate,
+        returndate: selectedFlight.returndate,
+        departtime: selectedFlight.departtime,
+        returntime: selectedFlight.returntime,
+        iataorigin: selectedFlight.iataorigin,
+        iatadest: selectedFlight.iatadest,
+        model: selectedFlight.model,
+        modelid: selectedFlight.modelid,
+      });
   
-        // Send the modified flight details to the server
-        axios.put(`http://localhost:8080/putFlight/${selectedFlight.id}`, {
-          // Assuming the details structure is similar to the API data
-          departureDate: selectedFlight.details.departureDate,
-          arrivalDate: selectedFlight.details.arrivalDate,
-          departureTime: selectedFlight.details.departureTime,
-          arrivalTime: selectedFlight.details.arrivalTime,
-          departureAirport: selectedFlight.details.departureAirport,
-          arrivalAirport: selectedFlight.details.arrivalAirport,
-          // Add more fields as needed
-        })
-          .then((response) => {
-            // Assuming the server returns the updated flight
-            const updatedFlight = response.data;
-  
-            // Update the state with the updated flight from the server
-            setFlightsData((prevFlightsData) => prevFlightsData.map((prevFlight) =>
-              (prevFlight.id === updatedFlight.id ? { ...prevFlight, details: updatedFlight.details } : prevFlight)
-            ));
-          })
-          .catch((error) => {
-            console.error('Error updating flight: ', error);
-          });
-      }
+      // Update the state after the request is successful
+      setFlightsData((prevFlightsData) =>
+        prevFlightsData.map((prevFlight) =>
+          prevFlight.id === selectedFlight.id ? response.data : prevFlight
+        )
+      );
+      setSelectedFlight(null);
 
-      if (searchClicked) {
-        const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
-        const results = flightsData.filter(
-          (flight) => flight.details.departureDate === formattedSearchDate
-        );
-        setSearchedFlights(results);
-      }
-      
-      return flight;
-    });
-  
-    setFlightsData([...updatedFlightsData]);
-    setSelectedFlight(null);
+    } catch (error) {
+      console.error('Error updating flight: ', error);
+    }
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setSelectedFlight((prevFlight) => ({
       ...prevFlight,
-      details: {
-        ...prevFlight.details,
-        [name]: value,
-      },
+      [name]: value,
     }));
   };
-
+  
   const handleNewFlightInputChange = (event) => {
     const { name, value } = event.target;
   
-    if (name === "aircraft") {
-      let aircraftType;
-
-      switch (value) {
-        case 1:
-          aircraftType = "Embraer E175-E2";
-          break;
-        case 2:
-          aircraftType = "Boeing 737 MAX 8";
-          break;
-        default:
-          aircraftType = "";
-      }
+    setNewFlightDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
   
-      // Update newFlightDetails with the selected aircraft details
-      setNewFlightDetails((prevDetails) => ({
-        ...prevDetails,
-        aircraft: {
-          id: value,
-          aircraftType: aircraftType,
-        },
-      }));
-    } else {
-      // Handle other input changes
-      setNewFlightDetails((prevDetails) => ({
-        ...prevDetails,
-        [name]: value,
-      }));
-    }
-  };  
 
   const handleAddNewFlight = async () => {
     try {
-      if (!newFlightDetails.aircraft || !newFlightDetails.aircraft.id) {
-        alert("Please select an aircraft.");
-        return;
-      }
-      const response = await axios.post("http://localhost:8080/postFlight", newFlightDetails);
+      const response = await axios.post("http://localhost:8080/postFlightList", newFlightDetails);
   
-      // Assuming the server successfully adds the new flight
       const newFlight = {
         id: response.data.id.toString(),
-        details: { ...response.data }, // Use the data returned from the server
+        searchbookingid: {
+          id: response.data.searchbookingid.id,
+          iataorigin: response.data.searchbookingid.iataorigin,
+          iatadest: response.data.searchbookingid.iatadest,
+          travellers: response.data.searchbookingid.travellers,
+          departing: response.data.searchbookingid.departing,
+          returning: response.data.searchbookingid.returning,
+        },
+        iataorigin: response.data.iataorigin,
+        iatadest: response.data.iatadest,
+        departdate: response.data.departdate,
+        returndate: response.data.returndate,
+        departtime: response.data.departtime,
+        returntime: response.data.returntime,
+        model: response.data.model,
+        modelid: response.data.modelid,
       };
   
       // Update the state with the new flight details
       setFlightsData([...flightsData, newFlight]);
       setNewFlightFormVisible(false);
-
+  
       if (searchClicked) {
         const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
         const results = flightsData.filter(
-          (flight) => flight.details.departureDate === formattedSearchDate
+          (flight) => flight.departdate === formattedSearchDate
         );
         setSearchedFlights(results);
       }
-      
+  
     } catch (error) {
       console.error("Error adding new flight: ", error);
     }
-  };
+  };  
 
   return (
     <div>
@@ -300,14 +267,14 @@ const SystemAdmin = () => {
                 {searchedFlights.map((flight) => (
                   <TableRow key={flight.id}>
                     <TableCell>{flight.id}</TableCell>
-                    <TableCell>{flight.details.departureDate}</TableCell>
-                    <TableCell>{flight.details.arrivalDate}</TableCell>
-                    <TableCell>{flight.details.departureTime}</TableCell>
-                    <TableCell>{flight.details.arrivalTime}</TableCell>
-                    <TableCell>{flight.details.departureAirport}</TableCell>
-                    <TableCell>{flight.details.arrivalAirport}</TableCell>
-                    <TableCell>{flight.details.crew}</TableCell>
-                    <TableCell>{flight.details.aircraft.aircraftType}</TableCell>
+                    <TableCell>{flight.departdate}</TableCell>
+                    <TableCell>{flight.returndate}</TableCell>
+                    <TableCell>{flight.departtime}</TableCell>
+                    <TableCell>{flight.returntime}</TableCell>
+                    <TableCell>{flight.iataorigin}</TableCell>
+                    <TableCell>{flight.iatadest}</TableCell>
+                    <TableCell>{flight.crew}</TableCell>
+                    <TableCell>{flight.model}</TableCell>
                     <TableCell>
                       <Button onClick={() => handleModifyFlight(flight.id)}>
                         Modify
@@ -352,14 +319,14 @@ const SystemAdmin = () => {
             {flightsData.map((flight) => (
               <TableRow key={flight.id}>
                 <TableCell>{flight.id}</TableCell>
-                <TableCell>{flight.details.departureDate}</TableCell>
-                <TableCell>{flight.details.arrivalDate}</TableCell>
-                <TableCell>{flight.details.departureTime}</TableCell>
-                <TableCell>{flight.details.arrivalTime}</TableCell>
-                <TableCell>{flight.details.departureAirport}</TableCell>
-                <TableCell>{flight.details.arrivalAirport}</TableCell>
-                <TableCell>{flight.details.crew}</TableCell>
-                <TableCell>{flight.details.aircraft.aircraftType}</TableCell>
+                <TableCell>{flight.departdate}</TableCell>
+                <TableCell>{flight.returndate}</TableCell>
+                <TableCell>{flight.departtime}</TableCell>
+                <TableCell>{flight.returntime}</TableCell>
+                <TableCell>{flight.iataorigin}</TableCell>
+                <TableCell>{flight.iatadest}</TableCell>
+                <TableCell>{flight.crew}</TableCell>
+                <TableCell>{flight.model + " " + flight.modelid}</TableCell>
                 <TableCell>
                   <Button onClick={() => handleModifyFlight(flight.id)}>
                     Modify
@@ -388,8 +355,8 @@ const SystemAdmin = () => {
               <TextField
                 label="Departure Date"
                 type="text"
-                name="departureDate"
-                value={newFlightDetails.departureDate}
+                name="departdate"
+                value={newFlightDetails.departdate}
                 onChange={handleNewFlightInputChange}
                 placeholder="Enter departure date"
               />
@@ -398,8 +365,8 @@ const SystemAdmin = () => {
               <TextField
                 label="Arrival Date"
                 type="text"
-                name="arrivalDate"
-                value={newFlightDetails.arrivalDate}
+                name="returndate"
+                value={newFlightDetails.returndate}
                 onChange={handleNewFlightInputChange}
                 placeholder="Enter arrival date"
               />
@@ -408,8 +375,8 @@ const SystemAdmin = () => {
               <TextField
                 label="Departing Time"
                 type="text"
-                name="departureTime"
-                value={newFlightDetails.departureTime}
+                name="departtime"
+                value={newFlightDetails.departtime}
                 onChange={handleNewFlightInputChange}
                 placeholder="Enter departure time"
               />
@@ -418,8 +385,8 @@ const SystemAdmin = () => {
               <TextField
                 label="Arriving Time"
                 type="text"
-                name="arrivalTime"
-                value={newFlightDetails.arrivalTime}
+                name="returntime"
+                value={newFlightDetails.returntime}
                 onChange={handleNewFlightInputChange}
                 placeholder="Enter arrival time"
               />
@@ -428,8 +395,8 @@ const SystemAdmin = () => {
               <TextField
                 label="Departure Location"
                 type="text"
-                name="departureAirport"
-                value={newFlightDetails.departureAirport}
+                name="iataorigin"
+                value={newFlightDetails.iataorigin}
                 onChange={handleNewFlightInputChange}
                 placeholder="Enter departure location"
               />
@@ -438,33 +405,31 @@ const SystemAdmin = () => {
               <TextField
                 label="Arrival Location"
                 type="text"
-                name="arrivalAirport"
-                value={newFlightDetails.arrivalAirport}
+                name="iatadest"
+                value={newFlightDetails.iatadest}
                 onChange={handleNewFlightInputChange}
                 placeholder="Enter arrival location"
               />
             </div>
             <div>
               <TextField
-                label="Crew"
+                label="Model name"
                 type="text"
-                name="crew"
-                value={newFlightDetails.crew}
+                name="model"
+                value={newFlightDetails.model}
                 onChange={handleNewFlightInputChange}
-                placeholder="Enter crew"
+                placeholder="Enter model name"
               />
             </div>
             <div>
-                <InputLabel>Aircraft</InputLabel>
-                <Select
-                    label="Aircraft"
-                    name="aircraft"
-                    value={newFlightDetails.aircraft.id}
-                    onChange={handleNewFlightInputChange}
-                >
-                <MenuItem value={1}>Embraer E175-E2</MenuItem>
-                <MenuItem value={2}>Boeing 737 MAX 8</MenuItem>
-                </Select>
+              <TextField
+                label="Model id"
+                type="text"
+                name="modelid"
+                value={newFlightDetails.modelid}
+                onChange={handleNewFlightInputChange}
+                placeholder="Enter model id"
+              />
             </div>
             <Button
               variant="contained"
@@ -486,28 +451,28 @@ const SystemAdmin = () => {
                 <TextField
                   label="Departure Date"
                   type="text"
-                  name="departureDate"
-                  value={selectedFlight.details.departureDate}
+                  name="departdate"
+                  value={selectedFlight.departdate}
                   onChange={handleInputChange}
-                  placeholder="Enter departure time"
+                  placeholder="Enter departure date"
                 />
               </div>
               <div>
                 <TextField
                   label="Arrival Date"
                   type="text"
-                  name="arrivalDate"
-                  value={selectedFlight.details.arrivalDate}
+                  name="returndate"
+                  value={selectedFlight.returndate}
                   onChange={handleInputChange}
-                  placeholder="Enter departure time"
+                  placeholder="Enter arrival date"
                 />
               </div>
               <div>
                 <TextField
                   label="Departure Time"
                   type="text"
-                  name="departureTime"
-                  value={selectedFlight.details.departureTime}
+                  name="departtime"
+                  value={selectedFlight.departtime}
                   onChange={handleInputChange}
                   placeholder="Enter departure time"
                 />
@@ -516,8 +481,8 @@ const SystemAdmin = () => {
                 <TextField
                   label="Arrival Time"
                   type="text"
-                  name="arrivalTime"
-                  value={selectedFlight.details.arrivalTime}
+                  name="returntime"
+                  value={selectedFlight.returntime}
                   onChange={handleInputChange}
                   placeholder="Enter arrival time"
                 />
@@ -526,8 +491,8 @@ const SystemAdmin = () => {
                 <TextField
                   label="Departure Location"
                   type="text"
-                  name="departureAirport"
-                  value={selectedFlight.details.departureAirport}
+                  name="iataorigin"
+                  value={selectedFlight.iataorigin}
                   onChange={handleInputChange}
                   placeholder="Enter departure location"
                 />
@@ -536,20 +501,30 @@ const SystemAdmin = () => {
                 <TextField
                   label="Arrival Location"
                   type="text"
-                  name="arrivalAirport"
-                  value={selectedFlight.details.arrivalAirport}
+                  name="iatadest"
+                  value={selectedFlight.iatadest}
                   onChange={handleInputChange}
                   placeholder="Enter arrival location"
                 />
               </div>
               <div>
                 <TextField
-                  label="Crew"
+                  label="Model Name"
                   type="text"
-                  name="crew"
-                  value={selectedFlight.details.crew}
+                  name="model"
+                  value={selectedFlight.model}
                   onChange={handleInputChange}
-                  placeholder="Enter crew"
+                  placeholder="Enter model id"
+                />
+              </div>
+              <div>
+                <TextField
+                  label="Model id"
+                  type="text"
+                  name="modelid"
+                  value={selectedFlight.modelid}
+                  onChange={handleInputChange}
+                  placeholder="Enter model id"
                 />
               </div>
               <Button
