@@ -9,11 +9,11 @@ public class UserProfile {
 
     @Id
     private Long id;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id")
     private User user;
+    
 
     private String username;
     private String userRole;

@@ -95,8 +95,8 @@ const SignUpSignIn = () => {
       .then((res) => {
         console.log(res);
         setIsSignIn(true);
-        localStorage.setItem("id", parseInt(res.data.id));
         localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("id", res.data.id);
         jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
       })
       .catch((err) => {

@@ -17,6 +17,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import Navbar from "../../Components/Navbar/Navbar";
+import { Send } from "@mui/icons-material";
 const PaymentForm = () => {
   const [useLoyaltyPoints, setUseLoyaltyPoints] = useState(false);
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
@@ -34,6 +35,7 @@ const PaymentForm = () => {
       .get(`http://localhost:8080/api/user/profile/${userId}`)
       .then((response) => {
         setUserProfile(response.data);
+        console.log(userProfile);
       })
       .catch((error) => {
         console.error("Error fetching user profile:", error);
@@ -113,18 +115,37 @@ const PaymentForm = () => {
       try {
         const updateResponse = await axios.put(
           `http://localhost:8080/api/user/UpdateMembership/${userId}`,
-          { membershipType }, // Send the data as JSON with 'membershipType' and 'membershipDiscount' fields
+          { membershipType: membershipType }, // Send the data as JSON with 'membershipType' field
+
           {
             headers: {
               "Content-Type": "application/json",
             },
           }
         );
-
+        SendEmail();
         setUserProfile(updateResponse.data);
       } catch (error) {
         console.error("Error updating membership:", error);
       }
+    } else if (paymentIsSuccessful && !cart) {
+      SendEmail();
+    }
+  };
+  const SendEmail = async () => {
+    try {
+      const emailResponse = await axios.post(
+        `http://localhost:8080/generateAndSendTicket`,
+        {
+          userEmail: userProfile.email || userProfile.user.email,
+          flightDetails: flightDetails,
+          balancePaid: totalAmount,
+          currentBalance: balance,
+        }
+      );
+      console.log(emailResponse);
+    } catch (error) {
+      console.error("Error sending email:", error);
     }
   };
 
