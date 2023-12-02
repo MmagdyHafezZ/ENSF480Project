@@ -45,6 +45,7 @@ const PaymentForm = () => {
   const location = useLocation();
   const { price, flightDetails, selectedSeats, cart } = location.state || {}; // Extracting price from the state <----FlightDetails should have the flight data, selectedSeats is the userSelectedSeats
   // Calculate the price from the cart
+  console.log("cart", cart);
   const cartPrice = cart
     ? Array.isArray(cart)
       ? cart.reduce((sum, item) => sum + item.price, 0)
@@ -109,9 +110,11 @@ const PaymentForm = () => {
       console.error("Error during payment process:", error);
       alert("Error during payment process");
     }
-    if (paymentIsSuccessful && cart) {
+    console.log("payment", paymentIsSuccessful);
+    if (paymentIsSuccessful && cart.type) {
       // Add the membership to the user's profile
       const membershipType = cart.type;
+      console.log("membership", membershipType);
       try {
         const updateResponse = await axios.put(
           `http://localhost:8080/api/user/UpdateMembership/${userId}`,

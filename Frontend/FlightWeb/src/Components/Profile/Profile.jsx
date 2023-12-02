@@ -51,6 +51,9 @@ const ProfilePage = () => {
         email: response.data.user.email,
         phoneNumber: response.data.phoneNumber,
         emailNotification: response.data.emailNotification,
+        loyaltyPoints: response.data.loyaltyPoints,
+        mealPreference: response.data.mealPreference,
+        membershipType: response.data.membershipType,
       });
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -161,7 +164,7 @@ const ProfilePage = () => {
               <Avatar
                 alt="Profile Picture"
                 src={profileImage}
-                sx={{ width: 100, height: 100 }}
+                sx={{ width: 200, height: 200 }}
                 style={{ margin: "auto" }}
               />
             </Grid>
@@ -333,7 +336,9 @@ const ProfilePage = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <Typography variant="h6">Recent Bookings:</Typography>
+              <Typography variant="h6">
+                {userData.recentBookings.length > 0 ? "Recent Bookings:" : ""}
+              </Typography>
               <List>
                 {userData.recentBookings.map((booking, index) => (
                   <React.Fragment key={index}>
@@ -348,7 +353,7 @@ const ProfilePage = () => {
 
             <Grid item xs={12}>
               <Typography variant="h6" style={{ marginTop: "20px" }}>
-                Upcoming Flights:
+                {upcomingFlights.length > 0 ? "Upcoming Flights:" : ""}
               </Typography>
               <List>
                 {upcomingFlights.map((flight, index) => (

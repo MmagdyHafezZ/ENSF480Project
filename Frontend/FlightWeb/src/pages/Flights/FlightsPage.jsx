@@ -23,7 +23,7 @@ const FlightsPage = () => {
       </>
     );
   }
-  console.log(userFlightData);
+  console.log("FlightsPage", userFlightData);
 
   return (
     <>

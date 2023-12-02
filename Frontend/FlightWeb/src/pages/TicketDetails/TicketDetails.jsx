@@ -57,7 +57,7 @@ const TicketDetails = () => {
   };
 
   const location = useLocation();
-  const flightDetails = location.state?.flightDetails;
+  const flightDetails = location.state?.flightDetails || null;
   const [showCheckmark, setShowCheckmark] = useState(
     location.state?.showCheckmark || false
   );
@@ -178,20 +178,22 @@ const TicketDetails = () => {
           <div className="ticket-details-top">
             <span>Round-Trip</span>
             <span>-</span>
-            <span>{userFlightData.travellers} traveller(s)</span>
+            <span>{userFlightData.travellers} Travellers</span>
             <span>-</span>
-            <span>{formatDate(userFlightData.depart)}</span>
+            <span>
+              Departure Day: {formatDate(flightDetails.departure_day)}
+            </span>
             <span>-</span>
-            <span>{formatDate(userFlightData.return)}</span>
+            <span>Departure Time: {flightDetails.departure_time}</span>
+            <span>-</span>
+            <span>Arrival Day: {formatDate(flightDetails.arrival_day)}</span>
+            <span>-</span>
+            <span>Arrival Time: {flightDetails.arrival_time}</span>
           </div>
           <div className="ticket-details-bottom">
-            <span>
-              {flightDetails && flightDetails.details.departureLocation}
-            </span>{" "}
-            -{" "}
-            <span>
-              {flightDetails && flightDetails.details.arrivalLocation}
-            </span>
+            <span>{flightDetails && flightDetails.iata2}</span> -{" "}
+            <span>{flightDetails && flightDetails.iata1}</span> - {""}
+            <span>{flightDetails && flightDetails.id}</span>
           </div>
         </div>
 
