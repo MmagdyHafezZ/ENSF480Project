@@ -1,10 +1,13 @@
 // utils.js
 export const formatDate = (date) => {
-  if (!date) return "";
+  const d = new Date(date);
+  let month = "" + (d.getMonth() + 1); // Month is 0-indexed
+  let day = "" + d.getDate();
+  const year = d.getFullYear();
 
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Month is 0-indexed
-  const year = date.getFullYear().toString().substr(-2);
+  // Add leading zero to single-digit months and days
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
 
-  return `${month}/${day}/${year}`;
+  return [year, month, day].join("-");
 };

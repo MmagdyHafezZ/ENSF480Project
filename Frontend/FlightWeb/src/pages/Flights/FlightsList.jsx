@@ -1,72 +1,59 @@
-import React from "react";
-import "./flights.scss";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUserDataContext } from "../../context/UserDataContext";
-import { useState, useEffect } from "react";
-import dummyFlightsData from "../../data/flightsData.json";
-import { useSearchParams } from "react-router-dom";
-import AirplaneLoading from "../../Components/LoadingScreens/AirplaneLoading";
-import axios from "axios";
+import "./flights.scss";
 
-const FlightsList = ({ userFlightData, apiFlight }) => {
+const FlightsList = ({ userFlightData }) => {
   const navigate = useNavigate();
-  const { searchState, isLoading, setIsLoading } = useUserDataContext();
+  const { isLoading, setIsLoading } = useUserDataContext();
+  const [filteredFlights, setFilteredFlights] = useState([]);
 
-  //Put flight data with all times and stuff here
-  const [flightData, setFlightData] = useState(dummyFlightsData);
-
-  const handleViewDetailsClick = (id) => {
-    const flightDetails = flightData.find((flight) => flight.id === id);
-    navigate("/tickets", { state: { flightDetails } });
-  };
   const formatDateOnly = (dateString) => {
     const date = new Date(dateString);
-    const options = { month: "long", day: "numeric" };
-    return date.toLocaleDateString("en-US", options);
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
-  // Function to format only the time to "Hour:Minute AM/PM"
-  const formatTimeOnly = (dateString) => {
-    const date = new Date(dateString);
+  const formatTimeOnly = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    const date = new Date();
+    date.setHours(hours, minutes);
     return date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
     });
   };
-  const [isSearchActive, setIsSearchActive] = useState(false);
-  const [filteredFlights, setFilteredFlights] = useState([]);
 
   useEffect(() => {
-    if (flightData && flightData.length > 0) {
-      const originalDepartDate = new Date(userFlightData.depart);
-      const formattedOriginalDate = originalDepartDate
-        .toISOString()
-        .slice(0, 19);
-      const originalReturnDate = new Date(userFlightData.return);
-      const formattedReturnDate = originalReturnDate.toISOString().slice(0, 19);
-
-      const newFilteredFlights = flightData.filter((flight) => {
-        return (
-          flight.details.departureLocation === userFlightData.leaving.city &&
-          flight.details.arrivalLocation === userFlightData.going.city &&
-          flight.details.departingTime.split("T")[0] ===
-            formattedOriginalDate.split("T")[0] &&
-          flight.details.leavingTime.split("T")[0] ===
-            formattedReturnDate.split("T")[0] &&
-          userFlightData.travellers < flight.details.seatCapacity
-        );
+    setIsLoading(true);
+    axios
+      .get(`http://localhost:8080/getFilteredFlightList`, {
+        params: {
+          iata1: userFlightData.leaving.iata,
+          iata2: userFlightData.going.iata,
+          DepartureDay: userFlightData.depart.toISOString().split("T")[0],
+        },
+      })
+      .then((response) => {
+        setFilteredFlights(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching flights data:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
+  }, [userFlightData, setIsLoading]);
 
-      // Update filteredFlights when searchState changes
-      if (searchState !== isSearchActive) {
-        setFilteredFlights(newFilteredFlights);
-        setIsSearchActive(searchState);
-      }
-    }
-  }, [searchState, flightData, userFlightData]); // Add flightData as a dependency
-  const originalDepartDate = new Date(userFlightData.depart);
-  const formattedOriginalDate = originalDepartDate.toISOString().slice(0, 19);
-  // console.log(formattedOriginalDate); // Convert
+  const handleViewDetailsClick = (id) => {
+    const flightDetails = filteredFlights.find((flight) => flight.id === id);
+    navigate("/tickets", { state: { flightDetails } });
+  };
+
   return (
     <div className="flights-list">
       {isLoading ? (
@@ -79,56 +66,60 @@ const FlightsList = ({ userFlightData, apiFlight }) => {
         </> // Loading indicator
       ) : filteredFlights.length > 0 ? (
         filteredFlights.map((flight) => {
-          const { id, details } = flight;
+          const {
+            id,
+            iata1,
+            iata2,
+            arrival_day,
+            departure_day,
+            arrival_time,
+            departure_time,
+            ordinaryPrice,
+            businessPrice,
+            comfortPrice,
+          } = flight;
+
           return (
             <div key={id} className="flight-details-container">
               <div className="flight-details__times">
                 <div className="flight-details__time-info">
                   <div className="flights-info-left">
-                    <div className="plane-company">{details.aircraft}</div>
-                    <span>Departing</span>
+                    <div className="plane-company">
+                      Flight {iata1} to {iata2}
+                    </div>
+                    <span>Departing: {formatDateOnly(departure_day)}</span>
                   </div>
                   <div className="flights-info-right">
                     <div className="flight-time-window">
                       <span>
-                        {formatTimeOnly(details.departingTime)} -{" "}
-                        {formatTimeOnly(details.arrivingTime)}
-                        {/* {formatDateOnly(details.departingTime)} -{" "}
-                      {formatDateOnly(details.arrivingTime)} */}
+                        Departure Time: {formatTimeOnly(departure_time)}
                       </span>
-                    </div>
-                    <div className="flight-depart-return">
-                      {details.departureLocation} - {details.arrivalLocation}
                     </div>
                   </div>
                 </div>
                 <div className="flight-details__time-info">
                   <div className="flights-info-left">
-                    <div className="plane-company">{details.aircraft}</div>
-                    <span>Returning</span>
+                    <span>Arriving: {formatDateOnly(arrival_day)}</span>
                   </div>
                   <div className="flights-info-right">
                     <div className="flight-time-window">
-                      <span>
-                        {formatTimeOnly(details.leavingTime)} -{" "}
-                        {formatTimeOnly(details.arriveBackTime)}
-                        {/* {formatDateOnly(details.leavingTime)} -{" "}
-                      {formatDateOnly(details.arriveBackTime)} */}
-                      </span>
-                    </div>
-                    <div className="flight-depart-return">
-                      {details.leavingLocation} - {details.arriveBackLocation}
+                      <span>Arrival Time: {formatTimeOnly(arrival_time)}</span>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="flight-details__price">
-                <div className="flight-price">{details.price}</div>
-                <span>Round Trip</span>
+                <div className="flight-price">
+                  Ordinary: ${ordinaryPrice.toFixed(2)}
+                </div>
+                <div className="flight-price">
+                  Comfort: ${comfortPrice.toFixed(2)}
+                </div>
+                <div className="flight-price">
+                  Business: ${businessPrice.toFixed(2)}
+                </div>
                 <button
-                  onClick={() => {
-                    handleViewDetailsClick(id);
-                  }}
+                  onClick={() => handleViewDetailsClick(id)}
                   className="view-details-button"
                 >
                   View Details
