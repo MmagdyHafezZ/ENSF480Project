@@ -36,12 +36,10 @@ public class UserProfileService {
         userProfile.setRecentBookings(dto.getRecentBookings());
         userProfile.setUpcomingFlights(dto.getUpcomingFlights());
         userProfile.setEmailNotification(dto.getEmailNotification());
+        userProfile.setbalance(dto.getBalance());
         userProfile.setEmail(dto.getEmail());
         userProfile.setPhoneNumber(dto.getPhoneNumber());
-
-
         userProfile.setUser(user);
-
         return userProfileRepository.save(userProfile);
     }
 

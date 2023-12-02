@@ -2400,3 +2400,90 @@ INSERT INTO `airportdata` (`iata`, `city`, `state`, `country`) VALUES
 ('AGJ', 'Aguni', 'Okinawa', 'JP'),
 ('HTR', 'Hateruma', 'Okinawa', 'JP'),
 ('DTR', 'Decatur', 'Washington', 'US');
+
+
+-- Create the first temporary table for IATA codes
+CREATE TEMPORARY TABLE IATA_Codes1 (iata VARCHAR(3));
+INSERT INTO IATA_Codes1 (iata) VALUES 
+('JFK'), ('LAX'), ('ORD'), ('ATL'), ('DFW'), 
+('LHR'), ('CDG'), ('HKG'), ('AMS'), ('SFO'), 
+('MIA'), ('DEN'), ('SEA'), ('PVG'), ('ICN'),
+('SIN'), ('CAN'), ('MAD'), ('FRA'), ('LAS'),
+('EWR'), ('MCO'), ('CLT'), ('PHX'), ('IAH'),
+('MUC'), ('MSP'), ('DTW'), ('PHL'), ('BKK'),
+('FCO'), ('BOS'), ('YYZ'), ('MNL'), ('DEL'),
+('IST'), ('DCA'), ('LGW'), ('SYD'), ('MEX'),
+('GRU'), ('MXP'), ('HND'), ('BOM'), ('FLL'),
+('SLC'), ('CTU'), ('KUL'), ('DME'), ('JNB'),
+('KMG'), ('SZX'), ('BWI'), ('IAD'), ('HGH'),
+('NRT'), ('HNL'), ('SHA'), ('BNE'), ('MEL'),
+('AKL'), ('SVO'), ('TXL'), -- Berlin, Germany
+('GRU'), -- Sao Paulo, Brazil
+('BCN'), -- Barcelona, Spain
+('PEK'), -- Beijing, China
+('BOM'), -- Mumbai, India
+('CAI'), -- Cairo, Egypt
+('DXB'), -- Dubai, United Arab Emirates
+('MAD'), -- Madrid, Spain
+('CDG'), -- Paris, France
+('FRA'), -- Frankfurt, Germany
+('HND'), -- Tokyo, Japan
+('IST'), -- Istanbul, Turkey
+('JNB'), -- Johannesburg, South Africa
+('KUL'), -- Kuala Lumpur, Malaysia
+('LAX'), -- Los Angeles, USA
+('LHR'), -- London, UK
+('MEL'), -- Melbourne, Australia
+('MEX'), -- Mexico City, Mexico
+('MIA'), -- Miami, USA
+('MUC'), -- Munich, Germany
+('JFK'), -- New York, USA
+('SFO'), -- San Francisco, USA
+('SYD'), -- Sydney, Australia
+('YYZ'), -- Toronto, Canada
+('ZRH'),-- Zurich, Switzerland
+('YYC');
+
+
+-- Create the second temporary table for IATA codes
+CREATE TEMPORARY TABLE IATA_Codes2 (iata VARCHAR(3));
+INSERT INTO IATA_Codes2 (iata) SELECT iata FROM IATA_Codes1;
+
+-- Generate a table of dates for the next 6 months
+CREATE TEMPORARY TABLE Dates (date DATE);
+INSERT INTO Dates (date)
+SELECT DATE_ADD('2023-12-01', INTERVAL n DAY)
+FROM (
+    SELECT a.N + b.N * 10 + c.N * 100 AS n
+    FROM 
+        (SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) a
+        CROSS JOIN 
+        (SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) b
+        CROSS JOIN 
+        (SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) c
+) numbers
+WHERE DATE_ADD('2023-12-01', INTERVAL n DAY) <= DATE_ADD('2023-12-01', INTERVAL 6 MONTH);
+
+-- Insert into Flights with random prices
+INSERT INTO `list_of_flights` (`iata1`, `iata2`, `arrival_day`, `departure_day`, `arrival_time`, `departure_time`, `ordinary_price`, `comfort_price`, `business_price`)
+SELECT 
+    a.iata AS iata1,
+    b.iata AS iata2,
+    d.date AS arrival_day,
+    DATE_ADD(d.date, INTERVAL 1 DAY) AS departure_day,
+    CONCAT(FLOOR(RAND() * 24), ':', LPAD(FLOOR(RAND() * 60), 2, '0')) AS arrival_time,
+    CONCAT(FLOOR(RAND() * 24), ':', LPAD(FLOOR(RAND() * 60), 2, '0')) AS departure_time,
+    ROUND(50 + RAND() * 450, 2) AS ordinary_price,  -- Random base price between $50 and $500 for ordinary seats
+    ROUND(70 + RAND() * 630, 2) AS comfort_price, -- Random price for comfort seats, 40% more than ordinary
+    ROUND(105 + RAND() * 895, 2) AS business_price -- Random price for business seats, more than double of ordinary
+FROM 
+    IATA_Codes1 a
+    CROSS JOIN IATA_Codes2 b
+    CROSS JOIN Dates d
+WHERE 
+    a.iata != b.iata;
+
+-- Drop temporary tables if no longer needed
+DROP TEMPORARY TABLE IATA_Codes1;
+DROP TEMPORARY TABLE IATA_Codes2;
+DROP TEMPORARY TABLE Dates;

@@ -1,5 +1,5 @@
-// src/components/ProfilePage.js
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Container,
   Paper,
@@ -21,11 +21,9 @@ import {
 import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
+  Settings as SettingsIcon,
 } from "@mui/icons-material";
-import SettingsIcon from "@mui/icons-material/Settings";
 import Navbar from "../Navbar/Navbar";
-import axios from "axios";
-import { fetchAndStoreUserProfile } from "../../utils/userProfileHelper";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState({
@@ -34,83 +32,45 @@ const ProfilePage = () => {
     membershipType: "",
     recentBookings: [],
     email: "",
-    phone: "",
+    phoneNumber: "",
+    emailNotification: false,
+    loyaltyPoints: 0,
+    upcomingFlights: [],
+    mealPreference: "",
   });
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-  // State for accordion toggle
-  const [isContactInfoExpanded, setIsContactInfoExpanded] = useState(false);
-  const [isSettingsExpanded, setIsSettingsExpanded] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-  const [seatPreference, setSeatPreference] = useState("Aisle"); // Assuming it's either "Aisle" or "Window"
   const profileImage =
     "https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png";
-
-  const toggleSettings = () => {
-    setIsSettingsOpen(!isSettingsOpen);
+  const fetchUserData = async (userId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/user/profile/${userId}`
+      );
+      setUserData({
+        ...response.data,
+        email: response.data.user.email,
+        phoneNumber: response.data.phoneNumber,
+        emailNotification: response.data.emailNotification,
+      });
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
   };
-  const handleEditProfileClick = () => {
-    setIsEditFormOpen(!isEditFormOpen);
-  };
-  const handleEmailNotificationChange = (event) => {
-    setEmailNotifications(event.target.checked);
-  };
-
-  const handleSeatPreferenceChange = (event) => {
-    setSeatPreference(event.target.value);
-  };
-  const handleSettingsToggle = () => {
-    setIsSettingsExpanded(!isSettingsExpanded);
-  };
-  const handleContactInfoToggle = () => {
-    setIsContactInfoExpanded(!isContactInfoExpanded);
-  };
-
-  const upcomingFlights = [
-    { flight: "Los Angeles to Tokyo", date: "2023-04-05" },
-    { flight: "Berlin to New York", date: "2023-05-11" },
-  ];
-
   useEffect(() => {
-    const userId = parseInt(localStorage.getItem("id"));
+    const userId = localStorage.getItem("id");
     if (userId) {
       fetchUserData(userId);
     }
   }, []);
 
-  const fetchUserData = async (userId) => {
-    try {
-      const userProfile = await fetchAndStoreUserProfile(userId);
-      setUserData(userProfile);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      const response = await axios.post(
-        `http://localhost:8080/api/user/profile`,
-        {
-          ...userData,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setUserData(response.data);
-    }
-  };
-
-  const saveProfile = async () => {
+  const updateProfile = async (updatedData) => {
     try {
       const userId = localStorage.getItem("id");
       const response = await axios.post(
         `http://localhost:8080/api/user/profile`,
         {
-          ...userData,
-          id: userId, // Include userId if your API expects it in the body
+          ...updatedData,
+          id: userId,
         },
         {
           headers: {
@@ -118,16 +78,73 @@ const ProfilePage = () => {
           },
         }
       );
-      // Update the user profile in the state and localStorage
+
       setUserData(response.data);
       localStorage.setItem("userProfile", JSON.stringify(response.data));
-      alert("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating user profile:", error);
-      alert("Error updating profile");
     }
-    setIsEditFormOpen(false);
   };
+
+  const saveProfile = async () => {
+    await updateProfile(userData);
+    alert("Profile updated successfully!");
+    isEditFormOpen && setIsEditFormOpen(false);
+  };
+  const handleEditProfileClick = () => setIsEditFormOpen(!isEditFormOpen);
+  const handleEmailNotificationChange = async (event) => {
+    const updatedUserData = {
+      ...userData,
+      emailNotification: event.target.checked,
+    };
+    setUserData(updatedUserData);
+    await updateProfile(updatedUserData);
+  };
+  const saveUserPreferences = async (preferences) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/user/preferences`,
+        preferences
+      );
+      console.log("Preferences saved:", response.data);
+    } catch (error) {
+      console.error("Error saving user preferences:", error);
+    }
+  };
+  const fetchUserPreferences = async (userId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/user/preferences/${userId}`
+      );
+      console.log("Fetched preferences:", response.data);
+      // Handle the fetched preferences as needed
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+    }
+  };
+
+  // UI State
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [isContactInfoExpanded, setIsContactInfoExpanded] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [seatPreference, setSeatPreference] = useState("Aisle");
+
+  // UI Handlers
+  const toggleSettings = async () => {
+    if (isSettingsOpen) {
+      await saveUserPreferences({
+        id: localStorage.getItem("id"),
+        seatPreference: seatPreference,
+        mealPreference: userData.mealPreference,
+      });
+    }
+    setIsSettingsOpen(!isSettingsOpen);
+  };
+  const handleContactInfoToggle = () =>
+    setIsContactInfoExpanded(!isContactInfoExpanded);
+
+  // Replace upcomingFlights with real data if available
+  const upcomingFlights = userData.upcomingFlights || [];
 
   return (
     <>
@@ -154,9 +171,8 @@ const ProfilePage = () => {
               <Typography variant="subtitle1" style={{ marginTop: "10px" }}>
                 {userData.membershipType}
               </Typography>
-
               <Typography variant="subtitle1" style={{ marginTop: "20px" }}>
-                Loyalty Points: 1200
+                Loyalty Points: {userData.loyaltyPoints || 0}
               </Typography>
             </Grid>
             <Grid item xs={12} style={{ textAlign: "center" }}>
@@ -168,10 +184,10 @@ const ProfilePage = () => {
                 Edit Profile
               </Button>
 
-              {/* Settings Icon */}
               <IconButton onClick={toggleSettings} style={{ float: "right" }}>
                 <SettingsIcon />
               </IconButton>
+
               {isEditFormOpen && (
                 <Paper style={{ padding: "20px", marginTop: "20px" }}>
                   <Typography variant="h6">Edit Profile</Typography>
@@ -180,7 +196,7 @@ const ProfilePage = () => {
                       <Grid item xs={12}>
                         <TextField
                           fullWidth
-                          label="username"
+                          label="Username"
                           value={userData.username}
                           onChange={(e) =>
                             setUserData({
@@ -193,7 +209,7 @@ const ProfilePage = () => {
                       <Grid item xs={12}>
                         <TextField
                           fullWidth
-                          label="userRole"
+                          label="User Role"
                           value={userData.userRole}
                           onChange={(e) =>
                             setUserData({
@@ -203,40 +219,42 @@ const ProfilePage = () => {
                           }
                         />
                       </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label="Email"
+                          value={userData.email}
+                          onChange={(e) =>
+                            setUserData({ ...userData, email: e.target.value })
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label="phoneNumber"
+                          value={userData.phoneNumber}
+                          onChange={(e) =>
+                            setUserData({
+                              ...userData,
+                              phoneNumber: e.target.value,
+                            })
+                          }
+                        />
+                      </Grid>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginTop: "20px" }}
+                        onClick={saveProfile}
+                      >
+                        Save Changes
+                      </Button>
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label="Email"
-                        value={userData.email}
-                        onChange={(e) =>
-                          setUserData({ ...userData, email: e.target.value })
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        fullWidth
-                        label="Phone"
-                        value={userData.phone}
-                        onChange={(e) =>
-                          setUserData({ ...userData, phone: e.target.value })
-                        }
-                      />
-                    </Grid>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{ marginTop: "20px" }}
-                      onClick={saveProfile}
-                    >
-                      Save Changes
-                    </Button>
                   </form>
                 </Paper>
               )}
 
-              {/* Settings Options */}
               {isSettingsOpen && (
                 <div style={{ marginTop: "20px" }}>
                   <Typography variant="h6">Settings and Preferences</Typography>
@@ -244,8 +262,20 @@ const ProfilePage = () => {
                     <ListItem>
                       <ListItemText primary="Email Notifications" />
                       <Switch
-                        checked={emailNotifications}
+                        checked={userData.emailNotification}
                         onChange={handleEmailNotificationChange}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemText primary="Meal Preference" />
+                      <TextField
+                        value={userData.mealPreference}
+                        onChange={(e) => {
+                          setUserData({
+                            ...userData,
+                            mealPreference: e.target.value,
+                          });
+                        }}
                       />
                     </ListItem>
                     <ListItem>
@@ -273,12 +303,11 @@ const ProfilePage = () => {
                         </Button>
                       </Typography>
                     </ListItem>
-                    {/* Additional settings can be added here */}
                   </List>
                 </div>
               )}
             </Grid>
-            {/* Contact Information Accordion */}
+
             <Grid item xs={12}>
               <Accordion
                 expanded={isContactInfoExpanded}
@@ -298,28 +327,26 @@ const ProfilePage = () => {
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>Email: {userData.email}</Typography>
-                  <Typography>Phone: {userData.phone}</Typography>
+                  <Typography>phoneNumber: {userData.phoneNumber}</Typography>
                 </AccordionDetails>
               </Accordion>
             </Grid>
+
             <Grid item xs={12}>
               <Typography variant="h6">Recent Bookings:</Typography>
               <List>
                 {userData.recentBookings.map((booking, index) => (
                   <React.Fragment key={index}>
                     <ListItem>
-                      <ListItemText
-                        primary={booking.flight}
-                        secondary={`Date: ${booking.date}`}
-                      />
+                      <ListItemText primary={booking} />
                     </ListItem>
                     {index < userData.recentBookings.length - 1 && <Divider />}
                   </React.Fragment>
                 ))}
               </List>
             </Grid>
+
             <Grid item xs={12}>
-              {/* Upcoming Flights Section */}
               <Typography variant="h6" style={{ marginTop: "20px" }}>
                 Upcoming Flights:
               </Typography>
@@ -337,6 +364,7 @@ const ProfilePage = () => {
                 ))}
               </List>
             </Grid>
+
             <Grid item xs={12} style={{ textAlign: "center" }}>
               <Button
                 variant="outlined"

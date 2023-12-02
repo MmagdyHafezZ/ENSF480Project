@@ -74,3 +74,22 @@ CREATE TABLE
     PRIMARY KEY (`id`),
     FOREIGN KEY (`searchbookingid`) REFERENCES `searchbooking`(`id`)
 );
+CREATE TABLE
+    IF NOT EXISTS `aircraftmodel` (
+        `id` BIGINT NOT NULL AUTO_INCREMENT,
+        `model` VARCHAR(50),
+        `modelid` VARCHAR(10) NOT NULL,
+        `seatcapacity` INT UNSIGNED,
+        `rownumber` INT UNSIGNED,
+        `columnnumber` INT UNSIGNED,
+        PRIMARY KEY (`id`)
+    );
+-- CREATE TABLE list_of_flights (
+--     flight_id INT AUTO_INCREMENT PRIMARY KEY,
+--     iata1 VARCHAR(3),
+--     iata2 VARCHAR(3),
+--     ArrivalDay DATE,
+--     DepartureDay DATE,
+--     ArrivalTime TIME,
+--     DepartureTime TIME
+-- );
