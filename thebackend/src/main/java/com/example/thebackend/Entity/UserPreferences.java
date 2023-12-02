@@ -22,6 +22,7 @@ public class UserPreferences {
         this.seatPreference = seatPreference;
         this.user = user;
     }
+    
     public UserPreferences() {
     }
 

@@ -10,10 +10,12 @@ import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
 const FlightsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
+  const state = location.state;
   // State declaration
   const { searchState, isLoggedIn } = useUserDataContext();
 
-  const userFlightData = location.state?.userFlightData;
+  const {userFlightData, sendData} = location.state||{};
+
   if (!userFlightData.return && !userFlightData.leaving.city) {
     return (
       <>
@@ -21,7 +23,7 @@ const FlightsPage = () => {
       </>
     );
   }
-  // console.log(userFlightData);
+  console.log(userFlightData);
 
   return (
     <>
@@ -35,7 +37,7 @@ const FlightsPage = () => {
           <div className="flights-list__container">
             {/* List of Flights Here */}
 
-            <FlightsList userFlightData={userFlightData} />
+            <FlightsList userFlightData={userFlightData} sendData = {sendData} />
           </div>
           <div className="flights-main__right">Right</div>
         </div>

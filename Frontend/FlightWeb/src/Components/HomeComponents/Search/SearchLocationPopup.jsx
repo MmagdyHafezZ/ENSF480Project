@@ -106,19 +106,35 @@ const SearchLocationPopup = ({
   value,
   setData,
 }) => {
+  const outClick = useRef();
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [destinations, setDestinations] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:8080/getAirport")
       .then((response) => {
-        setDestinations(response.data);
+        setSearchResults(response.data), console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
   }, []);
+
+  useEffect(() => {
+    function handleClickOutsidePopup(event) {
+      if (outClick.current && !outClick.current.contains(event.target)) {
+        setPopup(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutsidePopup);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsidePopup);
+    };
+  }, [setPopup]);
 
   const dummyData = [
     { city: "New York", iata: "JFK" },
@@ -135,7 +151,6 @@ const SearchLocationPopup = ({
   ];
 
   function handleSelectLocation(location) {
-    console.log(location);
     setData((prevData) => ({
       ...prevData,
       [type]: location, // 'type' can be 'leaving' or 'going'
@@ -151,10 +166,10 @@ const SearchLocationPopup = ({
           item.city.toLowerCase().includes(query.toLowerCase()) ||
           item.iata.toLowerCase().includes(query.toLowerCase())
       );
-      setDestinations(filteredResults);
-      console.log();
+      setSearchResults(filteredResults);
+      // console.log();
     } else {
-      setDestinations([]);
+      setSearchResults([]);
     }
   };
   function handleSearchCity(e) {
@@ -166,7 +181,11 @@ const SearchLocationPopup = ({
   };
 
   return (
-    <div className="search-location-popup" onClick={handlePopupClick}>
+    <div
+      className="search-location-popup"
+      ref={outClick}
+      onClick={handlePopupClick}
+    >
       <div className="search-location-popup__container">
         <input
           className="location-popup-placeholder"
@@ -176,7 +195,7 @@ const SearchLocationPopup = ({
           onChange={(e) => handleSearch(e.target.value)}
         />
         <ul>
-          {destinations.map((result, index) => (
+          {searchResults.map((result, index) => (
             <li
               className="list"
               key={index}

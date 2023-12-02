@@ -19,6 +19,7 @@ import CalendarInput from "./CalendarInput.jsx";
 import { formatDate } from "../../../utils/formatDate.js";
 import { useUserDataContext } from "../../../context/UserDataContext.jsx";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const Search = () => {
   const {
     userFlightData,
@@ -40,18 +41,21 @@ const Search = () => {
     calendar: false,
   });
 
-  const [locations, setLocations] = useState({ leaving: "", going: "" });
+  const [locations, setLocations] = useState({ origin: "", destination: "" });
   const [travelDates, setTravelDates] = useState({
-    depart: new Date(),
-    return: "",
+    departing: new Date(),
+    returning: "",
   });
   const [isDepartActive, setIsDepartActive] = useState(true);
   const [switchLocation, setSwitchLocation] = useState(false);
   const [searchingPopup, setSearchingPopup] = useState(false);
   const [travellers, setTravellers] = useState(0);
+
+  const [sendData, setSendData] = useState({});
+
   const refs = {
-    leaving: useRef(null),
-    going: useRef(null),
+    origin: useRef(null),
+    destination: useRef(null),
     travellers: useRef(null),
     calendar: useRef(null),
   };
@@ -97,8 +101,8 @@ const Search = () => {
 
   const handleSwitchLocations = () => {
     setLocations((prevLocations) => ({
-      leaving: prevLocations.going,
-      going: prevLocations.leaving,
+      origin: prevLocations.destination,
+      destination: prevLocations.origin,
     }));
     setSwitchLocation((prev) => !prev);
   };
@@ -106,11 +110,12 @@ const Search = () => {
   const updateUserFlightData = () => {
     setUserFlightData({
       ...userFlightData, // Keep existing data
-      leaving: locations.leaving,
-      going: locations.going,
+      origin: locations.origin,
+      destination: locations.destination,
       travellers: travellers.toString(),
-      depart: formatDate(travelDates.depart),
-      return: formatDate(travelDates.return),
+      departing: formatDate(travelDates.depart),
+      returning: formatDate(travelDates.returning),
+      
     });
   };
 
@@ -123,16 +128,58 @@ const Search = () => {
 
   // Function to update URL with userFlightData
 
-  const handleSearchFlight = () => {
+  function getType(value) {
+    if (Array.isArray(value)) {
+      return 'array';
+    } else if (value === null) {
+      return 'null';
+    } else if (value instanceof Date) {
+      return 'date';
+    } else {
+      return typeof value;
+    }
+  }
+
+  const handleSearchFlight = async () => {
     setSearchState((prev) => !prev); // Toggle search state
-    handleButtonClick();
-    sessionStorage.setItem("userFlightData", JSON.stringify(userFlightData));
-    // const updatedUserFlightData = { ...userFlightData };
-    // Update userFlightData with the copy
-    // setUserFlightData(userFlightData);
-    // saveFlightDataToLocalStorage();
-    navigate("/flights", { state: { userFlightData } });
+
+    
+
+
+    const dataToSend = {
+      iataorigin: userFlightData.leaving.iata,
+      iatadest: userFlightData.going.iata,
+      travellers: userFlightData.travellers,
+      departing: userFlightData.depart.toISOString(),
+      returning: userFlightData.return.toISOString()
   };
+
+  const types = Object.fromEntries(
+    Object.entries(dataToSend).map(([key, value]) => [key, getType(value)])
+  );
+  
+  console.log(types);
+
+
+
+
+    handleButtonClick();
+    console.log(typeof{dataToSend});
+    try{
+      const response = await 
+        axios
+          .post("http://localhost:8080/postSearchBooking", dataToSend);
+          console.log(typeof(response.data));
+          navigate("/flights", { state: { userFlightData, sendData : dataToSend } });
+    } catch (error){
+      console.error('Error posting data: ', error);
+    }
+
+    
+    
+  };
+
+
   return (
     <div className="search container section">
       <div className="sectionContainer grid">
@@ -152,7 +199,7 @@ const Search = () => {
                   setData={setUserFlightData}
                   popupState={popupStates.leavingTo}
                   togglePopup={() => togglePopup("leavingTo")}
-                  refProp={refs.leaving}
+                  refProp={refs.origin}
                 />
                 <div
                   onClick={handleSwitchLocations}
@@ -171,7 +218,7 @@ const Search = () => {
                   setData={setUserFlightData}
                   popupState={popupStates.goingTo}
                   togglePopup={() => togglePopup("goingTo")}
-                  refProp={refs.going}
+                  refProp={refs.destination}
                 />
               </div>
             </div>
@@ -214,8 +261,8 @@ const Search = () => {
           </div>
           <button
             onClick={() => {
-              // updateUserFlightData();
               handleSearchFlight();
+
             }}
             className="search-flight-button btn btnBlock flex"
             disabled={!isAllDummyFilled()}

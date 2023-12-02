@@ -6,11 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
 /**
  * AircraftModelEntity
  */
 @Entity
+@NoArgsConstructor
 @Table(name = "aircraftmodel")
 public class AircraftModelEntity {
     
@@ -22,6 +24,9 @@ public class AircraftModelEntity {
     @Column(name = "model")
     private String model;
 
+    @Column(name = "modelid")
+    private String modelid;
+
     @Column(name = "seatcapacity")
     private int seatcapacity;
 
@@ -31,18 +36,19 @@ public class AircraftModelEntity {
     @Column(name = "columnnumber")
     private int columnnumber;
 
-    public AircraftModelEntity(String model, int seatcapacity, int rownumber, int columnnumber){
+    public AircraftModelEntity(String model, String modelid, int seatcapacity, int rownumber, int columnnumber){
         this.model = model;
+        this.modelid = modelid;
         this.seatcapacity = seatcapacity;
         this.rownumber = rownumber;
         this.columnnumber = columnnumber;
     }
     
-    public Long getID(){
+    public Long getId(){
         return id;
     }
     
-    public void setID(Long id){
+    public void setId(Long id){
         this.id = id;
     }
     
@@ -76,5 +82,13 @@ public class AircraftModelEntity {
     
     public void setColumnNumber(int columnnumber){
         this.columnnumber = columnnumber;
+    }
+
+    public String getModelid(){
+        return modelid;
+    }
+
+    public void setModelid(String modelid){
+        this.modelid = modelid;
     }
 }

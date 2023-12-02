@@ -1,4 +1,5 @@
 // UserDataContext.js
+import { parse } from "date-fns";
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // Create the context
@@ -13,7 +14,6 @@ export const UserDataProvider = ({ children }) => {
     if (!storedData) return null;
 
     const parsedData = JSON.parse(storedData);
-
     // Convert date strings back to Date objects
     if (parsedData.depart) {
       parsedData.depart = new Date(parsedData.depart);
@@ -27,13 +27,14 @@ export const UserDataProvider = ({ children }) => {
 
   const [userFlightData, setUserFlightData] = useState(
     getFromSessionStorage() || {
-      leaving: { name: "", iata: "" },
-      going: { name: "", iata: "" },
+      leaving: { city: "", iata: "" },
+      going: { city: "", iata: "" },
       travellers: 0,
       depart: "",
       return: "",
     }
   );
+
   const [selectedSeats, setSelectedSeats] = useState({});
   const [price, setPrice] = useState(0); // Initialize price with 0
   const [searchState, setSearchState] = useState(false);
@@ -59,6 +60,7 @@ export const UserDataProvider = ({ children }) => {
   };
   const location = useLocation();
   useEffect(() => {
+    document.body.classList.remove("no-scroll");
     // Retrieve the userFlightData from sessionStorage
     const storedData = sessionStorage.getItem("userFlightData");
     if (storedData) {
@@ -71,8 +73,26 @@ export const UserDataProvider = ({ children }) => {
       setUserFlightData(parsedData);
     }
   }, [location.pathname]);
+  console.log("");
+  useEffect(() => {
+    console.log("resetting");
+    if (location.pathname === "/") {
+      // Reset userFlightData to its initial state
+      setUserFlightData({
+        leaving: { name: "", iata: "" },
+        going: { name: "", iata: "" },
+        travellers: 0,
+        depart: "",
+        return: "",
+      });
+
+      // Also, clear it from sessionStorage
+      sessionStorage.removeItem("userFlightData");
+    }
+  }, []);
+
   const [isLoggedInContext, setIsLoggedInContext] = useState(
-    JSON.parse(sessionStorage.getItem("isLoggedIn")) || false
+    JSON.parse(localStorage.getItem("isLoggedIn")) || false
   );
 
   // Use useEffect to clear local storage when the URL is at '/'
