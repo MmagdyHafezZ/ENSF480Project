@@ -1,9 +1,8 @@
+import SystemAdminHeader from "./SystemAdminHeader";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
-import { Select, MenuItem } from "@mui/material";
 import {
   Table,
   TableBody,
@@ -30,7 +29,7 @@ const SystemAdmin = () => {
       iatadest: "",
       travellers: 0,
       departing: "",
-      returning: ""
+      returning: "",
     },
     departdate: "",
     returndate: "",
@@ -39,7 +38,7 @@ const SystemAdmin = () => {
     iataorigin: "",
     iatadest: "",
     model: "",
-    modelid: ""
+    modelid: "",
   });
   const [searchDate, setSearchDate] = useState("");
   const [searchedFlights, setSearchedFlights] = useState([]);
@@ -56,7 +55,7 @@ const SystemAdmin = () => {
     axios
       .get("http://localhost:8080/getFlightList")
       .then((response) => {
-        const formattedData = response.data.map(apiFlight => ({
+        const formattedData = response.data.map((apiFlight) => ({
           id: apiFlight.id.toString(),
           searchbookingid: apiFlight.searchbookingid,
           departdate: apiFlight.departdate,
@@ -83,7 +82,7 @@ const SystemAdmin = () => {
     } else {
       const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
       const results = flightsData.filter(
-        (flight) => flight.departdate === formattedSearchDate
+        (flight) => flight.departdate === formattedSearchDate,
       );
       setSearchedFlights(results);
       setSearchClicked(true);
@@ -101,12 +100,12 @@ const SystemAdmin = () => {
     if (searchClicked) {
       const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
       const results = flightsData.filter(
-        (flight) => flight.departdate === formattedSearchDate
+        (flight) => flight.departdate === formattedSearchDate,
       );
       setSearchedFlights(results);
     }
   };
-  
+
   const handleAddFlight = () => {
     setNewFlightFormVisible(true);
     setSelectedFlight(null);
@@ -120,44 +119,46 @@ const SystemAdmin = () => {
         .then(() => {
           // Assuming the server successfully deletes the flight, update the state
           setFlightsData((prevFlightsData) =>
-            prevFlightsData.filter((flight) => flight.id !== flightToRemove.id)
+            prevFlightsData.filter((flight) => flight.id !== flightToRemove.id),
           );
           setSelectedFlight(null);
           setSearchedFlights((prevSearchedFlights) =>
-            prevSearchedFlights.filter((flight) => flight.id !== flightId)
+            prevSearchedFlights.filter((flight) => flight.id !== flightId),
           );
         })
         .catch((error) => {
           console.error("Error removing flight: ", error);
         });
     }
-  };  
+  };
 
   const handleSaveChanges = async () => {
     try {
       // Move the Axios PUT request here, outside the loop
-      const response = await axios.put(`http://localhost:8080/putFlightList/${selectedFlight.id}`, {
-        searchbookingid: selectedFlight.searchbookingid,
-        departdate: selectedFlight.departdate,
-        returndate: selectedFlight.returndate,
-        departtime: selectedFlight.departtime,
-        returntime: selectedFlight.returntime,
-        iataorigin: selectedFlight.iataorigin,
-        iatadest: selectedFlight.iatadest,
-        model: selectedFlight.model,
-        modelid: selectedFlight.modelid,
-      });
-  
+      const response = await axios.put(
+        `http://localhost:8080/putFlightList/${selectedFlight.id}`,
+        {
+          searchbookingid: selectedFlight.searchbookingid,
+          departdate: selectedFlight.departdate,
+          returndate: selectedFlight.returndate,
+          departtime: selectedFlight.departtime,
+          returntime: selectedFlight.returntime,
+          iataorigin: selectedFlight.iataorigin,
+          iatadest: selectedFlight.iatadest,
+          model: selectedFlight.model,
+          modelid: selectedFlight.modelid,
+        },
+      );
+
       // Update the state after the request is successful
       setFlightsData((prevFlightsData) =>
         prevFlightsData.map((prevFlight) =>
-          prevFlight.id === selectedFlight.id ? response.data : prevFlight
-        )
+          prevFlight.id === selectedFlight.id ? response.data : prevFlight,
+        ),
       );
       setSelectedFlight(null);
-
     } catch (error) {
-      console.error('Error updating flight: ', error);
+      console.error("Error updating flight: ", error);
     }
   };
 
@@ -168,21 +169,23 @@ const SystemAdmin = () => {
       [name]: value,
     }));
   };
-  
+
   const handleNewFlightInputChange = (event) => {
     const { name, value } = event.target;
-  
+
     setNewFlightDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
   };
-  
 
   const handleAddNewFlight = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/postFlightList", newFlightDetails);
-  
+      const response = await axios.post(
+        "http://localhost:8080/postFlightList",
+        newFlightDetails,
+      );
+
       const newFlight = {
         id: response.data.id.toString(),
         searchbookingid: {
@@ -202,48 +205,31 @@ const SystemAdmin = () => {
         model: response.data.model,
         modelid: response.data.modelid,
       };
-  
+
       // Update the state with the new flight details
       setFlightsData([...flightsData, newFlight]);
       setNewFlightFormVisible(false);
-  
+
       if (searchClicked) {
         const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
         const results = flightsData.filter(
-          (flight) => flight.departdate === formattedSearchDate
+          (flight) => flight.departdate === formattedSearchDate,
         );
         setSearchedFlights(results);
       }
-  
     } catch (error) {
       console.error("Error adding new flight: ", error);
     }
-  };  
+  };
 
   return (
     <div>
-      <h1>System Admin Page</h1>
-      <div
-        style={{
-          display: "block",
-          marginRight: "10px",
-          marginBottom: "10px",
-        }}
-      >
-        <DatePicker
-  selected={searchDate}
-  onChange={(date) => setSearchDate(date)}
-  dateFormat="yyyy-MM-dd"
-  placeholderText="Select date"
-/>
-
-        <Button variant="contained" color="primary" onClick={handleSearchDate}>
-          Search
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleAddFlight}>
-          Add Flight
-        </Button>
-      </div>
+      <SystemAdminHeader
+        searchDate={searchDate}
+        setSearchDate={setSearchDate}
+        handleSearchDate={handleSearchDate}
+        handleAddFlight={handleAddFlight}
+      />
       {searchedFlights.length > 0 ? (
         <div>
           <h2>Search Results</h2>
@@ -291,57 +277,59 @@ const SystemAdmin = () => {
         </div>
       ) : (
         <>
-      {searchedFlights.length === 0 && searchClicked ? (
-        <div>
-          <h2>No Results Found</h2>
-        </div>
-      ) : (
-      <TableContainer
-        component={Paper}
-        style={{ marginBottom: "20px", padding: "10px" }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Departure Date</TableCell>
-              <TableCell>Arrival Date</TableCell>
-              <TableCell>Departure Time</TableCell>
-              <TableCell>Arrival Time</TableCell>
-              <TableCell>Departure Location</TableCell>
-              <TableCell>Arrival Location</TableCell>
-              <TableCell>Crew</TableCell>
-              <TableCell>Aircraft</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {flightsData.map((flight) => (
-              <TableRow key={flight.id}>
-                <TableCell>{flight.id}</TableCell>
-                <TableCell>{flight.departdate}</TableCell>
-                <TableCell>{flight.returndate}</TableCell>
-                <TableCell>{flight.departtime}</TableCell>
-                <TableCell>{flight.returntime}</TableCell>
-                <TableCell>{flight.iataorigin}</TableCell>
-                <TableCell>{flight.iatadest}</TableCell>
-                <TableCell>{flight.crew}</TableCell>
-                <TableCell>{flight.model + " " + flight.modelid}</TableCell>
-                <TableCell>
-                  <Button onClick={() => handleModifyFlight(flight.id)}>
-                    Modify
-                  </Button>
-                  <Button onClick={() => handleRemoveFlight(flight.id)}>
-                    Remove
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      )}
-      </>
+          {searchedFlights.length === 0 && searchClicked ? (
+            <div>
+              <h2>No Results Found</h2>
+            </div>
+          ) : (
+            <TableContainer
+              component={Paper}
+              style={{ marginBottom: "20px", padding: "10px" }}
+            >
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Departure Date</TableCell>
+                    <TableCell>Arrival Date</TableCell>
+                    <TableCell>Departure Time</TableCell>
+                    <TableCell>Arrival Time</TableCell>
+                    <TableCell>Departure Location</TableCell>
+                    <TableCell>Arrival Location</TableCell>
+                    <TableCell>Crew</TableCell>
+                    <TableCell>Aircraft</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {flightsData.map((flight) => (
+                    <TableRow key={flight.id}>
+                      <TableCell>{flight.id}</TableCell>
+                      <TableCell>{flight.departdate}</TableCell>
+                      <TableCell>{flight.returndate}</TableCell>
+                      <TableCell>{flight.departtime}</TableCell>
+                      <TableCell>{flight.returntime}</TableCell>
+                      <TableCell>{flight.iataorigin}</TableCell>
+                      <TableCell>{flight.iatadest}</TableCell>
+                      <TableCell>{flight.crew}</TableCell>
+                      <TableCell>
+                        {flight.model + " " + flight.modelid}
+                      </TableCell>
+                      <TableCell>
+                        <Button onClick={() => handleModifyFlight(flight.id)}>
+                          Modify
+                        </Button>
+                        <Button onClick={() => handleRemoveFlight(flight.id)}>
+                          Remove
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </>
       )}
 
       <Dialog
