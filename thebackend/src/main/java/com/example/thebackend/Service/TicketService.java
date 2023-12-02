@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 import com.example.thebackend.Entity.FlightsDetails;
 import com.google.zxing.BarcodeFormat;
@@ -76,8 +75,6 @@ public class TicketService {
                                URLEncoder.encode(flightDetails.getDeparture(), StandardCharsets.UTF_8.toString()) : "N/A";
             String arrival = flightDetails != null && flightDetails.getArrival() != null ? 
                              URLEncoder.encode(flightDetails.getArrival(), StandardCharsets.UTF_8.toString()) : "N/A";
-            // String flightTime = flightDetails != null && flightDetails.getFlightTime() != null ? 
-            //                     URLEncoder.encode(flightDetails.getFlightTime(), StandardCharsets.UTF_8.toString()) : "N/A";
 
             String formattedFlightDate = "";
 
