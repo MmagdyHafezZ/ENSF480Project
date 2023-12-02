@@ -1,6 +1,10 @@
 package com.example.thebackend.Service;
 
+import java.time.LocalDateTime; 
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Service;
 import com.example.thebackend.Entity.FlightsDetails;
 import com.google.zxing.BarcodeFormat;
@@ -35,7 +39,7 @@ public class TicketService {
             String queryParams = String.format(
                 "?departure=%s&arrival=%s&flightTime=%s&id=%s", departure, arrival, flightTime, 
                 URLEncoder.encode(uniqueIdentifier, StandardCharsets.UTF_8.toString())
-            );  
+                );  
 
             String encodedUrl = baseUrl + "/" + queryParams;
 
@@ -65,4 +69,43 @@ public class TicketService {
             e.printStackTrace();
         }
     }
+
+    public void sendCancellationEmail(String userEmail, FlightsDetails flightDetails, Integer balancePaid){
+        try{
+            String departure = flightDetails != null && flightDetails.getDeparture() != null ? 
+                               URLEncoder.encode(flightDetails.getDeparture(), StandardCharsets.UTF_8.toString()) : "N/A";
+            String arrival = flightDetails != null && flightDetails.getArrival() != null ? 
+                             URLEncoder.encode(flightDetails.getArrival(), StandardCharsets.UTF_8.toString()) : "N/A";
+            // String flightTime = flightDetails != null && flightDetails.getFlightTime() != null ? 
+            //                     URLEncoder.encode(flightDetails.getFlightTime(), StandardCharsets.UTF_8.toString()) : "N/A";
+
+            String formattedFlightDate = "";
+
+            if(flightDetails != null && flightDetails.getFlightTime() != null){
+                LocalDateTime flightDate = LocalDateTime.parse(flightDetails.getFlightTime(), DateTimeFormatter.ISO_DATE_TIME);
+                formattedFlightDate = flightDate.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")); 
+            } else {
+                formattedFlightDate = "N/A";
+            }
+
+            if (departure.contains("+")) {
+                departure = departure.replace("+", " ");
+            }
+
+            if (arrival.contains("+")) {
+                arrival = arrival.replace("+", " ");
+            }
+            
+            String balancePaidStr = balancePaid != null ? String.valueOf(balancePaid) : "N/A";
+
+            String emailSubject = "Cancellation Confirmation";
+
+            String emailBody = String.format("Your flight departing from %s and arriving to %s on %s has been successfully cancelled.\r\n\r\nYou will be refunded with a balance of: $%s\r\n\r\nHave a great day!", departure, arrival, formattedFlightDate, balancePaidStr);
+
+            emailService.sendEmailWithoutAttachment(userEmail, emailSubject, emailBody);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

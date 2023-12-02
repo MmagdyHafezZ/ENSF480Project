@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.core.io.ByteArrayResource;
 
-
-
 @Service
 public class EmailService {
 
@@ -29,5 +27,18 @@ public class EmailService {
 
         emailSender.send(message);
         System.out.println("Email with attachment sent to " + to + " with subject " + subject);
+    }
+
+    public void sendEmailWithoutAttachment(String to, String subject, String tex) throws Exception {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, false);
+
+        helper.setFrom("Magdy.hafez9123@gmail.com");
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(tex);
+
+        emailSender.send(message);
+        System.out.println("Email without attachment sent to " + to + " with subject " + subject);
     }
 }
