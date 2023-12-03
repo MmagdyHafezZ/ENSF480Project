@@ -78,10 +78,6 @@ public class SearchBookingService {
 
             AircraftModelEntity aircraftModelEntity = aircraftModelRepository.findAll().get((int) aircraftpicker);
 
-            System.out.println(aircraftModelEntity);
-            System.out.println(aircraftModelEntity.getModel());
-            System.out.println(aircraftModelEntity.getModelid());
-
             flightListEntity.setModel(aircraftModelEntity.getModel());
             flightListEntity.setModelid(aircraftModelEntity.getModelid());
 

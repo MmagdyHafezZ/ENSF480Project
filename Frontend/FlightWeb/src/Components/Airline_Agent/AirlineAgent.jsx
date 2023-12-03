@@ -182,7 +182,7 @@ const AirlineAgentPage = () => {
         console.log(selectedBooking.id);
       if (response.status === 200) {
         const updatedBookings = getBookings.filter(booking => booking.id !== selectedBooking.id);
-      setGetBookings(updatedBookings);
+        setGetBookings(updatedBookings);
         setOpenDeleteDialog(false);
       } else {
         console.log("Error deleting booking: ", response.data);

@@ -3,11 +3,16 @@ package com.example.thebackend.Service;
 
 import com.example.thebackend.Entity.Memberships;
 import com.example.thebackend.Entity.User;
+import com.example.thebackend.Entity.UserCreditCard;
+import com.example.thebackend.Entity.UserPreferences;
+import com.example.thebackend.Entity.UserProfile;
 import com.example.thebackend.Repository.UserRepository;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -19,9 +24,14 @@ import java.util.Collections;
 @Service
 public class AuthService {
 
-    private static AuthService instance;
-    private UserRepository userRepository;
+    @Autowired
+    private PromoService promoService;
 
+    private static AuthService instance;
+
+    @Autowired
+    private UserRepository userRepository;
+    
     private AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -43,8 +53,24 @@ public class AuthService {
         newUser.setPassword(password); // In real applications, consider encrypting the password
         newUser.setfirst_name(firstName);
         newUser.setlast_name(lastName);
-        newUser.setmembership_type(membershipType);
+        newUser.setmembershipType(membershipType);
         userRepository.save(newUser);
+         UserProfile userProfile = new UserProfile();
+        userProfile.setUser(newUser);
+        newUser.setUserProfile(userProfile);
+        // set other userProfile fields
+
+        UserCreditCard creditCard = new UserCreditCard();
+        creditCard.setUser(newUser);
+        // set other creditCard fields
+
+        UserPreferences preferences = new UserPreferences();
+        preferences.setUser(newUser);
+        userRepository.save(newUser);
+        // set other preferences fields
+
+        promoService.postPromo(newUser);
+
         return newUser.getId();
 
     }

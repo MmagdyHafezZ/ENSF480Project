@@ -12,10 +12,10 @@ public class UserPreferences {
     private String mealPreference;
     private String seatPreference;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @MapsId
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    
     // Constructors, Getters and Setters
     public UserPreferences(String mealPreference, String seatPreference, User user) {
         this.mealPreference = mealPreference;

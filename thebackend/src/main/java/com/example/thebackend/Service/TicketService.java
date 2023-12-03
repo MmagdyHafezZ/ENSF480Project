@@ -1,5 +1,8 @@
 package com.example.thebackend.Service;
 
+import java.time.LocalDateTime; 
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.thebackend.Entity.FlightsDetails;
@@ -19,39 +22,87 @@ public class TicketService {
     @Autowired
     private EmailService emailService;
 
-    public void generateAndSendTicket(String userEmail, FlightsDetails flightDetails) {
+    public void generateAndSendTicket(String userEmail, FlightsDetails flightDetails, Integer balancePaid, Integer currentbalance) {
         try {
             String uniqueIdentifier = UUID.randomUUID().toString();
             String baseUrl = "http://localhost:5173/ticket-QR";
-            String queryParams = String.format(
-                "?departure=%s&arrival=%s&flightTime=%s&id=%s",
-                URLEncoder.encode(flightDetails.getDeparture(), StandardCharsets.UTF_8.toString()),
-                URLEncoder.encode(flightDetails.getArrival(), StandardCharsets.UTF_8.toString()),
-                URLEncoder.encode(flightDetails.getFlightTime(), StandardCharsets.UTF_8.toString()),
-                URLEncoder.encode(uniqueIdentifier, StandardCharsets.UTF_8.toString())
-            );  
 
-            // Combine base URL, unique identifier, and query parameters
+            // Check for null values in flightDetails and handle accordingly
+            String departure = flightDetails != null && flightDetails.getDeparture() != null ? 
+                               URLEncoder.encode(flightDetails.getDeparture(), StandardCharsets.UTF_8.toString()) : "N/A";
+            String arrival = flightDetails != null && flightDetails.getArrival() != null ? 
+                             URLEncoder.encode(flightDetails.getArrival(), StandardCharsets.UTF_8.toString()) : "N/A";
+            String flightTime = flightDetails != null && flightDetails.getFlightTime() != null ? 
+                                URLEncoder.encode(flightDetails.getFlightTime(), StandardCharsets.UTF_8.toString()) : "N/A";
+
+            String queryParams = String.format(
+                "?departure=%s&arrival=%s&flightTime=%s&id=%s", departure, arrival, flightTime, 
+                URLEncoder.encode(uniqueIdentifier, StandardCharsets.UTF_8.toString())
+                );  
+
             String encodedUrl = baseUrl + "/" + queryParams;
 
-            // Generate QR Code for the encoded URL
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(encodedUrl, BarcodeFormat.QR_CODE, 200, 200);
 
-            // Write QR code to ByteArrayOutputStream
             ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
             MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
-
-            // Convert QR code to byte array
             byte[] pngData = pngOutputStream.toByteArray();
 
-            // Send email with QR code as an attachment
-            emailService.sendEmailWithAttachment(userEmail, "Your E-Ticket", "Scan the QR code to view your flight details.", pngData, "ticket.png");
+            // Handling null values for balancePaid and currentbalance
+            String balancePaidStr = balancePaid != null ? String.valueOf(balancePaid) : "N/A";
+            String currentbalanceStr = currentbalance != null ? String.valueOf(currentbalance) : "N/A";
+
+            emailService.sendEmailWithAttachment(
+                userEmail, 
+                "Your E-Ticket", 
+                "-Scan the QR code to view your flight details- \n departure: " + departure + 
+                "\n arrival: " + arrival + 
+                "\n flightTime: " + flightTime + 
+                "\n balancePaid: " + balancePaidStr + 
+                "\n currentbalance: " + currentbalanceStr + "\n", 
+                pngData, 
+                "ticket.png"
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void sendCancellationEmail(String userEmail, FlightsDetails flightDetails, Integer balancePaid){
+        try{
+            String departure = flightDetails != null && flightDetails.getDeparture() != null ? 
+                               URLEncoder.encode(flightDetails.getDeparture(), StandardCharsets.UTF_8.toString()) : "N/A";
+            String arrival = flightDetails != null && flightDetails.getArrival() != null ? 
+                             URLEncoder.encode(flightDetails.getArrival(), StandardCharsets.UTF_8.toString()) : "N/A";
+
+            String formattedFlightDate = "";
+
+            if(flightDetails != null && flightDetails.getFlightTime() != null){
+                LocalDateTime flightDate = LocalDateTime.parse(flightDetails.getFlightTime(), DateTimeFormatter.ISO_DATE_TIME);
+                formattedFlightDate = flightDate.format(DateTimeFormatter.ofPattern("MMMM d, yyyy")); 
+            } else {
+                formattedFlightDate = "N/A";
+            }
+
+            if (departure.contains("+")) {
+                departure = departure.replace("+", " ");
+            }
+
+            if (arrival.contains("+")) {
+                arrival = arrival.replace("+", " ");
+            }
+            
+            String balancePaidStr = balancePaid != null ? String.valueOf(balancePaid) : "N/A";
+
+            String emailSubject = "Cancellation Confirmation";
+
+            String emailBody = String.format("Your flight departing from %s and arriving to %s on %s has been successfully cancelled.\r\n\r\nYou will be refunded with a balance of: $%s\r\n\r\nHave a great day!", departure, arrival, formattedFlightDate, balancePaidStr);
+
+            emailService.sendEmailWithoutAttachment(userEmail, emailSubject, emailBody);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
-
-
-

@@ -115,7 +115,6 @@ const Search = () => {
       travellers: travellers.toString(),
       departing: formatDate(travelDates.depart),
       returning: formatDate(travelDates.returning),
-      
     });
   };
 
@@ -130,11 +129,11 @@ const Search = () => {
 
   function getType(value) {
     if (Array.isArray(value)) {
-      return 'array';
+      return "array";
     } else if (value === null) {
-      return 'null';
+      return "null";
     } else if (value instanceof Date) {
-      return 'date';
+      return "date";
     } else {
       return typeof value;
     }
@@ -143,42 +142,45 @@ const Search = () => {
   const handleSearchFlight = async () => {
     setSearchState((prev) => !prev); // Toggle search state
 
-    
-
-
     const dataToSend = {
       iataorigin: userFlightData.leaving.iata,
       iatadest: userFlightData.going.iata,
       travellers: userFlightData.travellers,
       departing: userFlightData.depart.toISOString(),
-      returning: userFlightData.return.toISOString()
-  };
-
-  const types = Object.fromEntries(
-    Object.entries(dataToSend).map(([key, value]) => [key, getType(value)])
-  );
-  
-  console.log(types);
-
-
-
+      returning: userFlightData.return.toISOString(),
+    };
 
     handleButtonClick();
-    console.log(typeof{dataToSend});
-    try{
-      const response = await 
-        axios
-          .post("http://localhost:8080/postSearchBooking", dataToSend);
-          console.log(typeof(response.data));
-          navigate("/flights", { state: { userFlightData, sendData : dataToSend } });
-    } catch (error){
-      console.error('Error posting data: ', error);
+    console.log(typeof dataToSend);
+
+    try {
+      // First POST request
+      await axios.post("http://localhost:8080/postSearchBooking", dataToSend);
+
+      console.log("iata1: ", dataToSend.iataorigin);
+      console.log("iata2: ", dataToSend.iatadest);
+      console.log("DepartureDay: ", formatDate(userFlightData.depart));
+
+      // Now the GET request
+      const flightListResponse = await axios.get(
+        "http://localhost:8080/getFilteredFlightList",
+        {
+          params: {
+            iata1: dataToSend.iataorigin,
+            iata2: dataToSend.iatadest,
+            DepartureDay: formatDate(userFlightData.depart), // Ensure this formats the date correctly
+          },
+        }
+      );
+
+      console.log(flightListResponse.data);
+      navigate("/flights", {
+        state: { userFlightData, sendData: flightListResponse.data },
+      });
+    } catch (error) {
+      console.error("Error with request: ", error);
     }
-
-    
-    
   };
-
 
   return (
     <div className="search container section">
@@ -262,7 +264,6 @@ const Search = () => {
           <button
             onClick={() => {
               handleSearchFlight();
-
             }}
             className="search-flight-button btn btnBlock flex"
             disabled={!isAllDummyFilled()}

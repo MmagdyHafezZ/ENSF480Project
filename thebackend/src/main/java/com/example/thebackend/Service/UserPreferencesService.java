@@ -38,5 +38,10 @@ public class UserPreferencesService {
     public void deleteUserPreferences(Long id) {
         userPreferencesRepository.deleteById(id);
     }
+
+    public UserPreferences getUserPreferences(Long id) {
+        return userPreferencesRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User preferences not found with id: " + id));
+    }
 }
 

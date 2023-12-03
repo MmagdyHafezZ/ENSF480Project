@@ -10,24 +10,13 @@ import com.example.thebackend.Entity.FlightsDetails;
 @RestController
 public class TicketController {
 
-    @Autowired
-    private TicketService ticketService;
-
-    @PostMapping("/generateAndSendTicket")
-    public String generateAndSendTicket(@RequestBody TicketRequest request) {
-        try {
-            ticketService.generateAndSendTicket(request.getUserEmail(), request.getFlightDetails());
-            return "E-ticket sent successfully to " + request.getUserEmail();
-        } catch (Exception e) {
-            // Handle exceptions (e.g., email service failure)
-            return "Failed to send e-ticket: " + e.getMessage();
-        }
-    }
-
     // Inner class to represent the request body
     public static class TicketRequest {
         private String userEmail;
         private FlightsDetails flightDetails;
+        private int balancePaid;
+        private int currentbalance;
+
 
         // Getters and setters for userEmail and flightDetails
         public String getUserEmail() {
@@ -45,5 +34,44 @@ public class TicketController {
         public void setFlightDetails(FlightsDetails flightDetails) {
             this.flightDetails = flightDetails;
         }
+        public int getBalancePaid() {
+            return balancePaid;
+        }
+        public void setBalancePaid(int balancePaid) {
+            this.balancePaid = balancePaid;
+        }
+        public int getCurrentbalance() {
+            return currentbalance;
+        }
+        public void setCurrentbalance(int currentbalance) {
+            this.currentbalance = currentbalance;
+        }
     }
+    
+
+    @Autowired
+    private TicketService ticketService;
+
+    @PostMapping("/generateAndSendTicket")
+    public String generateAndSendTicket(@RequestBody TicketRequest request) {
+        try {
+            ticketService.generateAndSendTicket(request.getUserEmail(), request.getFlightDetails(), request.getBalancePaid(), request.getCurrentbalance());
+            return "E-ticket sent successfully to " + request.getUserEmail();
+        } catch (Exception e) {
+            // Handle exceptions (e.g., email service failure)
+            return "Failed to send e-ticket: " + e.getMessage();
+        }
+    }
+
+    @PostMapping("/sendCancellationEmail")
+    public String sendCancellationEmail(@RequestBody TicketRequest request){
+        try{
+            ticketService.sendCancellationEmail(request.getUserEmail(), request.getFlightDetails(), request.getBalancePaid());
+            return String.format("Ticket Cancellation E-mail successfully sent to %s", request.getUserEmail());
+        } catch (Exception e) {
+            return String.format("Failed to send e-ticket: %s", e.getMessage());
+        }
+    }
+
+    
 }

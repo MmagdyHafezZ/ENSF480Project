@@ -1,10 +1,16 @@
 package com.example.thebackend.Entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,10 +29,19 @@ public class User {
     private String first_name;
     @Column(name = "last_name")
     private String last_name;    
-    @Column(name = "membership_type")
-    private Memberships membership_type;
+    @Column(name = "membershipType")
+    private Memberships membershipType;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private UserProfile userProfile;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserCreditCard> creditCards;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserPreferences> preferences;
     
-    
+    @OneToMany(mappedBy = "userid", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PromoEntity> promos;
 
     // No-argument constructor
     public User() {
@@ -71,10 +86,22 @@ public class User {
     public void setlast_name(String last_name) { this.last_name = last_name; }
     public String getlast_name() { return last_name; }
 
-    public void setmembership_type(Memberships membershipType) {
-        this.membership_type = membershipType;
+    public void setmembershipType(Memberships membershipType) {
+        this.membershipType = membershipType;
     }
-    public Memberships getmembership_type() {
-        return membership_type;
+    public Memberships getmembershipType() {
+        return membershipType;
+    }
+
+    public void setUserProfile(UserProfile userProfile2) {
+        this.userProfile = userProfile2;
+    }
+
+    public List<PromoEntity> getPromos() {
+        return promos;
+    }
+
+    public void setPromos(List<PromoEntity> promos) {
+        this.promos = promos;
     }
 }

@@ -14,7 +14,7 @@ const FlightsPage = () => {
   // State declaration
   const { searchState, isLoggedIn } = useUserDataContext();
 
-  const {userFlightData, sendData} = location.state||{};
+  const { userFlightData, sendData } = location.state || {};
 
   if (!userFlightData.return && !userFlightData.leaving.city) {
     return (
@@ -23,7 +23,7 @@ const FlightsPage = () => {
       </>
     );
   }
-  console.log(userFlightData);
+  console.log("FlightsPage", userFlightData);
 
   return (
     <>
@@ -37,9 +37,9 @@ const FlightsPage = () => {
           <div className="flights-list__container">
             {/* List of Flights Here */}
 
-            <FlightsList userFlightData={userFlightData} sendData = {sendData} />
+            <FlightsList userFlightData={userFlightData} sendData={sendData} />
           </div>
-          <div className="flights-main__right">Right</div>
+          {/* <div className="flights-main__right">Right</div> */}
         </div>
       </div>
     </>

@@ -10,6 +10,7 @@ import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
 import AirplaneRedirectLoading from "../../Components/LoadingScreens/AirplaneRedirectLogin";
 import AirplaneLoading from "../../Components/LoadingScreens/AirplaneLoading";
 import { useUserDataContext } from "../../context/UserDataContext";
+import updateSeatMapData from "../../utils/updateSeatMapData";
 const TicketDetails = () => {
   // const [flightId, setFlightId] = useState();
   const {
@@ -20,6 +21,19 @@ const TicketDetails = () => {
     setPrice,
     isLoggedInContext,
   } = useUserDataContext();
+  useEffect(() => {
+    const fetchAndUpdateSeatData = async () => {
+      console.log("Flight Details", userFlightData);
+      const updatedSeatData = await updateSeatMapData(
+        {},
+        userFlightData.flightId
+      );
+      setAllSeatData(updatedSeatData);
+    };
+    if (userFlightData && userFlightData.flightId) {
+      fetchAndUpdateSeatData();
+    }
+  }, []);
 
   console.log(
     isLoggedInContext
@@ -57,7 +71,7 @@ const TicketDetails = () => {
   };
 
   const location = useLocation();
-  const flightDetails = location.state?.flightDetails;
+  const flightDetails = location.state?.flightDetails || null;
   const [showCheckmark, setShowCheckmark] = useState(
     location.state?.showCheckmark || false
   );
@@ -111,9 +125,7 @@ const TicketDetails = () => {
     Object.keys(selectedSeats).length === userFlightData.travellers;
   // console.log(Object.keys(selectedSeats).length);
   const SeatMapComponent =
-    flightDetails?.details?.aircraft === "Embraer E175-E2"
-      ? SmallPlane
-      : MediumPlane;
+    flightDetails?.planeType === "A" ? SmallPlane : MediumPlane;
   console.log(!flightDetails);
 
   if (isLoading) {
@@ -178,20 +190,22 @@ const TicketDetails = () => {
           <div className="ticket-details-top">
             <span>Round-Trip</span>
             <span>-</span>
-            <span>{userFlightData.travellers} traveller(s)</span>
+            <span>{userFlightData.travellers} Travellers</span>
             <span>-</span>
-            <span>{formatDate(userFlightData.depart)}</span>
+            <span>
+              Departure Day: {formatDate(flightDetails.departure_day)}
+            </span>
             <span>-</span>
-            <span>{formatDate(userFlightData.return)}</span>
+            <span>Departure Time: {flightDetails.departure_time}</span>
+            <span>-</span>
+            <span>Arrival Day: {formatDate(flightDetails.arrival_day)}</span>
+            <span>-</span>
+            <span>Arrival Time: {flightDetails.arrival_time}</span>
           </div>
           <div className="ticket-details-bottom">
-            <span>
-              {flightDetails && flightDetails.details.departureLocation}
-            </span>{" "}
-            -{" "}
-            <span>
-              {flightDetails && flightDetails.details.arrivalLocation}
-            </span>
+            <span>{flightDetails && flightDetails.iata2}</span> -{" "}
+            <span>{flightDetails && flightDetails.iata1}</span> - {""}
+            <span>{flightDetails && flightDetails.id}</span>
           </div>
         </div>
 
