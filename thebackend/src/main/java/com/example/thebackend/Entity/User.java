@@ -31,7 +31,7 @@ public class User {
     private String last_name;    
     @Column(name = "membershipType")
     private Memberships membershipType;
-     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private UserProfile userProfile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -40,7 +40,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UserPreferences> preferences;
     
-    
+    @OneToMany(mappedBy = "userid", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PromoEntity> promos;
 
     // No-argument constructor
     public User() {
@@ -94,5 +95,13 @@ public class User {
 
     public void setUserProfile(UserProfile userProfile2) {
         this.userProfile = userProfile2;
+    }
+
+    public List<PromoEntity> getPromos() {
+        return promos;
+    }
+
+    public void setPromos(List<PromoEntity> promos) {
+        this.promos = promos;
     }
 }

@@ -10,7 +10,9 @@ import com.example.thebackend.Repository.UserRepository;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -22,9 +24,14 @@ import java.util.Collections;
 @Service
 public class AuthService {
 
-    private static AuthService instance;
-    private UserRepository userRepository;
+    @Autowired
+    private PromoService promoService;
 
+    private static AuthService instance;
+
+    @Autowired
+    private UserRepository userRepository;
+    
     private AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -61,6 +68,9 @@ public class AuthService {
         preferences.setUser(newUser);
         userRepository.save(newUser);
         // set other preferences fields
+
+        promoService.postPromo(newUser);
+
         return newUser.getId();
 
     }

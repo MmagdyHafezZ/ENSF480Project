@@ -29,5 +29,4 @@ public class FlightListController {
         return flightListService.singleGet(id);
     }
     
-
 }
