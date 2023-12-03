@@ -8,6 +8,8 @@ public class FlightsDetails {
     private String price;
     private String iata1;
     private String iata2;
+    private String planeType;
+    private String id;
 
     public FlightsDetails(String flightNumber, String departure_day, String arrival_day, String departure_time, String price) {
         this.flightNumber = flightNumber;
@@ -71,6 +73,18 @@ public class FlightsDetails {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+    public String getPlaneType() {
+        return planeType;
+    }
+    public void setPlaneType(String planeType) {
+        this.planeType = planeType;
+    }
+    public void setFlightId(String id) {
+        this.id = id;
+    }
+    public String getFlightId() {
+        return id;
     }
     
 }
