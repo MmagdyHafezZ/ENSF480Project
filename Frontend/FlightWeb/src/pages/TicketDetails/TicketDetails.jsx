@@ -10,6 +10,7 @@ import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
 import AirplaneRedirectLoading from "../../Components/LoadingScreens/AirplaneRedirectLogin";
 import AirplaneLoading from "../../Components/LoadingScreens/AirplaneLoading";
 import { useUserDataContext } from "../../context/UserDataContext";
+import updateSeatMapData from "../../utils/updateSeatMapData";
 const TicketDetails = () => {
   // const [flightId, setFlightId] = useState();
   const {
@@ -20,6 +21,19 @@ const TicketDetails = () => {
     setPrice,
     isLoggedInContext,
   } = useUserDataContext();
+  useEffect(() => {
+    const fetchAndUpdateSeatData = async () => {
+      console.log("Flight Details", userFlightData);
+      const updatedSeatData = await updateSeatMapData(
+        {},
+        userFlightData.flightId
+      );
+      setAllSeatData(updatedSeatData);
+    };
+    if (userFlightData && userFlightData.flightId) {
+      fetchAndUpdateSeatData();
+    }
+  }, []);
 
   console.log(
     isLoggedInContext
@@ -111,9 +125,7 @@ const TicketDetails = () => {
     Object.keys(selectedSeats).length === userFlightData.travellers;
   // console.log(Object.keys(selectedSeats).length);
   const SeatMapComponent =
-    flightDetails?.details?.aircraft === "Embraer E175-E2"
-      ? SmallPlane
-      : MediumPlane;
+    flightDetails?.planeType === "A" ? SmallPlane : MediumPlane;
   console.log(!flightDetails);
 
   if (isLoading) {

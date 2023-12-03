@@ -1,58 +1,68 @@
-import React, { useState } from "react";
-// import "./planes.css";
+import React, { useState, useEffect } from "react";
 import "../SeatMaps/planes.scss";
 import { BsXLg } from "react-icons/bs";
-import seatData from "../../data/mp_seatAvailability.json";
+import axios from "axios";
 import { useUserDataContext } from "../../context/UserDataContext";
-const MediumPlane = ({ isBooking }) => {
-  const [allSeatData, setAllSeatData] = useState(seatData); // <----- This is the seat data of the chosen flight
-  const { userFlightData, selectedSeats, setSelectedSeats, price, setPrice } =
-    useUserDataContext();
 
-  // Function to handle the click event on seats
-  const handleSeatClick = (seatId, seatContent) => {
+const MediumPlane = ({ isBooking, flightDetails }) => {
+  const { userFlightData, selectedSeats, setSelectedSeats, setPrice } =
+    useUserDataContext();
+  const [allSeatData, setAllSeatData] = useState({});
+
+  useEffect(() => {
+    const fetchSeatData = async () => {
+      if (flightDetails && flightDetails.id) {
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/getSeatsByFlightId/flightId=${flightDetails.id}`
+          );
+          const seatData = response.data.reduce((acc, seat) => {
+            acc[seat.seatID] = {
+              available: seat.isAvailable,
+              type: seat.seatType,
+              price: seat.flight[`${seat.seatType}Price`],
+            };
+            return acc;
+          }, {});
+          setAllSeatData(seatData);
+          console.log("allSeatData", allSeatData);
+        } catch (error) {
+          console.error("Error fetching seat data:", error);
+        }
+      }
+    };
+
+    fetchSeatData();
+  }, [flightDetails]);
+
+  const handleSeatClick = (seatId) => {
     if (isBooking) {
       setSelectedSeats((prevSelectedSeats) => {
         const currentlySelected = Object.keys(prevSelectedSeats).filter(
           (key) => prevSelectedSeats[key]
         ).length;
+        let updatedSelectedSeats = { ...prevSelectedSeats };
 
-        // Toggle the selected state for the seat
-        let updatedSelectedSeats;
         if (prevSelectedSeats[seatId]) {
-          // Seat is currently selected, so remove it
-          updatedSelectedSeats = { ...prevSelectedSeats };
           delete updatedSelectedSeats[seatId];
+        } else if (currentlySelected < userFlightData.travellers) {
+          updatedSelectedSeats[seatId] = true;
         } else {
-          // Seat is not selected and we have room for more, so add it
-          if (currentlySelected < userFlightData.travellers) {
-            updatedSelectedSeats = {
-              ...prevSelectedSeats,
-              [seatId]: true,
-            };
-          } else {
-            // No room for more selections, return previous state
-            return prevSelectedSeats;
-          }
+          return prevSelectedSeats;
         }
 
-        // Calculate the total price based on the selected seats
+        // Corrected total price calculation
         const totalPrice = Object.keys(updatedSelectedSeats).reduce(
           (total, seatId) => {
-            if (updatedSelectedSeats[seatId]) {
-              const seatInfo = seatData[seatId];
-              if (seatInfo && seatInfo.available) {
-                total += seatInfo.price;
-              }
-            }
-            return total;
+            return updatedSelectedSeats[seatId] &&
+              allSeatData[seatId]?.available
+              ? total + allSeatData[seatId].price
+              : total;
           },
           0
         );
 
-        // Update the price state
         setPrice(totalPrice);
-
         return updatedSelectedSeats;
       });
     }
@@ -67,7 +77,7 @@ const MediumPlane = ({ isBooking }) => {
 
   // Function to generate seat divs
   const generateSeats = (numRows, numColumns) => {
-    let rows = [];
+    const rows = [];
 
     // Header for business class
     const headerBusinessRow = (
@@ -113,30 +123,32 @@ const MediumPlane = ({ isBooking }) => {
 
     // Generate business class rows
     for (let rowIndex = 0; rowIndex < 4; rowIndex++) {
-      if (rowIndex === 0)
+      // Add business class header
+      if (rowIndex === 0) {
         rows.push(
           <div key="business-header" className="row header-row">
             {headerBusinessRow}
           </div>
         );
+      }
 
       let leftColumnSeats = [];
       let rightColumnSeats = [];
 
-      for (let columnIndex = 0; columnIndex < 6; columnIndex++) {
+      for (let columnIndex = 0; columnIndex < numColumns; columnIndex++) {
         // Skip B and E seats for business class
         if (columnIndex === 1 || columnIndex === 4) continue;
+
         const seatId = `${String.fromCharCode(65 + columnIndex)}${
           rowIndex + 1
         }`;
-        const seatInfo = seatData[seatId];
-        const isAvailable = seatInfo?.available;
+        const seatData = allSeatData[seatId];
+        const isAvailable = seatData?.available;
         const isSelected = selectedSeats[seatId];
-        const isWingSeat = 16 <= seatData[seatId] <= 23 ? "wing-row" : "";
+        const isWingSeat = rowIndex >= 4 && rowIndex <= 11 ? "wing-row" : "";
         let seatContent = isBooking ? (
           isAvailable ? (
-            // `$${seatInfo?.price}`
-            seatId
+            `$${seatData?.price} (${seatId})`
           ) : (
             <BsXLg />
           )
@@ -149,7 +161,7 @@ const MediumPlane = ({ isBooking }) => {
             key={seatId}
             className={`seat ${isSelected ? "selected" : ""} ${
               isAvailable === false ? "unavailable" : ""
-            } business `}
+            } ${isWingSeat} ${seatData?.type || "ordinary"} business`}
             onClick={() => isAvailable && handleSeatClick(seatId)}
           >
             {seatContent}
@@ -162,7 +174,7 @@ const MediumPlane = ({ isBooking }) => {
       }
 
       rows.push(
-        <div key={rowIndex} className="row">
+        <div key={`business-row-${rowIndex}`} className="row">
           <div className="left-column">{leftColumnSeats}</div>
           <div className="aisle"></div>
           <div className="right-column">{rightColumnSeats}</div>
@@ -172,12 +184,14 @@ const MediumPlane = ({ isBooking }) => {
 
     // Generate the rest of the rows
     for (let rowIndex = 4; rowIndex < numRows; rowIndex++) {
-      if (rowIndex === 4)
+      // Add economy class header
+      if (rowIndex === 4) {
         rows.push(
           <div key="economy-header" className="row header-row">
             {headerRow}
           </div>
         );
+      }
 
       let seats = [];
 
@@ -185,15 +199,13 @@ const MediumPlane = ({ isBooking }) => {
         const seatId = `${String.fromCharCode(65 + columnIndex)}${
           rowIndex + 1
         }`;
-        const seatInfo = seatData[seatId];
-        const isAvailable = seatInfo?.available;
+        const seatData = allSeatData[seatId];
+        const isAvailable = seatData?.available;
         const isSelected = selectedSeats[seatId];
-        const rowNumber = parseInt(seatId.slice(1));
-        const isWingSeat = rowNumber >= 16 && rowNumber <= 23 ? "wing-row" : "";
+        const isWingSeat = rowIndex >= 16 && rowIndex <= 23 ? "wing-row" : "";
         let seatContent = isBooking ? (
           isAvailable ? (
-            // `$${seatInfo?.price}`
-            seatId
+            `$${seatData?.price} (${seatId})`
           ) : (
             <BsXLg />
           )
@@ -206,7 +218,7 @@ const MediumPlane = ({ isBooking }) => {
             key={seatId}
             className={`seat ${isSelected ? "selected" : ""} ${
               isAvailable === false ? "unavailable" : ""
-            } ${isWingSeat} ${seatInfo?.type || "ordinary"} ${rowNumber}`}
+            } ${isWingSeat} ${seatData?.type || "ordinary"}`}
             onClick={() => isAvailable && handleSeatClick(seatId)}
           >
             {seatContent}
@@ -217,7 +229,7 @@ const MediumPlane = ({ isBooking }) => {
       }
 
       rows.push(
-        <div key={rowIndex} className="row">
+        <div key={`economy-row-${rowIndex}`} className="row">
           <div className="left-column">{seats.slice(0, 3)}</div>
           <div className="aisle"></div>
           <div className="right-column">{seats.slice(3)}</div>
