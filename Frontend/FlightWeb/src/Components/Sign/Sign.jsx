@@ -69,6 +69,7 @@ const SignUpSignIn = () => {
         localStorage.setItem("isLoggedIn", true);
         console.log(res.data);
         localStorage.setItem("id", res.data.id);
+        console.log(res.data.id);
         jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
       })
       .catch((err) => {
@@ -102,6 +103,7 @@ const SignUpSignIn = () => {
         console.log(res);
         setIsSignIn(true);
         localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("id", res.data.id);
         jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
       })
       .catch((err) => {
