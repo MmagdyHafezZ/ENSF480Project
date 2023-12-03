@@ -55,6 +55,10 @@ public class FlightListEntity {
     @Column(name = "modelid")
     private String modelid;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "crew", referencedColumnName = "id")
+    private Crew crew;
+
     public void setId(Long id){
         this.id = id;
     }
@@ -134,4 +138,13 @@ public class FlightListEntity {
     public void setModelid(String modelid){
         this.modelid = modelid;
     }
+
+    public Crew getCrew(){
+        return crew;
+    }
+
+    public void setCrew(Crew crew){
+        this.crew = crew;
+    }
+
 }

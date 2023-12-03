@@ -26,5 +26,32 @@ public class FlightListService {
     public FlightListEntity singleGet(Long id){
         return flightListRepository.findById(id).get();
     }
+
+    // POST
+    public FlightListEntity postFlightListEntity(FlightListEntity flightListEntity){
+        return flightListRepository.save(flightListEntity);
+    }
+
+    // PUT
+    public FlightListEntity updateFlightListEntity(Long id, FlightListEntity existingData){
+        FlightListEntity updateData = flightListRepository.findById(id).get();
+        updateData.setSearchbookingid(existingData.getSearchbookingid());
+        updateData.setIatadest(existingData.getIatadest());
+        updateData.setIataorigin(existingData.getIataorigin());
+        updateData.setDepartdate(existingData.getDepartdate());
+        updateData.setReturndate(existingData.getReturndate());
+        updateData.setDeparttime(existingData.getDeparttime());
+        updateData.setReturntime(existingData.getReturntime());
+        updateData.setModel(existingData.getModel());
+        updateData.setModelid(existingData.getModelid());
+        updateData.setCrew(existingData.getCrew());
+
+        return flightListRepository.save(updateData);
+    }
+    
+    // DELETE
+    public void deleteFlightListEntity(Long id){
+        flightListRepository.deleteById(id);
+    }
     
 }
