@@ -1,5 +1,6 @@
 // src/components/OffersPage.js
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Container,
   Typography,
@@ -22,6 +23,20 @@ import Holiday from "../../assets/Holiday.jpg";
 import Navbar from "../Navbar/Navbar";
 
 const OffersPage = () => {
+  const [userID, setUserID] = useState(parseInt(localStorage.getItem("id")));
+  const [promotions, setPromotions] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/getPromo/${userID}`)
+      .then((response) => {
+        setPromotions(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data: ", error);
+      })
+  }, []);
+
   // Example offers data
   const offers = [
     {

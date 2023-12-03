@@ -4,7 +4,6 @@ CREATE DATABASE IF NOT EXISTS 480base;
 
 USE 480base;
 
-DROP TABLE IF exists users;
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(255),
@@ -19,8 +18,7 @@ INSERT INTO users (email, password, first_name, last_name) VALUES
 ('johndoe@example.com', 'encrypted_password', 'John','Doe');
 
 
-DROP TABLE IF EXISTS user_profile;
-CREATE TABLE user_profile (
+CREATE TABLE IF NOT EXISTS user_profile (
     id BIGINT NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
     userRole VARCHAR(255),
@@ -31,8 +29,8 @@ CREATE TABLE user_profile (
     emailNotification BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id) REFERENCES users(id)
 );
-DROP TABLE IF EXISTS user_credit_card;
-CREATE TABLE user_credit_card (
+
+CREATE TABLE IF NOT EXISTS user_credit_card (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,  -- Changed from userId to user_id to match foreign key reference
     card_number VARCHAR(255),
@@ -46,7 +44,7 @@ CREATE TABLE user_credit_card (
 
 
    
-CREATE TABLE userPreferences (
+CREATE TABLE IF NOT EXISTS userPreferences (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     userId BIGINT NOT NULL,
     mealPreference VARCHAR(255),

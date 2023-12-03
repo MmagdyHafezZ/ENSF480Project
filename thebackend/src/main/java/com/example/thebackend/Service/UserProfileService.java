@@ -40,6 +40,7 @@ public class UserProfileService {
         userProfile.setEmail(dto.getEmail());
         userProfile.setPhoneNumber(dto.getPhoneNumber());
         userProfile.setUser(user);
+
         return userProfileRepository.save(userProfile);
     }
 
