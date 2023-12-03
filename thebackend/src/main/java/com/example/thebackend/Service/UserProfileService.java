@@ -1,5 +1,7 @@
 package com.example.thebackend.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,10 @@ public class UserProfileService {
 
     @Autowired
     private UserRepository userRepository;
+
+    public List<UserProfile> getUsers(){
+        return userProfileRepository.findAll();
+    }    
 
     public UserProfile addOrUpdateUserProfile(UserProfileDTO dto) {
         long userId = dto.getId();

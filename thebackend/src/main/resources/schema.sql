@@ -59,6 +59,18 @@ CREATE TABLE
     PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `crew`;
+
+CREATE TABLE    
+    IF NOT EXISTS `crew` (
+    `id`                            BIGINT NOT NULL AUTO_INCREMENT,
+    `pilot`                         VARCHAR(50) NOT NULL,
+    `copilot`                       VARCHAR(50) NOT NULL,
+    `leadflightattendant`           VARCHAR(50) NOT NULL,
+    `assistantflightattendant`      VARCHAR(50) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE 
     IF NOT EXISTS `flightlist` (
     `id`                BIGINT NOT NULL AUTO_INCREMENT,
@@ -71,6 +83,8 @@ CREATE TABLE
     `returntime`        VARCHAR(50) NOT NULL,
     `model`             VARCHAR(50) NOT NULL,
     `modelid`           VARCHAR(10) NOT NULL,
+    `crew`            BIGINT NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`searchbookingid`) REFERENCES `searchbooking`(`id`)
+    FOREIGN KEY (`searchbookingid`) REFERENCES `searchbooking`(`id`),
+    FOREIGN KEY (`crew`) REFERENCES `crew`(`id`)
 );

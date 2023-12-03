@@ -1,7 +1,6 @@
 import SystemAdminHeader from "./SystemAdminHeader";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import {
   Table,
@@ -16,7 +15,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  InputLabel,
+  Typography,
 } from "@mui/material";
 
 const SystemAdmin = () => {
@@ -39,8 +38,16 @@ const SystemAdmin = () => {
     iatadest: "",
     model: "",
     modelid: "",
+    crew: {
+      id: "",
+      pilot: "",
+      copilot: "",
+      leadFlightAttendant: "",
+      assistantFlightAttendant: "",
+    }
   });
   const [searchDate, setSearchDate] = useState("");
+  const [searchId, setSearchId] = useState("");
   const [searchedFlights, setSearchedFlights] = useState([]);
   const [searchClicked, setSearchClicked] = useState(false);
   const [admin, setAdmin] = useState(localStorage.getItem("admin") || false);
@@ -66,6 +73,7 @@ const SystemAdmin = () => {
           iatadest: apiFlight.iatadest,
           model: apiFlight.model,
           modelid: apiFlight.modelid,
+          crew: apiFlight.crew,
         }));
 
         setFlightsData(formattedData);
@@ -80,11 +88,25 @@ const SystemAdmin = () => {
       setSearchClicked(false);
       setSearchedFlights([]);
     } else {
-      const formattedSearchDate = format(searchDate, "yyyy-MM-dd");
+      const parsedDate = new Date(searchDate);
+      const formattedSearchDate = parsedDate.toISOString().split('T')[0];
+      console.log(formattedSearchDate);
       const results = flightsData.filter(
-        (flight) => flight.departdate === formattedSearchDate,
+        (flight) => new Date(flight.departdate).toISOString().split('T')[0] === formattedSearchDate,
       );
       setSearchedFlights(results);
+      setSearchClicked(true);
+    }
+  };
+
+  const handleSearchId = () => {
+    if (!searchId) {
+      setSearchClicked(false);
+      setSearchedFlights([]);
+    } else { 
+      const result = flightsData.filter((flight) => flight.id === searchId);
+      console.log(result);
+      setSearchedFlights(result);
       setSearchClicked(true);
     }
   };
@@ -115,7 +137,7 @@ const SystemAdmin = () => {
     const flightToRemove = flightsData.find((flight) => flight.id === flightId);
     if (flightToRemove) {
       axios
-        .delete(`http://localhost:8080/deleteFlight/${flightId}`)
+        .delete(`http://localhost:8080/deleteFlightList/${flightId}`)
         .then(() => {
           // Assuming the server successfully deletes the flight, update the state
           setFlightsData((prevFlightsData) =>
@@ -147,6 +169,7 @@ const SystemAdmin = () => {
           iatadest: selectedFlight.iatadest,
           model: selectedFlight.model,
           modelid: selectedFlight.modelid,
+          crew: selectedFlight.crew,
         },
       );
 
@@ -181,10 +204,12 @@ const SystemAdmin = () => {
 
   const handleAddNewFlight = async () => {
     try {
+      console.log(newFlightDetails)
       const response = await axios.post(
         "http://localhost:8080/postFlightList",
         newFlightDetails,
       );
+      console.log(response.data);
 
       const newFlight = {
         id: response.data.id.toString(),
@@ -204,6 +229,13 @@ const SystemAdmin = () => {
         returntime: response.data.returntime,
         model: response.data.model,
         modelid: response.data.modelid,
+        crew: {
+          id: response.data.crew.id,
+          pilot: "",
+          copilot: "",
+          leadFlightAttendant: "",
+          assistantFlightAttendant: "",
+        }
       };
 
       // Update the state with the new flight details
@@ -222,14 +254,30 @@ const SystemAdmin = () => {
     }
   };
 
+  const handleCrewInputChange = (event) => {
+    const { name, value } = event.target;
+    setSelectedFlight((prevFlight) => ({
+      ...prevFlight,
+      crew: {
+        ...prevFlight.crew,
+        [name]: value,
+      },
+    }));
+  };
+
   return (
     <div>
+      <div>
       <SystemAdminHeader
         searchDate={searchDate}
         setSearchDate={setSearchDate}
+        searchId={searchId}
+        setSearchId={setSearchId}
         handleSearchDate={handleSearchDate}
+        handleSearchId={handleSearchId}
         handleAddFlight={handleAddFlight}
       />
+      </div>
       {searchedFlights.length > 0 ? (
         <div>
           <h2>Search Results</h2>
@@ -259,8 +307,15 @@ const SystemAdmin = () => {
                     <TableCell>{flight.returntime}</TableCell>
                     <TableCell>{flight.iataorigin}</TableCell>
                     <TableCell>{flight.iatadest}</TableCell>
-                    <TableCell>{flight.crew}</TableCell>
-                    <TableCell>{flight.model}</TableCell>
+                    <TableCell>
+                    <Typography style={{ whiteSpace: 'pre-line' }}>
+                      {"Pilot: " + flight.crew.pilot + "\n" +
+                      "Copilot: " + flight.crew.copilot + "\n" +
+                      "Lead Flight Attendant: " + flight.crew.leadFlightAttendant + "\n" +
+                      "Assistant Flight Attendant: " + flight.crew.assistantFlightAttendant}
+                    </Typography>
+                    </TableCell>
+                    <TableCell>{flight.model + " " + flight.modelid}</TableCell>
                     <TableCell>
                       <Button onClick={() => handleModifyFlight(flight.id)}>
                         Modify
@@ -311,7 +366,14 @@ const SystemAdmin = () => {
                       <TableCell>{flight.returntime}</TableCell>
                       <TableCell>{flight.iataorigin}</TableCell>
                       <TableCell>{flight.iatadest}</TableCell>
-                      <TableCell>{flight.crew}</TableCell>
+                      <TableCell>
+                      <Typography style={{ whiteSpace: 'pre-line' }}>
+                        {"Pilot: " + flight.crew.pilot + "\n" +
+                        "Copilot: " + flight.crew.copilot + "\n" +
+                        "Lead Flight Attendant: " + flight.crew.leadFlightAttendant + "\n" +
+                        "Assistant Flight Attendant: " + flight.crew.assistantFlightAttendant}
+                      </Typography>
+                      </TableCell>
                       <TableCell>
                         {flight.model + " " + flight.modelid}
                       </TableCell>
@@ -513,6 +575,46 @@ const SystemAdmin = () => {
                   value={selectedFlight.modelid}
                   onChange={handleInputChange}
                   placeholder="Enter model id"
+                />
+              </div>
+              <div>
+                <TextField
+                  label="Pilot"
+                  type="text"
+                  name="pilot"
+                  value={selectedFlight.crew.pilot}
+                  onChange={handleCrewInputChange}
+                  placeholder="Enter pilot"
+                />
+              </div>
+              <div>
+                <TextField
+                  label="Copilot"
+                  type="text"
+                  name="copilot"
+                  value={selectedFlight.crew.copilot}
+                  onChange={handleCrewInputChange}
+                  placeholder="Enter copilot"
+                />
+              </div>
+              <div>
+                <TextField
+                  label="Lead Flight Attendant"
+                  type="text"
+                  name="leadFlightAttendant"
+                  value={selectedFlight.crew.leadFlightAttendant}
+                  onChange={handleCrewInputChange}
+                  placeholder="Enter Lead Flight Attendant"
+                />
+              </div>
+              <div>
+                <TextField
+                  label="Assistant Flight Attendant"
+                  type="text"
+                  name="assistantFlightAttendant"
+                  value={selectedFlight.crew.assistantFlightAttendant}
+                  onChange={handleCrewInputChange}
+                  placeholder="Enter Assistant Flight Attendant"
                 />
               </div>
               <Button
