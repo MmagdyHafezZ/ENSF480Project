@@ -39,6 +39,9 @@ public class Flights {
     @Column(name = "ComfortPrice")
     private int comfortPrice;
 
+    @Column(name = "PlaneType")
+    private Character planeType;
+
     // Getters and Setters
     // id
     public Long getId() { return id; }
@@ -79,6 +82,12 @@ public class Flights {
     // ComfortPrice
     public int getComfortPrice() { return comfortPrice; }
     public void setComfortPrice(int ComfortPrice) { this.comfortPrice = ComfortPrice; }
+    public Character getPlaneType() {
+        return planeType;
+    }
+    public void setPlaneType(Character planeType) {
+        this.planeType = planeType;
+    }
     
 
 }

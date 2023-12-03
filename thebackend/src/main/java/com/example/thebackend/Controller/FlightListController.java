@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.thebackend.Entity.FlightListEntity;
-import com.example.thebackend.Entity.ManageBookingEntity;
 import com.example.thebackend.Service.FlightListService;
 
 /**
