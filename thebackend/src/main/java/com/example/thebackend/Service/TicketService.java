@@ -62,9 +62,6 @@ public class TicketService {
                 + "Flight ID: " + uniqueIdentifier + "\n"+
                 "FROM: " + flightDetails.getiata1() + "\n" +
                 "TO: " + flightDetails.getiata2() + "\n" +         
-                "\n departure:" + flightDetails.getDeparture() +
-                "\n arrival: " + flightDetails.getArrival() +
-                "\n flightTime: " + flightDetails.getFlightTime() +
                 "\n balancePaid: " + balancePaidStr +
                 "\n currentbalance: " + currentbalanceStr + "\n", 
                 pngData, 
