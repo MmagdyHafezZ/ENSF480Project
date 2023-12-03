@@ -30,7 +30,6 @@ const PaymentForm = () => {
   );
   const [balance, setBalance] = useState(null);
   const [paymentIsSuccessful, setPaymentIsSuccessful] = useState(false);
-  const [discountAmount, setDiscountAmount] = useState(0);
   
 
   useEffect(() => {
@@ -183,20 +182,19 @@ const PaymentForm = () => {
   const RequestDiscountCode = async (discountCode) => {
     try {
       const discountResponse = await axios.get(
-        `http://localhost:8080/api/user/getPromo/${userId}`,
-        { params: { userId: userProfile.id } } // Send the user's ID as a parameter
-        );
-        if (response.data.valid) {
-          setDiscountAmount(response.data.amount); // Assuming the API returns an object with 'valid' and 'amount' properties
-          alert("Discount code applied successfully!");
-        } else {
-          alert("Invalid discount code.");
-        }
-      } catch (error) {
-        console.error("Error fetching discount code:", error);
-        alert("There was a problem fetching the discount code.");
+        `http://localhost:8080/api/user/getPromo/${userId}`
+      );
+      console.log(discountResponse);
+      if (discountResponse.data) {
+        setDiscountCode(discountResponse.data);
+        alert("Discount Code Applied");
+      } else {
+        alert("Invalid Discount Code");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching discount code:", error);
+    }
+  };
 
   return (
     <>
