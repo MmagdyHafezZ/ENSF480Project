@@ -21,7 +21,8 @@ public class TicketService {
 
     public void generateAndSendTicket(String userEmail, FlightsDetails flightDetails, Integer balancePaid, Integer currentbalance) {
         try {
-            String uniqueIdentifier = UUID.randomUUID().toString();
+            String uniqueIdentifier = flightDetails != null && flightDetails.getFlightId() != null ? 
+                                      flightDetails.getFlightId() : UUID.randomUUID().toString();
             String baseUrl = "http://localhost:5173/ticket-QR";
 
             // Check for null values in flightDetails and handle accordingly
@@ -58,10 +59,10 @@ public class TicketService {
                 + "Flight ID: " + uniqueIdentifier + "\n"+
                 "FROM: " + flightDetails.getiata1() + "\n" +
                 "TO: " + flightDetails.getiata2() + "\n" +         
-                "\n departure:" + departure +
-                "\n arrival: " + arrival + 
-                "\n flightTime: " + flightTime + 
-                "\n balancePaid: " + balancePaidStr + 
+                "\n departure:" + flightDetails.getDeparture() +
+                "\n arrival: " + flightDetails.getArrival() +
+                "\n flightTime: " + flightDetails.getFlightTime() +
+                "\n balancePaid: " + balancePaidStr +
                 "\n currentbalance: " + currentbalanceStr + "\n", 
                 pngData, 
                 "ticket.png"

@@ -261,11 +261,7 @@ const TicketDetails = () => {
                   <span className="price">${price} CAD</span>
                 </div>
               </div>
-              <button
-                disabled={!isSeatSelectionComplete}
-                onClick={handleNavigation}
-                className="ticket-next-button"
-              >
+              <button onClick={handleNavigation} className="ticket-next-button">
                 Next
               </button>
             </div>
