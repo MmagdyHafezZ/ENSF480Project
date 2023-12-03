@@ -69,6 +69,7 @@ const PaymentForm = () => {
   const handleLoyaltyChange = (event, newValue) => {
     setLoyaltyPoints(newValue);
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -83,6 +84,8 @@ const PaymentForm = () => {
           `http://localhost:8080/api/user/GetBalance/${userId}`
         );
         const currentBalance = balanceResponse.data;
+
+        console.log(currentBalance);
 
         if (currentBalance < finalAmount) {
           alert("Insufficient Balance");
