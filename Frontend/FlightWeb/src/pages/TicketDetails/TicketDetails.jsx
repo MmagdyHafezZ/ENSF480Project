@@ -34,6 +34,9 @@ const TicketDetails = () => {
       fetchAndUpdateSeatData();
     }
   }, []);
+  const [mealPreference, setMealPreference] = useState(
+    localStorage.getItem("mealPreference") || ""
+  );
 
   console.log(
     isLoggedInContext
@@ -233,6 +236,24 @@ const TicketDetails = () => {
                 ) : (
                   <p>No seats selected</p>
                 )}
+              </div>
+              <div className="meal-preference-container">
+                <h3>Meal Preference:</h3>
+                <select
+                  value={mealPreference}
+                  onChange={(e) =>
+                    setMealPreference(e.target.value) &&
+                    localStorage.setItem("mealPreference", e.target.value)
+                  }
+                  className="meal-preference-select"
+                >
+                  <option value="">Select a meal</option>
+                  <option value="Standard Meal">Standard Meal</option>
+                  <option value="Vegetarian">Vegetarian</option>
+                  <option value="Vegan">Vegan</option>
+                  <option value="Gluten-Free">Gluten-Free</option>
+                  <option value="Kosher">Kosher</option>
+                </select>
               </div>
               <div className="selected-seats-container price">
                 <div className="total-price">
