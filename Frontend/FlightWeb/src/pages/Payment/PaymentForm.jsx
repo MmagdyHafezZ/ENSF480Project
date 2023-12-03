@@ -61,80 +61,79 @@ const PaymentForm = () => {
   const handleLoyaltyChange = (event, newValue) => {
     setLoyaltyPoints(newValue);
   };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (totalAmount === 0) {
-      return;
-    }
-    const userId = parseInt(localStorage.getItem("id"));
 
+    const userId = parseInt(localStorage.getItem("id"));
     const totalDiscount =
       loyaltyPoints + (discountCode ? parseInt(discountCode) : 0);
     const finalAmount = totalAmount - totalDiscount;
-    try {
-      const addbalance = await axios.post(
-        `http://localhost:8080/api/user/SetBalance/${userId}`,
-        { balance: finalAmount }, // Send the data as JSON with 'balance' field
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const balanceResponse = await axios.get(
-        `http://localhost:8080/api/user/GetBalance/${userId}`
-      );
-      const currentBalance = balanceResponse.data;
 
-      if (currentBalance < finalAmount) {
-        alert("Insufficient Balance");
-      } else {
-        const updatedBalance = currentBalance - finalAmount;
-
-        const updateResponse = await axios.post(
-          `http://localhost:8080/api/user/SetBalance/${userId}`,
-          { balance: updatedBalance }, // Send the data as JSON with 'balance' field
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        setBalance(updateResponse.data);
-        alert("Payment Successful new balance is " + updatedBalance);
-        setPaymentIsSuccessful(true);
-      }
-    } catch (error) {
-      console.error("Error during payment process:", error);
-      alert("Error during payment process");
-    }
-    console.log("payment", paymentIsSuccessful);
-    if (paymentIsSuccessful && cart.type) {
-      // Add the membership to the user's profile
-      const membershipType = cart.type;
-      console.log("membership", membershipType);
+    const handlePaymentAndSubscription = async () => {
       try {
-        const updateResponse = await axios.put(
-          `http://localhost:8080/api/user/UpdateMembership/${userId}`,
-          { membershipType: membershipType }, // Send the data as JSON with 'membershipType' field
-
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
+        // Update balance and check if the user has sufficient balance
+        const balanceResponse = await axios.get(
+          `http://localhost:8080/api/user/GetBalance/${userId}`
         );
-        SendEmail();
-        setUserProfile(updateResponse.data);
+        const currentBalance = balanceResponse.data;
+
+        if (currentBalance < finalAmount) {
+          alert("Insufficient Balance");
+          return;
+        }
+
+        const updatedBalance = currentBalance - finalAmount;
+        await axios.post(
+          `http://localhost:8080/api/user/SetBalance/${userId}`,
+          { balance: updatedBalance },
+          { headers: { "Content-Type": "application/json" } }
+        );
+
+        setBalance(updatedBalance);
+        alert("Payment Successful. New balance is " + updatedBalance);
+        setPaymentIsSuccessful(true);
+
+        // Add the membership to the user's profile
+        if (cart && cart.type) {
+          const membershipType = cart.type;
+          await axios.put(
+            `http://localhost:8080/api/user/UpdateMembership/${userId}`,
+            { membershipType },
+            { headers: { "Content-Type": "application/json" } }
+          );
+        }
+        alert("Membership updated successfully");
       } catch (error) {
-        console.error("Error updating membership:", error);
+        console.error("Error during payment process:", error);
+        alert("Error during payment process");
+        return;
       }
-    } else if (paymentIsSuccessful && !cart) {
-      SendEmail();
+    };
+
+    const sendPaymentEmail = async () => {
+      try {
+        await axios.post(`http://localhost:8080/generateAndSendTicket`, {
+          userEmail: userProfile.email || userProfile.user.email,
+          flightDetails: flightDetails,
+          balancePaid: totalAmount,
+          currentBalance: balance,
+        });
+        alert("Email sent successfully");
+      } catch (error) {
+        console.error("Error sending email:", error);
+      }
+    };
+
+    if (cart && Object.keys(cart).length > 0) {
+      // If cart has items, handle payment and update subscription
+      await handlePaymentAndSubscription();
+      await sendPaymentEmail();
+    } else {
+      // If cart is empty, just send email
+      await sendPaymentEmail();
     }
   };
+
   const SendEmail = async () => {
     try {
       const emailResponse = await axios.post(
@@ -149,6 +148,23 @@ const PaymentForm = () => {
       console.log(emailResponse);
     } catch (error) {
       console.error("Error sending email:", error);
+    }
+  };
+
+  const RequestDiscountCode = async (discountCode) => {
+    try {
+      const discountResponse = await axios.get(
+        `http://localhost:8080/api/user/getPromo/${userId}`
+      );
+      console.log(discountResponse);
+      if (discountResponse.data) {
+        setDiscountCode(discountResponse.data);
+        alert("Discount Code Applied");
+      } else {
+        alert("Invalid Discount Code");
+      }
+    } catch (error) {
+      console.error("Error fetching discount code:", error);
     }
   };
 
@@ -196,7 +212,7 @@ const PaymentForm = () => {
                   <TextField label="Address" fullWidth variant="outlined" />
                 </Grid>
                 {userProfile &&
-                  ["Bronze Member", "Silver Member", "Gold Member"].includes(
+                  ["Bronze", "Silver", "Gold"].includes(
                     userProfile.membershipType
                   ) && (
                     <>
@@ -236,7 +252,10 @@ const PaymentForm = () => {
                           fullWidth
                           variant="outlined"
                           value={discountCode}
-                          onChange={(e) => setDiscountCode(e.target.value)}
+                          onChange={(e) =>
+                            setDiscountCode(e.target.value) &&
+                            RequestDiscountCode(e.target.value)
+                          }
                         />
                       </Grid>
                     </>
@@ -254,7 +273,7 @@ const PaymentForm = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <Box border={1} borderColor="grey.300" p={2} borderRadius={2}>
-                    {cart.price && (
+                    {cart?.price && (
                       <Typography variant="body1">
                         Membership price: ${cart.price}
                       </Typography>
@@ -280,13 +299,45 @@ const PaymentForm = () => {
                         "Gold Member",
                       ].includes(userProfile.membershipType) && (
                         <>
-                          <Typography variant="body1">
-                            Membership Discount Applied: $
-                            {userProfile.membershipDiscount}
-                          </Typography>
-                          <Typography variant="body1">
-                            Final Amount: ${totalAmount - loyaltyPoints}
-                          </Typography>
+                          <Grid item xs={12}>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={useLoyaltyPoints}
+                                  onChange={(e) =>
+                                    setUseLoyaltyPoints(e.target.checked)
+                                  }
+                                />
+                              }
+                              label="Use Loyalty Points"
+                            />
+                            <Typography variant="body2" gutterBottom>
+                              {`You have ${totalLoyaltyPoints} loyalty points`}
+                            </Typography>
+
+                            {useLoyaltyPoints && (
+                              <Slider
+                                value={loyaltyPoints}
+                                onChange={handleLoyaltyChange}
+                                aria-labelledby="loyalty-slider"
+                                valueLabelDisplay="auto"
+                                max={
+                                  totalLoyaltyPoints > totalAmount
+                                    ? totalAmount
+                                    : totalLoyaltyPoints
+                                }
+                              />
+                            )}
+                          </Grid>
+                          <Grid item xs={12}>
+                            <TextField
+                              label="Discount Code"
+                              fullWidth
+                              variant="outlined"
+                              value={discountCode}
+                              onChange={(e) => setDiscountCode(e.target.value)}
+                            />
+                          </Grid>
                         </>
                       )}
                     {/* Calculate and display final amount after applying loyalty points */}

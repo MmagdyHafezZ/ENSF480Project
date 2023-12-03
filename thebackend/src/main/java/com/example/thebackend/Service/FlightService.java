@@ -42,6 +42,7 @@ public class FlightService {
         dto.setOrdinaryPrice(flight.getOrdinaryPrice());
         dto.setBusinessPrice(flight.getBusinessPrice());
         dto.setComfortPrice(flight.getComfortPrice());
+        dto.setPlaneType(flight.getPlaneType());
         
         return dto;
     }

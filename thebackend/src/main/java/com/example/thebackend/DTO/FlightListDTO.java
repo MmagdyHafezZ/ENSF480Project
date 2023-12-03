@@ -12,6 +12,7 @@ public class FlightListDTO {
     private int ordinaryPrice;
     private int businessPrice;
     private int comfortPrice;
+    private Character planeType;
 
     // Getters and Setters
     // id
@@ -53,6 +54,12 @@ public class FlightListDTO {
     // comfortPrice
     public int getComfortPrice() { return comfortPrice; }
     public void setComfortPrice(int comfortPrice) { this.comfortPrice = comfortPrice; }
+    public void setPlaneType(Character planeType) {
+        this.planeType = planeType;
+    }
+    public Character getPlaneType() {
+        return planeType;
+    }
 
 
     

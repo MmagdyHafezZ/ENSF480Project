@@ -1,24 +1,42 @@
-// Helper function to update seat map data with backend data
 import axios from "axios";
-const updateSeatMapData = async (originalSeatMap) => {
+
+const updateSeatMapData = async (originalSeatMap, flightId) => {
   try {
-    // Replace with your actual API endpoint
-    const response = await axios.get("https://api.example.com/seats");
+    // Use the new API endpoint with the flightId
+    const response = await axios.get(
+      `http://localhost:8080/getSeatsByFlightId/flightId=${flightId}`
+    );
     const apiData = response.data;
 
     // Clone the original seat map to avoid mutating the original data
     const updatedSeatMap = { ...originalSeatMap };
 
-    // Update each seat with data from the API
-    for (const seatId in updatedSeatMap) {
-      if (apiData[seatId]) {
+    // Iterate over the API data and update the seat map
+    apiData.forEach((seat) => {
+      const seatId = seat.seatID;
+
+      // If the seat exists in the original map, update its details
+      if (updatedSeatMap[seatId]) {
         updatedSeatMap[seatId] = {
           ...updatedSeatMap[seatId],
-          available: apiData[seatId].available,
-          price: apiData[seatId].price,
+          available: seat.isAvailable,
+          // Use API price if it's different from the original, else keep the original
+          price:
+            updatedSeatMap[seatId].price !==
+            seat.flight[`${seat.seatType}Price`]
+              ? seat.flight[`${seat.seatType}Price`]
+              : updatedSeatMap[seatId].price,
+          type: seat.seatType, // Update the seat type if necessary
+        };
+      } else {
+        // If the seat is not in the original map, add it
+        updatedSeatMap[seatId] = {
+          available: seat.isAvailable,
+          price: seat.flight[`${seat.seatType}Price`],
+          type: seat.seatType,
         };
       }
-    }
+    });
 
     return updatedSeatMap;
   } catch (error) {
