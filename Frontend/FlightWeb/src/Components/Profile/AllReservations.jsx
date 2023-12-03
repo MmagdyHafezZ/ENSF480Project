@@ -51,6 +51,8 @@ const AllReservations = () => {
       );
       setReservations(response.data);
     } catch (error) {
+
+      console.error("Error fetching reservations:", error);
       setReservations([
         { id: 1, flight: "New York to London", date: "2023-01-15" },
         { id: 2, flight: "Paris to Tokyo", date: "2023-02-20" },
