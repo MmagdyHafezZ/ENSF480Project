@@ -10,6 +10,11 @@ import {
   CardContent,
   CardActions,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText
 } from "@mui/material";
 import Flightoffer from "../../assets/FlightOffer.jpg";
 import Hoteloffer from "../../assets/Hoteloffer.jpg";
@@ -25,6 +30,8 @@ import Navbar from "../Navbar/Navbar";
 const OffersPage = () => {
   const [userID, setUserID] = useState(parseInt(localStorage.getItem("id")));
   const [promotions, setPromotions] = useState([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState(null);
 
   useEffect(() => {
     axios
@@ -98,6 +105,19 @@ const OffersPage = () => {
     },
   ];
 
+  const handleClaimOffer = (offerID) => {
+    const offer = promotions.find(promo => ((promo.id % 9) === 0 ? 9 : promo.id % 9) === offerID);
+    if(offer) {
+      setSelectedOffer(offer);
+      setIsDialogOpen(true);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedOffer(null);
+  };
+
   return (
     <>
       <Navbar />
@@ -128,13 +148,35 @@ const OffersPage = () => {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small">Claim Offer</Button>
+                  <Button 
+                    size="small"
+                    onClick={() => handleClaimOffer(offer.id)}
+                  >
+                    Claim Offer
+                  </Button>
                 </CardActions>
               </Card>
             </Grid>
           ))}
         </Grid>
       </Container>
+
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+      >
+        <DialogTitle>
+          Claim Your Offer!
+        </DialogTitle>
+        <DialogContent>
+          {selectedOffer && (
+            <DialogContentText>
+              Here is your promo code for the {selectedOffer.promo_offer}: <strong>{selectedOffer.promocode}</strong>
+            </DialogContentText>
+          )}
+        </DialogContent>
+
+      </Dialog>
     </>
   );
 };

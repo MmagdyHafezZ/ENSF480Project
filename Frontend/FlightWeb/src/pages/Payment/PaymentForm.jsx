@@ -30,6 +30,7 @@ const PaymentForm = () => {
   );
   const [balance, setBalance] = useState(null);
   const [paymentIsSuccessful, setPaymentIsSuccessful] = useState(false);
+  
 
   useEffect(() => {
     // Replace 'userId' with the actual user ID
@@ -73,6 +74,7 @@ const PaymentForm = () => {
   const handleLoyaltyChange = (event, newValue) => {
     setLoyaltyPoints(newValue);
   };
+
   const bookFlight = async () => {
     try {
       const bookingDetails = {
@@ -94,6 +96,7 @@ const PaymentForm = () => {
     }
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -106,6 +109,7 @@ const PaymentForm = () => {
       `http://localhost:8080/api/user/GetBalance/${userId}`
     );
     const currentBalance = currentBalanceResponse.data;
+
 
     const updatedBalance = currentBalance - finalAmount;
     await axios.post(
