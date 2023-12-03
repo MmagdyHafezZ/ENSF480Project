@@ -12,18 +12,22 @@ import {
   Box,
   Switch,
   Slider,
+  Icon,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import Navbar from "../../Components/Navbar/Navbar";
 import { Send } from "@mui/icons-material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 const PaymentForm = () => {
   const [useLoyaltyPoints, setUseLoyaltyPoints] = useState(false);
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
   const [saveCardDetails, setSaveCardDetails] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState(
+    JSON.parse(localStorage.getItem("userProfile"))
+  );
   const [balance, setBalance] = useState(null);
   const [paymentIsSuccessful, setPaymentIsSuccessful] = useState(false);
 
@@ -44,6 +48,9 @@ const PaymentForm = () => {
 
   const location = useLocation();
   const { price, flightDetails, selectedSeats, cart } = location.state || {}; // Extracting price from the state <----FlightDetails should have the flight data, selectedSeats is the userSelectedSeats
+  console.log("price", price);
+  console.log("flightDetails", flightDetails);
+  console.log("selectedSeats", selectedSeats);
   // Calculate the price from the cart
   console.log("cart", cart);
   const cartPrice = cart
@@ -68,7 +75,6 @@ const PaymentForm = () => {
     const totalDiscount =
       loyaltyPoints + (discountCode ? parseInt(discountCode) : 0);
     const finalAmount = totalAmount - totalDiscount;
-
     const handlePaymentAndSubscription = async () => {
       try {
         // Update balance and check if the user has sufficient balance
@@ -92,7 +98,10 @@ const PaymentForm = () => {
         setBalance(updatedBalance);
         alert("Payment Successful. New balance is " + updatedBalance);
         setPaymentIsSuccessful(true);
-
+        if (paymentIsSuccessful) {
+          await bookFlight();
+          sendPaymentEmail;
+        }
         // Add the membership to the user's profile
         if (cart && cart.type) {
           const membershipType = cart.type;
@@ -107,6 +116,24 @@ const PaymentForm = () => {
         console.error("Error during payment process:", error);
         alert("Error during payment process");
         return;
+      }
+    };
+    const bookFlight = async () => {
+      try {
+        const bookingDetails = {
+          passenger: userProfile.name, // Assuming 'name' is a field in userProfile
+          origin: flightDetails.origin, // Assuming 'origin' is a field in flightDetails
+          destination: flightDetails.destination, // Assuming 'destination' is a field in flightDetails
+          confirm: "Yes", // Example value
+          seat: selectedSeats.join(", "), // Assuming selectedSeats is an array of seat numbers
+          meal: localStorage.getItem("mealPreference"),
+        };
+
+        await axios.post("http://localhost:8080/postBooking", bookingDetails);
+        alert("Flight booking successful");
+      } catch (error) {
+        console.error("Error booking the flight:", error);
+        alert("Error during flight booking");
       }
     };
 
@@ -252,10 +279,10 @@ const PaymentForm = () => {
                           fullWidth
                           variant="outlined"
                           value={discountCode}
-                          onChange={(e) =>
-                            setDiscountCode(e.target.value) &&
-                            RequestDiscountCode(e.target.value)
-                          }
+                          onChange={(e) => setDiscountCode(e.target.value)}
+                        />
+                        <ArrowUpwardIcon
+                          onClick={() => RequestDiscountCode(discountCode)}
                         />
                       </Grid>
                     </>

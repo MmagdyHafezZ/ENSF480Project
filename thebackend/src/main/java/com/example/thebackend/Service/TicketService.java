@@ -53,7 +53,12 @@ public class TicketService {
             emailService.sendEmailWithAttachment(
                 userEmail, 
                 "Your E-Ticket", 
-                "-Scan the QR code to view your flight details- \n departure: " + departure + 
+                "-Scan the QR code to view your flight details-\n"
+                + "Your flight details are as follows:\n"
+                + "Flight ID: " + uniqueIdentifier + "\n"+
+                "FROM: " + flightDetails.getiata1() + "\n" +
+                "TO: " + flightDetails.getiata2() + "\n" +         
+                "\n departure:" + departure +
                 "\n arrival: " + arrival + 
                 "\n flightTime: " + flightTime + 
                 "\n balancePaid: " + balancePaidStr + 
