@@ -25,7 +25,6 @@ import Navbar from "../Navbar/Navbar";
 const OffersPage = () => {
   const [userID, setUserID] = useState(parseInt(localStorage.getItem("id")));
   const [promotions, setPromotions] = useState([]);
-  console.log(userID)
 
   useEffect(() => {
     axios
@@ -37,10 +36,6 @@ const OffersPage = () => {
         console.error("Error fetching data: ", error);
       })
   }, []);
-
-  useEffect(() => {
-    console.log(promotions); // This will log the updated state
-  }, [promotions]);
 
   // Example offers data
   const offers = [
