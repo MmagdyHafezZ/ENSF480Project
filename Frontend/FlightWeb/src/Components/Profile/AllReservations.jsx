@@ -16,10 +16,11 @@ import {
   DialogActions,
 } from "@mui/material";
 import Navbar from "../Navbar/Navbar";
-import axios from "axios"; // Make sure to install axios if not already installed
+import axios from "axios";
 
 const AllReservations = () => {
   const [reservations, setReservations] = useState([]);
+
   const [selectedReservation, setSelectedReservation] = useState(null);
   const [openCancelDialog, setOpenCancelDialog] = useState(false);
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
@@ -45,20 +46,24 @@ const AllReservations = () => {
 
   const fetchReservations = async () => {
     try {
-      // Replace with your API endpoint
       const response = await axios.get(
-        "http://localhost:8080/api/reservations"
+        `http://localhost:8080/getBooking/${userid}`
       );
-      setReservations(response.data);
+
+      // Check if response.data is an array or a single object and set it appropriately
+      if (Array.isArray(response.data)) {
+        setReservations(response.data);
+      } else if (response.data && typeof response.data === "object") {
+        setReservations([response.data]);
+      } else {
+        setReservations([]);
+      }
     } catch (error) {
 
       console.error("Error fetching reservations:", error);
-      setReservations([
-        { id: 1, flight: "New York to London", date: "2023-01-15" },
-        { id: 2, flight: "Paris to Tokyo", date: "2023-02-20" },
-      ]);
-      console.log(reservations);
-      // console.error("Error fetching reservations:", error);
+
+      setReservations([]);
+
     }
   };
 
@@ -114,18 +119,24 @@ const AllReservations = () => {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Flight</TableCell>
-                <TableCell align="right">Date</TableCell>
+                <TableCell>Passenger</TableCell>
+                <TableCell>Origin</TableCell>
+                <TableCell>Destination</TableCell>
+                <TableCell>Seat</TableCell>
+                <TableCell>Meal</TableCell>
                 <TableCell align="right">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {reservations.map((row) => (
-                <TableRow key={row.id}>
+              {reservations.map((row, index) => (
+                <TableRow key={row.id || index}>
                   <TableCell component="th" scope="row">
-                    {row.flight}
+                    {row.passenger}
                   </TableCell>
-                  <TableCell align="right">{row.date}</TableCell>
+                  <TableCell>{row.origin}</TableCell>
+                  <TableCell>{row.destination}</TableCell>
+                  <TableCell>{row.seat}</TableCell>
+                  <TableCell>{row.meal}</TableCell>
                   <TableCell align="right">
                     <Button
                       variant="contained"

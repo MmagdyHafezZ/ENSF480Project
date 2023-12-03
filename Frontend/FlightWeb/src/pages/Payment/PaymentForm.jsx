@@ -43,6 +43,7 @@ const PaymentForm = () => {
       })
       .catch((error) => {
         console.error("Error fetching user profile:", error);
+        alert("Error fetching user profile");
       });
   }, []);
 
@@ -61,13 +62,38 @@ const PaymentForm = () => {
 
   // Sum the price and cartPrice
   const totalAmount = (price || 0) + cartPrice;
-  console.log(selectedSeats);
+  const seats = Object.keys(selectedSeats).filter(
+    (seat) => selectedSeats[seat]
+  );
+  const stringSeats = seats.join(",");
+  console.log("seats", seats);
   // Mock data - replace with actual data from the user's profile
   const totalLoyaltyPoints =
-    parseInt(localStorage.getItem("loyaltyPoints")) || 200;
+    parseInt(localStorage.getItem("loyaltyPoints")) || 0;
   const handleLoyaltyChange = (event, newValue) => {
     setLoyaltyPoints(newValue);
   };
+  const bookFlight = async () => {
+    try {
+      const bookingDetails = {
+        passenger: userProfile.user.first_name, // Assuming 'name' is a field in userProfile
+        origin: flightDetails.iata1, // Assuming 'origin' is a field in flightDetails
+        destination: flightDetails.iata2, // Assuming 'destination' is a field in flightDetails
+        confirm: "Yes", // Example value
+        seat: stringSeats, // Assuming 'selectedSeats' is an array of seat numbers
+        meal: localStorage.getItem("mealPreference"),
+      };
+      console.log("bookingDetails", bookingDetails);
+
+      await axios.post("http://localhost:8080/postBooking", bookingDetails);
+      alert("Flight booking successful");
+      await sendPaymentEmail();
+    } catch (error) {
+      console.error("Error booking the flight:", error);
+      alert("Error during flight booking");
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -75,82 +101,35 @@ const PaymentForm = () => {
     const totalDiscount =
       loyaltyPoints + (discountCode ? parseInt(discountCode) : 0);
     const finalAmount = totalAmount - totalDiscount;
-    const handlePaymentAndSubscription = async () => {
-      try {
-        // Update balance and check if the user has sufficient balance
-        const balanceResponse = await axios.get(
-          `http://localhost:8080/api/user/GetBalance/${userId}`
-        );
-        const currentBalance = balanceResponse.data;
+    console.log("finalAmount", finalAmount);
+    const currentBalanceResponse = await axios.get(
+      `http://localhost:8080/api/user/GetBalance/${userId}`
+    );
+    const currentBalance = currentBalanceResponse.data;
 
-        if (currentBalance < finalAmount) {
-          alert("Insufficient Balance");
-          return;
-        }
+    const updatedBalance = currentBalance - finalAmount;
+    await axios.post(
+      `http://localhost:8080/api/user/SetBalance/${userId}`,
+      { balance: updatedBalance },
+      { headers: { "Content-Type": "application/json" } }
+    );
 
-        const updatedBalance = currentBalance - finalAmount;
-        await axios.post(
-          `http://localhost:8080/api/user/SetBalance/${userId}`,
-          { balance: updatedBalance },
-          { headers: { "Content-Type": "application/json" } }
-        );
+    setBalance(updatedBalance);
+    setPaymentIsSuccessful(true);
 
-        setBalance(updatedBalance);
-        alert("Payment Successful. New balance is " + updatedBalance);
-        setPaymentIsSuccessful(true);
-        if (paymentIsSuccessful) {
-          await bookFlight();
-          sendPaymentEmail;
-        }
-        // Add the membership to the user's profile
-        if (cart && cart.type) {
-          const membershipType = cart.type;
-          await axios.put(
-            `http://localhost:8080/api/user/UpdateMembership/${userId}`,
-            { membershipType },
-            { headers: { "Content-Type": "application/json" } }
-          );
-        }
-        alert("Membership updated successfully");
-      } catch (error) {
-        console.error("Error during payment process:", error);
-        alert("Error during payment process");
-        return;
-      }
-    };
-    const bookFlight = async () => {
-      try {
-        const bookingDetails = {
-          passenger: userProfile.name, // Assuming 'name' is a field in userProfile
-          origin: flightDetails.origin, // Assuming 'origin' is a field in flightDetails
-          destination: flightDetails.destination, // Assuming 'destination' is a field in flightDetails
-          confirm: "Yes", // Example value
-          seat: selectedSeats.join(", "), // Assuming selectedSeats is an array of seat numbers
-          meal: localStorage.getItem("mealPreference"),
-        };
+    if (paymentIsSuccessful) {
+      await bookFlight();
+    }
 
-        await axios.post("http://localhost:8080/postBooking", bookingDetails);
-        alert("Flight booking successful");
-      } catch (error) {
-        console.error("Error booking the flight:", error);
-        alert("Error during flight booking");
-      }
-    };
-
-    const sendPaymentEmail = async () => {
-      try {
-        await axios.post(`http://localhost:8080/generateAndSendTicket`, {
-          userEmail: userProfile.email || userProfile.user.email,
-          flightDetails: flightDetails,
-          balancePaid: totalAmount,
-          currentBalance: balance,
-        });
-        alert("Email sent successfully");
-      } catch (error) {
-        console.error("Error sending email:", error);
-      }
-    };
-
+    if (cart && cart.type) {
+      const membershipType = cart.type;
+      await axios.put(
+        `http://localhost:8080/api/user/UpdateMembership/${userId}`,
+        { membershipType },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      alert("Membership updated successfully");
+    }
     if (cart && Object.keys(cart).length > 0) {
       // If cart has items, handle payment and update subscription
       await handlePaymentAndSubscription();
@@ -158,6 +137,20 @@ const PaymentForm = () => {
     } else {
       // If cart is empty, just send email
       await sendPaymentEmail();
+    }
+  };
+
+  const sendPaymentEmail = async () => {
+    try {
+      await axios.post(`http://localhost:8080/generateAndSendTicket`, {
+        userEmail: userProfile.email || userProfile.user.email,
+        flightDetails: flightDetails,
+        balancePaid: totalAmount,
+        currentBalance: balance,
+      });
+      alert("Email sent successfully");
+    } catch (error) {
+      console.error("Error sending email:", error);
     }
   };
 
