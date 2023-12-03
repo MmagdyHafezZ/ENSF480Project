@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+// import "./planes.css";
+import "./planes.scss";
 import { BsXLg } from "react-icons/bs";
-import "../SeatMaps/planes.scss";
-import { useUserDataContext } from "../../context/UserDataContext";
-
-const MediumPlane = ({ isBooking, flightDetails }) => {
-  const { userFlightData, selectedSeats, setSelectedSeats, setPrice } =
-    useUserDataContext();
+import seatData from "./mp_seatAvailability.json";
+const MediumPlane = ({ isBooking }) => {
+  const [selectedSeats, setSelectedSeats] = useState({});
 
   // Function to handle the click event on seats
   const handleSeatClick = (seatId) => {

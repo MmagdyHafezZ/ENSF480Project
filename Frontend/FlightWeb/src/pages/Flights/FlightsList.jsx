@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserDataContext } from "../../context/UserDataContext";
 import "./flights.scss";
 
-const FlightsList = ({ userFlightData }) => {
+const FlightsList = ({ userFlightData, sendData }) => {
   const navigate = useNavigate();
   const { isLoading, setIsLoading } = useUserDataContext();
   const [filteredFlights, setFilteredFlights] = useState([]);
@@ -56,10 +56,11 @@ const FlightsList = ({ userFlightData }) => {
         flight.iata1 === userFlightData.leaving.iata &&
         flight.iata2 === userFlightData.going.iata &&
         flight.departure_day ===
-          userFlightData.depart.toISOString().split("T")[0]
+          userFlightData.depart.toISOString().split("T")[0] &&
+        flight.flightType === sendData.flightType
       );
     });
-    console.log("Flight detailsss: ", flightDetails);
+    console.log("flightDetails", flightDetails);
 
     if (flightDetails) {
       navigate("/tickets", { state: { flightDetails } });
@@ -94,6 +95,7 @@ const FlightsList = ({ userFlightData }) => {
             ordinaryPrice,
             businessPrice,
             comfortPrice,
+            flightType,
           } = flight;
 
           return (

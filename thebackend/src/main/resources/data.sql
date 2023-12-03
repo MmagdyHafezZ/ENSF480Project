@@ -2405,10 +2405,10 @@ INSERT INTO `airportdata` (`iata`, `city`, `state`, `country`) VALUES
 -- Create the first temporary table for IATA codes
 CREATE TEMPORARY TABLE IATA_Codes1 (iata VARCHAR(3));
 INSERT INTO IATA_Codes1 (iata) VALUES 
-('GRU'), -- Sao Paulo, Brazil
-('BCN'), -- Barcelona, Spain
-('PEK'), -- Beijing, China
-('BOM'); -- Mumbai, India
+-- ('GRU'), -- Sao Paulo, Brazil
+-- ('BCN'), -- Barcelona, Spain
+-- ('PEK'), -- Beijing, China
+-- ('BOM'), -- Mumbai, India
 -- ('CAI'), -- Cairo, Egypt
 -- ('DXB'), -- Dubai, United Arab Emirates
 -- ('MAD'), -- Madrid, Spain
@@ -2424,12 +2424,12 @@ INSERT INTO IATA_Codes1 (iata) VALUES
 -- ('MEX'), -- Mexico City, Mexico
 -- ('MIA'), -- Miami, USA
 -- ('MUC'), -- Munich, Germany
--- ('JFK'), -- New York, USA
+('JFK'), -- New York, USA
 -- ('SFO'), -- San Francisco, USA
 -- ('SYD'), -- Sydney, Australia
 -- ('YYZ'), -- Toronto, Canada
 -- ('ZRH'),-- Zurich, Switzerland
--- ('YYC');
+('YYC');
 
 
 -- Create the second temporary table for IATA codes

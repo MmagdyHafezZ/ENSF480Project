@@ -10,6 +10,7 @@ import ErrorComponent from "../../Components/ErrorPage/ErrorComponent";
 import AirplaneRedirectLoading from "../../Components/LoadingScreens/AirplaneRedirectLogin";
 import AirplaneLoading from "../../Components/LoadingScreens/AirplaneLoading";
 import { useUserDataContext } from "../../context/UserDataContext";
+import updateSeatMapData from "../../utils/updateSeatMapData";
 const TicketDetails = () => {
   // const [flightId, setFlightId] = useState();
   const {
@@ -20,6 +21,22 @@ const TicketDetails = () => {
     setPrice,
     isLoggedInContext,
   } = useUserDataContext();
+  useEffect(() => {
+    const fetchAndUpdateSeatData = async () => {
+      console.log("Flight Details", userFlightData);
+      const updatedSeatData = await updateSeatMapData(
+        {},
+        userFlightData.flightId
+      );
+      setAllSeatData(updatedSeatData);
+    };
+    if (userFlightData && userFlightData.flightId) {
+      fetchAndUpdateSeatData();
+    }
+  }, []);
+  const [mealPreference, setMealPreference] = useState(
+    localStorage.getItem("mealPreference") || ""
+  );
 
   console.log(
     isLoggedInContext
@@ -111,9 +128,7 @@ const TicketDetails = () => {
     Object.keys(selectedSeats).length === userFlightData.travellers;
   // console.log(Object.keys(selectedSeats).length);
   const SeatMapComponent =
-    flightDetails?.details?.aircraft === "Embraer E175-E2"
-      ? SmallPlane
-      : MediumPlane;
+    flightDetails?.planeType === "A" ? SmallPlane : MediumPlane;
   console.log(!flightDetails);
 
   if (isLoading) {
@@ -221,6 +236,24 @@ const TicketDetails = () => {
                 ) : (
                   <p>No seats selected</p>
                 )}
+              </div>
+              <div className="meal-preference-container">
+                <h3>Meal Preference:</h3>
+                <select
+                  value={mealPreference}
+                  onChange={(e) =>
+                    setMealPreference(e.target.value) &&
+                    localStorage.setItem("mealPreference", e.target.value)
+                  }
+                  className="meal-preference-select"
+                >
+                  <option value="">Select a meal</option>
+                  <option value="Standard Meal">Standard Meal</option>
+                  <option value="Vegetarian">Vegetarian</option>
+                  <option value="Vegan">Vegan</option>
+                  <option value="Gluten-Free">Gluten-Free</option>
+                  <option value="Kosher">Kosher</option>
+                </select>
               </div>
               <div className="selected-seats-container price">
                 <div className="total-price">
