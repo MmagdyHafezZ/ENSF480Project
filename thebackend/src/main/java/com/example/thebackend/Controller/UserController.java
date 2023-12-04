@@ -1,7 +1,5 @@
 package com.example.thebackend.Controller;
 
-import java.util.List;
-
 // import org.aspectj.weaver.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,12 +47,6 @@ public class UserController {
     public ResponseEntity<?> getUserProfile(@PathVariable Long id) {
         UserProfile userProfile = userProfileService.getUserProfile(id);
         return ResponseEntity.ok(userProfile);
-    }
-
-    // Get all users
-    @GetMapping(path = "/getUsers")
-    public List<UserProfile> getFlightList(){
-        return userProfileService.getUsers();
     }
 
     // Add/Edit UserCreditCard
