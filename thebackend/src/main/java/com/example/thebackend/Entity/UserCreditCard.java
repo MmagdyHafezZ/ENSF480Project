@@ -16,7 +16,7 @@ public class UserCreditCard {
     private String address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id") // Specify the foreign key column
     private User user;
 
     // Constructors, Getters and Setters

@@ -10,6 +10,8 @@ import com.example.thebackend.Repository.UserRepository;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,8 +71,7 @@ public class AuthService {
         userRepository.save(newUser);
         // set other preferences fields
 
-        promoService.postPromo(newUser);
-
+        promoService.postPromo(newUser.getId());
         return newUser.getId();
 
     }

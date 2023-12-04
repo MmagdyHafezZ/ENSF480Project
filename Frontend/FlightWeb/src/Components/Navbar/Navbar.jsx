@@ -11,6 +11,10 @@ const Navbar = () => {
   const [active, setActive] = useState("navBarMenu");
   const [noBg, addBg] = useState("navBarTwo");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [hasTicketDetails, setHasTicketDetails] = useState(
+    localStorage.getItem("hasTicketDetails") || false
+  );
+
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") || false
   );
@@ -43,6 +47,7 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   const showNavBar = () => {
     if (active === "navBarMenu") {
       setActive("navBarMenu showNavBar");
@@ -84,6 +89,7 @@ const Navbar = () => {
               <>
                 <span
                   onClick={() => {
+                    localStorage.clear();
                     localStorage.setItem("isLoggedIn", false);
                     window.location.href = "/signin";
                   }}
@@ -146,6 +152,22 @@ const Navbar = () => {
                   </>
                 )}
               </li>
+              <li onClick={hideNavBar} className="listItem">
+                {hasTicketDetails ? (
+                  <>
+                    <span
+                      onClick={() => {
+                        window.location.href = "/payment";
+                      }}
+                    >
+                      payment
+                    </span>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </li>
+
               <button onClick={hideNavBar} className="btn flex btnOne">
                 Contact
               </button>

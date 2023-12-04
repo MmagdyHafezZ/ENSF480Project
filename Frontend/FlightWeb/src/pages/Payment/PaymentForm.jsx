@@ -14,71 +14,114 @@ import {
   Slider,
   Icon,
 } from "@mui/material";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import Navbar from "../../Components/Navbar/Navbar";
 import { Send } from "@mui/icons-material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { useLocation } from "react-router-dom";
 const PaymentForm = () => {
+  const location = useLocation();
+
+  // Extract data from location.state or use localStorage as fallback
+  const locationState = location.state || {};
+  const userId = localStorage.getItem("id");
+  const email = localStorage.getItem("email");
+  const emailNotification = localStorage.getItem("emailNotification");
+  const userProfileLocalStorage = localStorage.getItem("userProfile")
+    ? JSON.parse(localStorage.getItem("userProfile"))
+    : null;
+  const loyaltyPointsLocalStorage =
+    parseInt(localStorage.getItem("loyaltyPoints")) || 0;
+
+  // Default values from location.state or localStorage
+  const [userProfile, setUserProfile] = useState(
+    locationState.userProfile || userProfileLocalStorage
+  );
+  const [price, setPrice] = useState(
+    locationState.price || parseFloat(localStorage.getItem("price")) || 0
+  );
+  const [flightDetails, setFlightDetails] = useState(
+    locationState.flightDetails ||
+      JSON.parse(localStorage.getItem("flightDetails"))
+  );
+  const [selectedSeats, setSelectedSeats] = useState(
+    locationState.selectedSeats ||
+      JSON.parse(localStorage.getItem("selectedSeats"))
+  );
+  const [cart, setCart] = useState(locationState.cart || null);
+
   const [useLoyaltyPoints, setUseLoyaltyPoints] = useState(false);
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
   const [saveCardDetails, setSaveCardDetails] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
-  const [userProfile, setUserProfile] = useState(
-    JSON.parse(localStorage.getItem("userProfile"))
-  );
   const [balance, setBalance] = useState(null);
   const [paymentIsSuccessful, setPaymentIsSuccessful] = useState(false);
-  
+  const [stringSeats, setStringSeats] = useState("");
 
   useEffect(() => {
-    // Replace 'userId' with the actual user ID
     const userId = parseInt(localStorage.getItem("id"));
 
     axios
       .get(`http://localhost:8080/api/user/profile/${userId}`)
       .then((response) => {
         setUserProfile(response.data);
-        console.log(userProfile);
+        localStorage.setItem("userProfile", JSON.stringify(response.data));
+
+        // Check if userProfile.email exists
+        if (!response.data.email) {
+          alert("Please update your profile before proceeding to payment");
+          window.location.href = "/profile";
+        }
       })
       .catch((error) => {
         console.error("Error fetching user profile:", error);
-        alert("Error fetching user profile");
+        alert("Please create a profile before proceeding to payment");
+        window.location.href = "/profile";
       });
-  }, []);
-
-  const location = useLocation();
-  const { price, flightDetails, selectedSeats, cart } = location.state || {}; // Extracting price from the state <----FlightDetails should have the flight data, selectedSeats is the userSelectedSeats
+  }, []); // Add history to the dependency array
   console.log("price", price);
   console.log("flightDetails", flightDetails);
   console.log("selectedSeats", selectedSeats);
   // Calculate the price from the cart
   console.log("cart", cart);
+
+  // Sum the price and cartPrice
   const cartPrice = cart
     ? Array.isArray(cart)
       ? cart.reduce((sum, item) => sum + item.price, 0)
       : cart.price
     : 0;
+  const totalAmount = price + cartPrice - loyaltyPoints - discountCode;
 
-  // Sum the price and cartPrice
-  const totalAmount = (price || 0) + cartPrice;
-  const seats = Object.keys(selectedSeats).filter(
-    (seat) => selectedSeats[seat]
-  );
-  const stringSeats = seats.join(",");
-  console.log("seats", seats);
+  // Update localStorage with new values if needed
+  useEffect(() => {
+    localStorage.setItem("totalAmount", totalAmount);
+    localStorage.setItem("flightDetails", JSON.stringify(flightDetails));
+    localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
+    localStorage.setItem("price", price);
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [totalAmount, flightDetails, selectedSeats, price, cart]);
+
   // Mock data - replace with actual data from the user's profile
   const totalLoyaltyPoints =
-    parseInt(localStorage.getItem("loyaltyPoints")) || 0;
+    parseInt(localStorage.getItem("loyaltyPoints")) || 100;
   const handleLoyaltyChange = (event, newValue) => {
     setLoyaltyPoints(newValue);
   };
 
   const bookFlight = async () => {
     try {
+      if (selectedSeats) {
+        const seats = Object.keys(selectedSeats).filter(
+          (seat) => selectedSeats[seat]
+        );
+        const SeatsStr = seats.join(",");
+        console.log("seats", seats);
+        setStringSeats(SeatsStr);
+      }
       const bookingDetails = {
-        passenger: userProfile.user.first_name, // Assuming 'name' is a field in userProfile
+        passenger: userProfile.username, // Assuming 'name' is a field in userProfile
         origin: flightDetails.iata1, // Assuming 'origin' is a field in flightDetails
         destination: flightDetails.iata2, // Assuming 'destination' is a field in flightDetails
         confirm: "Yes", // Example value
@@ -86,16 +129,27 @@ const PaymentForm = () => {
         meal: localStorage.getItem("mealPreference"),
       };
       console.log("bookingDetails", bookingDetails);
-
-      await axios.post("http://localhost:8080/postBooking", bookingDetails);
+      try {
+        await axios.post("http://localhost:8080/postBooking", bookingDetails);
+      } catch (error) {
+        console.log(error);
+      }
       alert("Flight booking successful");
+      try {
+        await axios.put(
+          `http://localhost:8080/api/user/addUpcomingFlight/${userId}/${flightDetails.id}`
+        );
+      } catch (error) {
+        console.log(error);
+      }
       await sendPaymentEmail();
     } catch (error) {
       console.error("Error booking the flight:", error);
       alert("Error during flight booking");
     }
+    const addloyaltypoints = loyaltyPoints + 100;
+    localStorage.setItem("loyaltyPoints", addloyaltypoints);
   };
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -110,7 +164,6 @@ const PaymentForm = () => {
     );
     const currentBalance = currentBalanceResponse.data;
 
-
     const updatedBalance = currentBalance - finalAmount;
     await axios.post(
       `http://localhost:8080/api/user/SetBalance/${userId}`,
@@ -121,29 +174,57 @@ const PaymentForm = () => {
     setBalance(updatedBalance);
     setPaymentIsSuccessful(true);
 
-    if (paymentIsSuccessful) {
-      await bookFlight();
-    }
-
-    if (cart && cart.type) {
-      const membershipType = cart.type;
-      await axios.put(
-        `http://localhost:8080/api/user/UpdateMembership/${userId}`,
-        { membershipType },
-        { headers: { "Content-Type": "application/json" } }
-      );
-      alert("Membership updated successfully");
-    }
     if (cart && Object.keys(cart).length > 0) {
       // If cart has items, handle payment and update subscription
       await handlePaymentAndSubscription();
-      await sendPaymentEmail();
-    } else {
+      if (emailNotification === "true") {
+        await sendPaymentEmail();
+      }
+    } else if (
+      cart &&
+      Object.keys(cart).length > 0 &&
+      flightDetails &&
+      Object.keys(flightDetails).length > 0
+    ) {
+      await bookFlight();
+      await handlePaymentAndSubscription();
       // If cart is empty, just send email
-      await sendPaymentEmail();
+      if (emailNotification === "true") {
+        await sendPaymentEmail();
+      }
+    } else if (flightDetails && Object.keys(flightDetails).length > 0) {
+      await bookFlight();
+      if (emailNotification === "true") {
+        await sendPaymentEmail();
+      }
     }
+
+    localStorage.removeItem("price");
+    localStorage.removeItem("mealPreference");
+    localStorage.removeItem("loyaltyPoints");
+    localStorage.removeItem("totalAmount");
   };
 
+  const addpromos = async () => {
+    try {
+      const res = await axios.post(`http://localhost:8080/postPromo/${userId}`);
+      console.log(res);
+      alert("Promo code added successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handlePaymentAndSubscription = async () => {
+    const membershipType = cart.type;
+    const userId = parseInt(localStorage.getItem("id"));
+    await axios.put(
+      `http://localhost:8080/api/user/UpdateMembership/${userId}`,
+      { membershipType },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    alert("Membership updated successfully");
+    addpromos();
+  };
   const sendPaymentEmail = async () => {
     try {
       await axios.post(`http://localhost:8080/generateAndSendTicket`, {
@@ -158,27 +239,10 @@ const PaymentForm = () => {
     }
   };
 
-  const SendEmail = async () => {
-    try {
-      const emailResponse = await axios.post(
-        `http://localhost:8080/generateAndSendTicket`,
-        {
-          userEmail: userProfile.email || userProfile.user.email,
-          flightDetails: flightDetails,
-          balancePaid: totalAmount,
-          currentBalance: balance,
-        }
-      );
-      console.log(emailResponse);
-    } catch (error) {
-      console.error("Error sending email:", error);
-    }
-  };
-
   const RequestDiscountCode = async (discountCode) => {
     try {
       const discountResponse = await axios.get(
-        `http://localhost:8080/api/user/getPromo/${userId}`
+        `http://localhost:8080/getDiscount/${discountCode}`
       );
       console.log(discountResponse);
       if (discountResponse.data) {

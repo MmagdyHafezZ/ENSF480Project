@@ -63,9 +63,16 @@ const MediumPlane = ({ isBooking, flightDetails }) => {
         );
 
         setPrice(totalPrice);
+        toggleSeat(seatId);
         return updatedSelectedSeats;
       });
     }
+  };
+  const toggleSeat = async (seatId) => {
+    const res = await axios.put(
+      `http://localhost:8080/toggleSeat/${flightDetails.id}/${seatId}`
+    );
+    console.log("res", res);
   };
 
   const displaySelectedSeats = () => {

@@ -29,7 +29,7 @@ const ProfilePage = () => {
   const [userData, setUserData] = useState({
     username: "",
     userRole: "",
-    membershipType: "",
+    membershipType: "Basic",
     recentBookings: [],
     email: "",
     phoneNumber: "",
@@ -48,7 +48,7 @@ const ProfilePage = () => {
       );
       setUserData({
         ...response.data,
-        email: response.data.user.email,
+        email: response.data.email,
         phoneNumber: response.data.phoneNumber,
         emailNotification: response.data.emailNotification,
         loyaltyPoints: response.data.loyaltyPoints,
@@ -68,7 +68,7 @@ const ProfilePage = () => {
 
   const updateProfile = async (updatedData) => {
     try {
-      const userId = localStorage.getItem("id");
+      const userId = parseInt(localStorage.getItem("id"));
       const response = await axios.post(
         `http://localhost:8080/api/user/profile`,
         {
@@ -333,41 +333,6 @@ const ProfilePage = () => {
                   <Typography>phoneNumber: {userData.phoneNumber}</Typography>
                 </AccordionDetails>
               </Accordion>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Typography variant="h6">
-                {userData.recentBookings.length > 0 ? "Recent Bookings:" : ""}
-              </Typography>
-              <List>
-                {userData.recentBookings.map((booking, index) => (
-                  <React.Fragment key={index}>
-                    <ListItem>
-                      <ListItemText primary={booking} />
-                    </ListItem>
-                    {index < userData.recentBookings.length - 1 && <Divider />}
-                  </React.Fragment>
-                ))}
-              </List>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Typography variant="h6" style={{ marginTop: "20px" }}>
-                {upcomingFlights.length > 0 ? "Upcoming Flights:" : ""}
-              </Typography>
-              <List>
-                {upcomingFlights.map((flight, index) => (
-                  <React.Fragment key={index}>
-                    <ListItem>
-                      <ListItemText
-                        primary={flight.flight}
-                        secondary={`Date: ${flight.date}`}
-                      />
-                    </ListItem>
-                    {index < upcomingFlights.length - 1 && <Divider />}
-                  </React.Fragment>
-                ))}
-              </List>
             </Grid>
 
             <Grid item xs={12} style={{ textAlign: "center" }}>

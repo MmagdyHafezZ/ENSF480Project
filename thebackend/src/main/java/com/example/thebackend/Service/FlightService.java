@@ -46,4 +46,12 @@ public class FlightService {
         
         return dto;
     }
+    public boolean checkFlight(Long id) {
+        return flightsRepository.existsById(id);
+    }
+
+    public Flights getFlight(Long id) {
+        return flightsRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Flight not found with id: " + id));
+    }
 }

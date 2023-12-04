@@ -18,22 +18,25 @@ public class UserPreferencesService {
     private UserRepository userRepository;
 
     public UserPreferences addOrUpdateUserPreferences(UserPreferencesDTO dto) {
-        // Fetch the associated User
-        Long userId = dto.getId(); // Assuming getId() returns the User ID
+        Long userId = dto.getId();
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        // Find existing UserPreferences for this User or create a new one
+        // Retrieve existing UserPreferences or create new if not exist
         UserPreferences preferences = userPreferencesRepository.findByUserId(userId)
             .orElse(new UserPreferences());
 
+        // Update preferences with DTO values
         preferences.setMealPreference(dto.getMealPreference());
         preferences.setSeatPreference(dto.getSeatPreference());
-        preferences.setUser(user); // Set the user to the preferences
 
-        // Save the UserPreferences
+        // Link the preferences with the user
+        preferences.setUser(user);
+
+        // Save the updated preferences
         return userPreferencesRepository.save(preferences);
     }
+
 
     public void deleteUserPreferences(Long id) {
         userPreferencesRepository.deleteById(id);

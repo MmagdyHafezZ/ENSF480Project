@@ -151,7 +151,6 @@ const Search = () => {
     };
 
     handleButtonClick();
-    console.log(typeof dataToSend);
 
     try {
       // First POST request

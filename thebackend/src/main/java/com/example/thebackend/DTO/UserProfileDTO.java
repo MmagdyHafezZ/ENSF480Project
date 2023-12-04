@@ -39,6 +39,12 @@ public class UserProfileDTO {
     public void setEmail(String email) { this.email = email; }
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void addUpcomingFlight(Long flightId) {
+        this.upcomingFlights.add(flightId.toString());
+    }
+    public void deleteUpcomingFlight(Long flightId) {
+        this.upcomingFlights.remove(flightId.toString());
+    }
     
     
 

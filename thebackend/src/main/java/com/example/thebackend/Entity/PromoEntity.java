@@ -1,5 +1,7 @@
 package com.example.thebackend.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +31,9 @@ public class PromoEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userid", referencedColumnName = "id")
+    @JsonBackReference // Prevents serialization of User object in PromoEntity
     private User userid;
+
 
     @Column(name = "promo_offer")
     private String promo_offer;

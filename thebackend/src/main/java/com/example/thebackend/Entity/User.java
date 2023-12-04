@@ -2,6 +2,8 @@ package com.example.thebackend.Entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,8 +42,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UserPreferences> preferences;
     
-    @OneToMany(mappedBy = "userid", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userid", cascade = CascadeType.ALL)
+    @JsonManagedReference // Allows serialization of PromoEntity list in User
     private List<PromoEntity> promos;
+
 
     // No-argument constructor
     public User() {
