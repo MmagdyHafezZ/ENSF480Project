@@ -18,12 +18,10 @@ import {
   DialogActions,
   Box,
   Pagination,
-
 } from "@mui/material";
 import axios from "axios";
 
 const AirlineAgentPage = () => {
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
@@ -43,11 +41,11 @@ const AirlineAgentPage = () => {
     axios
       .get("http://localhost:8080/getBooking")
       .then((response) => {
-        setGetBookings(response.data)
+        setGetBookings(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-      })
+      });
   }, []);
 
   useEffect(() => {
@@ -73,7 +71,7 @@ const AirlineAgentPage = () => {
     setSelectedBooking(booking);
     setPutPassenger(booking.passenger);
     setPutOrigin(booking.origin);
-    setPutDestination(booking.destination)
+    setPutDestination(booking.destination);
     setPutConfirm(booking.confirm);
     setPutSeat(booking.seat);
     setPutMeal(booking.meal);
@@ -96,27 +94,27 @@ const AirlineAgentPage = () => {
 
   const handlePassengerEdit = (event) => {
     setPutPassenger(event.target.value);
-  }
+  };
 
   const handleOriginEdit = (event) => {
     setPutOrigin(event.target.value);
-  }
+  };
 
   const handleDestinationEdit = (event) => {
     setPutDestination(event.target.value);
-  }
+  };
 
   const handleConfirmEdit = (event) => {
     setPutConfirm(event.target.value);
-  }
+  };
 
   const handleSeatEdit = (event) => {
     setPutSeat(event.target.value);
-  }
+  };
 
   const handleMealEdit = (event) => {
     setPutMeal(event.target.value);
-  }
+  };
 
   const handlePutMethod = async () => {
     const updatedBookingData = {
@@ -126,29 +124,32 @@ const AirlineAgentPage = () => {
       destination: putDestination,
       confirm: putConfirm,
       seat: putSeat,
-      meal: putMeal
-    }
+      meal: putMeal,
+    };
     try {
-      const response = await
-        axios
-          .put(`http://localhost:8080/putBooking/${selectedBooking.id}`, updatedBookingData);
+      const response = await axios.put(
+        `http://localhost:8080/putBooking/${selectedBooking.id}`,
+        updatedBookingData
+      );
       if (response.status === 200) {
         const updatedBookings = getBookings.map((booking) =>
-          booking.id === selectedBooking.id ? { ...booking, ...updatedBookingData } : booking
+          booking.id === selectedBooking.id
+            ? { ...booking, ...updatedBookingData }
+            : booking
         );
         setGetBookings(updatedBookings);
         setOpenEditDialog(false);
       } else {
-        console.log("Error updating booking: ", response.data)
+        console.log("Error updating booking: ", response.data);
       }
     } catch (error) {
       console.error("Error updating booking: ", error);
     }
-  }
+  };
 
   const handleAddBookingClick = () => {
     setOpenPostDialog(true);
-  }
+  };
 
   const handleAddBookingSubmit = async () => {
     const newBooking = {
@@ -157,12 +158,13 @@ const AirlineAgentPage = () => {
       destination: putDestination,
       confirm: putConfirm,
       seat: putSeat,
-      meal: putMeal
+      meal: putMeal,
     };
     try {
-      const response = await
-        axios
-          .post(`http://localhost:8080/postBooking`, newBooking);
+      const response = await axios.post(
+        `http://localhost:8080/postBooking`,
+        newBooking
+      );
       if (response.status === 200 || response.status === 201) {
         setGetBookings([...getBookings, response.data]);
         setOpenPostDialog(false);
@@ -172,26 +174,27 @@ const AirlineAgentPage = () => {
     } catch (error) {
       console.error("Error adding booking: ", error);
     }
-  }
+  };
 
   const handleDeleteBooking = async () => {
-    try{
-      const response = await
-      axios
-        .delete(`http://localhost:8080/deleteBooking/${selectedBooking.id}`);
-        console.log(selectedBooking.id);
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/deleteBooking/${selectedBooking.id}`
+      );
+      console.log(selectedBooking.id);
       if (response.status === 200) {
-        const updatedBookings = getBookings.filter(booking => booking.id !== selectedBooking.id);
+        const updatedBookings = getBookings.filter(
+          (booking) => booking.id !== selectedBooking.id
+        );
         setGetBookings(updatedBookings);
         setOpenDeleteDialog(false);
       } else {
         console.log("Error deleting booking: ", response.data);
       }
-    } catch(error) {
+    } catch (error) {
       console.error("Error deleting booking: ", error);
     }
-  }
-  
+  };
 
   return (
     <Container maxWidth="lg">
@@ -220,62 +223,65 @@ const AirlineAgentPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {getBookings.filter((booking) =>
-              booking.passenger.toLowerCase().includes(searchTerm.toLowerCase())
-            ).map((getBooking) => (
-              <TableRow
-                key={getBooking.id}
-                onClick={() => handleOpenDialog(getBooking)}
-                style={{ cursor: "pointer" }}
-              >
-                <TableCell>{getBooking.passenger}</TableCell>
-                <TableCell>{getBooking.origin}</TableCell>
-                <TableCell>{getBooking.destination}</TableCell>
-                <TableCell>{getBooking.confirm}</TableCell>
-                <TableCell>
-                  <Button
-                    color="primary"
-                    onClick={(e) => handleOpenEditDialog(e, getBooking)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    color="secondary"
-                    onClick={(e) => handleOpenDeleteDialog(e, getBooking)}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {getBookings
+              .filter((booking) =>
+                booking?.passenger
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+              )
+              .map((getBooking) => (
+                <TableRow
+                  key={getBooking.id}
+                  onClick={() => handleOpenDialog(getBooking)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <TableCell>{getBooking.passenger}</TableCell>
+                  <TableCell>{getBooking.origin}</TableCell>
+                  <TableCell>{getBooking.destination}</TableCell>
+                  <TableCell>{getBooking.confirm}</TableCell>
+                  <TableCell>
+                    <Button
+                      color="primary"
+                      onClick={(e) => handleOpenEditDialog(e, getBooking)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      color="secondary"
+                      onClick={(e) => handleOpenDeleteDialog(e, getBooking)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Pagination count={10} color="primary" />
         <Button
           variant="contained"
           onClick={handleAddBookingClick}
-          sx={{ bgcolor: 'info.main' }}
+          sx={{ bgcolor: "info.main" }}
         >
           Add Booking
         </Button>
       </Box>
 
       {openPostDialog && (
-        <Dialog open={openPostDialog} 
+        <Dialog
+          open={openPostDialog}
           onClose={() => setOpenPostDialog(false)}
           sx={{
-            '& .MuiDialog-paper': {
-              minWidth: '500px',
-              minHeight: '400px'
-            }
+            "& .MuiDialog-paper": {
+              minWidth: "500px",
+              minHeight: "400px",
+            },
           }}
         >
-          <DialogTitle>
-            Add New Booking
-          </DialogTitle>
+          <DialogTitle>Add New Booking</DialogTitle>
           <DialogContent>
             {/* Add field for adding PASSENGER */}
             <TextField
@@ -343,10 +349,10 @@ const AirlineAgentPage = () => {
           open={openEditDialog}
           onClose={handleCloseEditDialog}
           sx={{
-            '& .MuiDialog-paper': {
-              minWidth: '300px',
-              minHeight: '300px'
-            }
+            "& .MuiDialog-paper": {
+              minWidth: "300px",
+              minHeight: "300px",
+            },
           }}
         >
           <DialogTitle>Edit Booking</DialogTitle>
@@ -366,7 +372,7 @@ const AirlineAgentPage = () => {
               placeholder={putOrigin}
               onChange={handleOriginEdit}
               fullWidth
-              sx={{ mb : 1, mt : 1 , textTransform : 'uppercase'}}
+              sx={{ mb: 1, mt: 1, textTransform: "uppercase" }}
             />
             {/* Add field for editing DESTINATION */}
             <TextField
@@ -374,7 +380,7 @@ const AirlineAgentPage = () => {
               placeholder={putDestination}
               onChange={handleDestinationEdit}
               fullWidth
-              sx={{ mb : 1, mt : 1 }}
+              sx={{ mb: 1, mt: 1 }}
             />
             {/* Add field for editing CONFIRM */}
             <TextField
@@ -421,11 +427,7 @@ const AirlineAgentPage = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseCancelDialog}>No</Button>
-            <Button
-            onClick={handleDeleteBooking}
-            >
-              Delete
-            </Button>
+            <Button onClick={handleDeleteBooking}>Delete</Button>
           </DialogActions>
         </Dialog>
       )}

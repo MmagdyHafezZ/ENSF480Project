@@ -66,10 +66,32 @@ const SignUpSignIn = () => {
       .then((res) => {
         console.log(res);
         setIsSignIn(true);
+        const res2 = axios.post(
+          `http://localhost:8080/api/user/profile`,
+          {
+            id: res.data.id,
+            balance: 10000,
+            userRole: "User",
+            loyaltyPoints: 0,
+            firstName: first_name,
+            lastName: last_name,
+            email: email,
+            membership: "Basic",
+            recentBookings: [],
+            upcomingFlights: [],
+            emailNotification: true,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(res2);
         localStorage.setItem("isLoggedIn", true);
-        console.log(res.data);
         localStorage.setItem("id", res.data.id);
-        console.log(res.data.id);
+        localStorage.setItem("username", first_name);
+        localStorage.setItem("email", email);
         jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
       })
       .catch((err) => {
@@ -104,6 +126,8 @@ const SignUpSignIn = () => {
         setIsSignIn(true);
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("id", res.data.id);
+        localStorage.setItem("email", email);
+
         jumpToHome(); // Ensure `jumpToHome` is defined and performs the desired navigation
       })
       .catch((err) => {
@@ -249,7 +273,7 @@ const SignUpSignIn = () => {
             />
             <span className="form__span">
               By creating an account, you agree to our
-              <a className="form__link" href="#terms">
+              <a className="form__link" href="/Term">
                 Terms & Privacy
               </a>
               .
@@ -271,11 +295,11 @@ const SignUpSignIn = () => {
         >
           <form className="form" id="b-form" onSubmit={handleLogin}>
             <h2 className="form_title title">Sign in to Website</h2>
-            <GoogleLoginButton
+            {/* <GoogleLoginButton
               className="GoogleButton"
               onClick={() => handleLoginGoogle()}
-            />
-            <span className="form__span">or use your email account</span>
+            /> */}
+            {/* <span className="form__span">or use your email account</span> */}
             <input
               className="form__input"
               type="text"
@@ -288,9 +312,9 @@ const SignUpSignIn = () => {
               placeholder="Password"
               name="password1"
             />
-            <a className="form__link" href="#forgot-password">
+            {/* <a className="form__link" href="#forgot-password">
               Forgot your password?
-            </a>
+            </a> */}
             <button className="form__button button switch-btn" name="signin">
               SIGN IN
             </button>

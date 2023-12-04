@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.thebackend.Entity.SeatEntity;
@@ -21,8 +22,12 @@ public class FlightReservationController {
     public java.util.List<SeatEntity> getSeats(){
         return flightReservationService.getSeats();
     }
-@GetMapping(path = "/getSeatsByFlightId/flightId={flightId}")
+    @GetMapping(path = "/getSeatsByFlightId/flightId={flightId}")
     public List<SeatEntity> getSeatsByFlightId(@PathVariable("flightId") Long flightId) {
         return flightReservationService.getSeatsByFlightId(flightId);
+    }
+    @PutMapping(path = "/toggleSeat/{flightId}/{seatId}")
+    public void toggleSeat(@PathVariable("flightId") Long flightId, @PathVariable("seatId") String seatId) {
+        flightReservationService.toggleSeat(flightId, seatId);
     }
 }

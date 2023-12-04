@@ -106,7 +106,7 @@ const FlightsList = ({ userFlightData, sendData }) => {
                     <div className="plane-company">
                       Flight {iata1} to {iata2}
                     </div>
-                    <span>Departing: {formatDateOnly(departure_day)}</span>
+                    <span>Departing: {departure_day}</span>
                   </div>
                   <div className="flights-info-right">
                     <div className="flight-time-window">
@@ -118,7 +118,7 @@ const FlightsList = ({ userFlightData, sendData }) => {
                 </div>
                 <div className="flight-details__time-info">
                   <div className="flights-info-left">
-                    <span>Arriving: {formatDateOnly(arrival_day)}</span>
+                    <span>Arriving: {arrival_day}</span>
                   </div>
                   <div className="flights-info-right">
                     <div className="flight-time-window">

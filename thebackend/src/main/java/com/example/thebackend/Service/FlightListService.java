@@ -26,5 +26,7 @@ public class FlightListService {
     public FlightListEntity singleGet(Long id){
         return flightListRepository.findById(id).get();
     }
+
+
     
 }

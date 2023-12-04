@@ -1,5 +1,6 @@
 package com.example.thebackend.Controller;
 
+import org.apache.http.HttpStatus;
 // import org.aspectj.weaver.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import com.example.thebackend.DTO.MembershipDTO;
 import com.example.thebackend.DTO.UserCreditCardDTO;
 import com.example.thebackend.DTO.UserPreferencesDTO;
 import com.example.thebackend.Service.UserProfileService;
+import com.example.thebackend.Service.FlightService;
 import com.example.thebackend.Service.UserCreditCardService;
 import com.example.thebackend.Service.UserPreferencesService;
 import com.example.thebackend.Entity.UserCreditCard;
@@ -30,6 +32,9 @@ public class UserController {
     @Autowired
     private UserPreferencesService userPreferencesService;
 
+    @Autowired
+    private FlightService flightService;
+
     // Add/Edit UserProfile
     @PostMapping("/profile")
     public ResponseEntity<?> addOrUpdateUserProfile(@RequestBody UserProfileDTO userProfileDTO) {
@@ -45,7 +50,7 @@ public class UserController {
     }
     @GetMapping("/profile/{id}")
     public ResponseEntity<?> getUserProfile(@PathVariable Long id) {
-        UserProfile userProfile = userProfileService.getUserProfile(id);
+        UserProfileDTO userProfile = userProfileService.getUserProfile(id);
         return ResponseEntity.ok(userProfile);
     }
 
@@ -86,27 +91,48 @@ public class UserController {
 
     @GetMapping("/GetBalance/{id}")
     public ResponseEntity<?> getBalance(@PathVariable Long id) {
-        UserProfile userProfile = userProfileService.getUserProfile(id);
-        return ResponseEntity.ok(userProfile.getbalance());
+        UserProfileDTO userProfile = userProfileService.getUserProfile(id);
+        return ResponseEntity.ok(userProfile.getBalance());
     }
     @PostMapping("/SetBalance/{id}")
     public ResponseEntity<?> setBalance(@PathVariable Long id, @RequestBody BalanceDTO balanceDto) {
-        UserProfile userProfile = userProfileService.getUserProfile(id);
-        userProfile.setbalance(balanceDto.getBalance());
+        UserProfileDTO userProfile = userProfileService.getUserProfile(id);
+        userProfile.setBalance(balanceDto.getBalance());
         userProfileService.addOrUpdateUserProfile(userProfile);
-        return ResponseEntity.ok(userProfile.getbalance());
+        return ResponseEntity.ok(userProfile.getBalance());
     }
     @PutMapping("/UpdateMembership/{id}")
     public ResponseEntity<?> updateMembership(@PathVariable Long id, @RequestBody MembershipDTO membershipDto) {
-        UserProfile userProfile = userProfileService.getUserProfile(id);
+        UserProfileDTO userProfile = userProfileService.getUserProfile(id);
         userProfile.setMembershipType(membershipDto.getMembershipType());
         userProfileService.addOrUpdateUserProfile(userProfile);
         return ResponseEntity.ok(userProfile.getMembershipType());
     }
     @GetMapping("/GetMembership/{id}")
     public ResponseEntity<?> getMembership(@PathVariable Long id) {
-        UserProfile userProfile = userProfileService.getUserProfile(id);
+        UserProfileDTO userProfile = userProfileService.getUserProfile(id);
         return ResponseEntity.ok(userProfile.getMembershipType());
+    }
+
+    @GetMapping("/getUpcomingFlights/{id}")
+    public ResponseEntity<?> getUpcomingFlights(@PathVariable Long id) {
+        UserProfileDTO userProfile = userProfileService.getUserProfile(id);
+        return ResponseEntity.ok(userProfile.getUpcomingFlights());
+    }
+    @PutMapping("/addUpcomingFlight/{id}/{flightId}")
+    public ResponseEntity<?> addUpcomingFlight(@PathVariable Long id, @PathVariable Long flightId) {
+        UserProfileDTO userProfile = userProfileService.getUserProfile(id);
+        userProfile.addUpcomingFlight(flightId);
+        userProfileService.addOrUpdateUserProfile(userProfile);
+        return ResponseEntity.ok(userProfile.getUpcomingFlights());
+
+    }
+    @DeleteMapping("/deleteUpcomingFlight/{id}/{flightId}")
+    public ResponseEntity<?> deleteUpcomingFlight(@PathVariable Long id, @PathVariable Long flightId) {
+        UserProfileDTO userProfile = userProfileService.getUserProfile(id);
+        userProfile.deleteUpcomingFlight(flightId);
+        userProfileService.addOrUpdateUserProfile(userProfile);
+        return ResponseEntity.ok(userProfile.getUpcomingFlights());
     }
     
     

@@ -20,6 +20,7 @@ import AirlineAgentLoginPage from "./Components/Airline_Agent/AgentLoginPage.jsx
 import AdminLoginPage from "./pages/SystemAdmin/AdminLoginPage.jsx";
 import TicketInfo from "./pages/TicketInfo/TIcketInfo.jsx";
 import PaymentForm from "./pages/Payment/PaymentForm.jsx";
+import TermsAndPolicies from "./Components/Sign/TermsandPolicies.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="561701800707-oiljspvu920o0pfkavpfiedsu7sbrfgj.apps.googleusercontent.com">
     <BrowserRouter>
@@ -33,10 +34,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/tickets" element={<TicketDetails />} />
           <Route path="/reservations" element={<AllReservations />} />
           <Route path="/membership" element={<MembershipBenefits />} />
+          <Route path="/Term" element={<TermsAndPolicies />} />
           {/* <Route path="/admin" element={<SystemAdmin />} /> */}
+          <Route path="/agent" element={<AirlineAgentPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/offers" element={<OffersPage />} />
-          <Route path="/agent" element={<AirlineAgentPage />} />
           <Route path="/signin-agent" element={<AirlineAgentLoginPage />} />
           <Route path="/signin-admin" element={<AdminLoginPage />} />
           <Route path="/ticket-QR" element={<TicketInfo />} />

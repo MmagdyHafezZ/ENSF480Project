@@ -28,5 +28,6 @@ public class FlightListController {
     public FlightListEntity getSingleBooking(@PathVariable Long id){
         return flightListService.singleGet(id);
     }
+
     
 }

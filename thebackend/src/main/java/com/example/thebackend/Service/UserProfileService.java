@@ -47,10 +47,31 @@ public class UserProfileService {
     public void deleteUserProfile(Long id) {
         userProfileRepository.deleteById(id);
     }
-    public UserProfile getUserProfile(Long id) {
-        return userProfileRepository.findById(id)
+    public UserProfileDTO getUserProfile(Long id) {
+        UserProfile userProfile = userProfileRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User profile not found with id: " + id));
+        
+        // Convert UserProfile to UserProfileDTO (which should not include the entire User object)
+        return convertToDTO(userProfile);
     }
+    private UserProfileDTO convertToDTO(UserProfile userProfile) {
+        // Create a new DTO and set only the necessary fields from userProfile
+        // Avoid setting the entire User object
+        UserProfileDTO dto = new UserProfileDTO();
+        dto.setUsername(userProfile.getUsername());
+        dto.setUserRole(userProfile.getUserRole());
+        dto.setMembershipType(userProfile.getMembershipType());
+        dto.setLoyaltyPoints(userProfile.getLoyaltyPoints());
+        dto.setRecentBookings(userProfile.getRecentBookings());
+        dto.setUpcomingFlights(userProfile.getUpcomingFlights());
+        dto.setEmailNotification(userProfile.getEmailNotification());
+        dto.setEmail(userProfile.getEmail());
+        dto.setPhoneNumber(userProfile.getPhoneNumber());
+        dto.setId(userProfile.getId());
+        return dto;
+
+    }
+
 
     public void addOrUpdateUserProfile(UserProfile userProfile) {
         userProfileRepository.save(userProfile);

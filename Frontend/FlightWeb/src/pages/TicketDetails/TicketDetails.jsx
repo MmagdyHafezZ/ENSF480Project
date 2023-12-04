@@ -53,6 +53,7 @@ const TicketDetails = () => {
 
   const handleNavigation = () => {
     setIsLoading(true); // Show loading screen
+    localStorage.setItem("hasTicketDetails", true);
     document.body.classList.add("no-scroll");
     setTimeout(() => {
       if (isLoggedInContext) {

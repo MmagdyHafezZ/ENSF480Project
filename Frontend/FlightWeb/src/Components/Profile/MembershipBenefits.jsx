@@ -55,6 +55,7 @@ const MembershipBenefits = () => {
 
   const proceedToPay = () => {
     console.log("Proceeding to payment with:", cart);
+    localStorage.setItem("cart", JSON.stringify(cart));
     navigate("/payment", { state: { cart: cart } });
   };
 

@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  DialogContentText
+  DialogContentText,
 } from "@mui/material";
 import Flightoffer from "../../assets/FlightOffer.jpg";
 import Hoteloffer from "../../assets/Hoteloffer.jpg";
@@ -41,7 +41,7 @@ const OffersPage = () => {
       })
       .catch((error) => {
         console.error("Error fetching data: ", error);
-      })
+      });
   }, []);
 
   // Example offers data
@@ -106,8 +106,10 @@ const OffersPage = () => {
   ];
 
   const handleClaimOffer = (offerID) => {
-    const offer = promotions.find(promo => ((promo.id % 9) === 0 ? 9 : promo.id % 9) === offerID);
-    if(offer) {
+    const offer = promotions.find(
+      (promo) => (promo.id % 9 === 0 ? 9 : promo.id % 9) === offerID
+    );
+    if (offer) {
       setSelectedOffer(offer);
       setIsDialogOpen(true);
     }
@@ -148,7 +150,7 @@ const OffersPage = () => {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button 
+                  <Button
                     size="small"
                     onClick={() => handleClaimOffer(offer.id)}
                   >
@@ -161,21 +163,16 @@ const OffersPage = () => {
         </Grid>
       </Container>
 
-      <Dialog
-        open={isDialogOpen}
-        onClose={handleCloseDialog}
-      >
-        <DialogTitle>
-          Claim Your Offer!
-        </DialogTitle>
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Claim Your Offer!</DialogTitle>
         <DialogContent>
           {selectedOffer && (
             <DialogContentText>
-              Here is your promo code for the {selectedOffer.promo_offer}: <strong>{selectedOffer.promocode}</strong>
+              Here is your promo code for the {selectedOffer.promo_offer}:{" "}
+              <strong>{selectedOffer.promocode}</strong>
             </DialogContentText>
           )}
         </DialogContent>
-
       </Dialog>
     </>
   );

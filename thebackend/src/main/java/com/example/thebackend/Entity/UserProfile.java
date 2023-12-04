@@ -2,17 +2,22 @@ package com.example.thebackend.Entity;
 
 import jakarta.persistence.*;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "userProfile")
 public class UserProfile {
 
     @Id
     private Long id;
+    
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id")
+    @JsonIgnore // Prevent serialization of the User object
     private User user;
     
+
 
     private String username;
     private String userRole;

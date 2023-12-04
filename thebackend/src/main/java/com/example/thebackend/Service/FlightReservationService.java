@@ -84,4 +84,11 @@ private String determineSeatType(String row, int number, String type) {
     public List<SeatEntity> getSeatsByFlightId(Long flightId) {
         return flightReservationRepository.findByFlight_Id(flightId);
     }
+    public void toggleSeat(Long flightId, String seatId) {
+        SeatEntity seat = flightReservationRepository.findByFlight_Id(flightId).stream().filter(s -> s.getSeatID().equals(seatId)).findFirst().get();
+        seat.setIsAvailable(!seat.getIsAvailable());
+        flightReservationRepository.save(seat);
+
+    }
+
 }
