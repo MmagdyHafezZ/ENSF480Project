@@ -23,6 +23,7 @@ public class FlightController {
         @RequestParam String iata1, 
         @RequestParam String iata2, 
         @RequestParam String DepartureDay){
+            
         return flightService.getFilteredFlightList(iata1, iata2, DepartureDay);
     }
     @GetMapping(path = "/getFlight/{id}")

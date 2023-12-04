@@ -2449,17 +2449,17 @@ FROM (
         CROSS JOIN 
         (SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) c
 ) numbers
-WHERE DATE_ADD('2023-12-04', INTERVAL n DAY) <= DATE_ADD('2023-12-04', INTERVAL 1 MONTH);
+WHERE DATE_ADD('2023-12-04', INTERVAL n DAY) <= DATE_ADD('2023-12-04', INTERVAL 3 MONTH);
 
 -- Insert into Flights with random prices and plane type
-INSERT INTO `list_of_flights` (`iata1`, `iata2`, `arrival_day`, `departure_day`, `arrival_time`, `departure_time`, `ordinary_price`, `comfort_price`, `business_price`, `plane_type`)
+INSERT INTO `list_of_flights` (`iata1`, `iata2`, `departure_day`, `arrival_day`, `departure_time`, `arrival_time`, `ordinary_price`, `comfort_price`, `business_price`, `plane_type`)
 SELECT 
     a.iata AS iata1,
     b.iata AS iata2,
-    d.date AS arrival_day,
-    DATE_ADD(d.date, INTERVAL 1 DAY) AS departure_day,
-    CONCAT(FLOOR(RAND() * 24), ':', LPAD(FLOOR(RAND() * 60), 2, '0')) AS arrival_time,
+    d.date AS departure_day, -- Departure day from the Dates table
+    DATE_ADD(d.date, INTERVAL 1 DAY) AS arrival_day, -- Arrival day is one day after the departure
     CONCAT(FLOOR(RAND() * 24), ':', LPAD(FLOOR(RAND() * 60), 2, '0')) AS departure_time,
+    CONCAT(FLOOR(RAND() * 24), ':', LPAD(FLOOR(RAND() * 60), 2, '0')) AS arrival_time,
     ROUND(50 + RAND() * 450, 2) AS ordinary_price,  -- Random base price between $50 and $500 for ordinary seats
     ROUND(70 + RAND() * 630, 2) AS comfort_price, -- Random price for comfort seats, 40% more than ordinary
     ROUND(105 + RAND() * 895, 2) AS business_price, -- Random price for business seats, more than double of ordinary
@@ -2470,6 +2470,7 @@ FROM
     CROSS JOIN Dates d
 WHERE 
     a.iata != b.iata;
+
 
 -- Drop temporary tables if no longer needed
 DROP TEMPORARY TABLE IATA_Codes1;
