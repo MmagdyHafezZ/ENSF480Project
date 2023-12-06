@@ -20,11 +20,12 @@ public class FlightService {
         return flightsRepository.findById(id).orElse(null);
     }
 
-    public List<FlightListDTO> getFilteredFlightList(String iata1, String iata2, String DepartureDay) {
+    public List<FlightListDTO> getFilteredFlightList(String iata1, String iata2, String DepartureDay, String ArrivalDay) {
         System.out.println("iata1: " + iata1);
         System.out.println("iata2: " + iata2);
         System.out.println("departureDay: " + DepartureDay);
-        List<Flights> flights = flightsRepository.findByIata1AndIata2AndDepartureDay(iata1, iata2, DepartureDay);
+        System.out.println("returnDay: " + ArrivalDay);
+        List<Flights> flights = flightsRepository.findByIata1AndIata2AndDepartureDayAndArrivalDay(iata1, iata2, DepartureDay, ArrivalDay);
         return flights.stream()
                       .map(this::convertToDTO)
                       .collect(Collectors.toList());

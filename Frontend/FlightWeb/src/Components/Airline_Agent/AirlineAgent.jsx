@@ -225,9 +225,7 @@ const AirlineAgentPage = () => {
           <TableBody>
             {getBookings
               .filter((booking) =>
-                booking?.passenger
-                  .toLowerCase()
-                  .includes(searchTerm.toLowerCase())
+                booking.passenger?.includes(searchTerm.toLowerCase())
               )
               .map((getBooking) => (
                 <TableRow

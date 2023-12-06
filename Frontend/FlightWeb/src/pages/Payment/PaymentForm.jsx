@@ -86,6 +86,18 @@ const PaymentForm = () => {
         alert("Please create a profile before proceeding to payment");
         window.location.href = "/profile";
       });
+    axios.get(`http://localhost:8080/api/user/creditcard/${userId}`).then(
+      (response) => {
+        setCardNumber(response.data.cardNumber);
+        setExpiryDate(response.data.expiryDate);
+        setCvv(response.data.cvv);
+        setCardholderName(response.data.cardholderName);
+        setAddress(response.data.address);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }, []); // Add history to the dependency array
   console.log("price", price);
   console.log("flightDetails", flightDetails);
@@ -120,11 +132,20 @@ const PaymentForm = () => {
   const bookFlight = async () => {
     try {
       if (selectedSeats) {
-        const seats = Object.keys(selectedSeats).filter(
+        const seatsArray = Object.keys(selectedSeats).filter(
           (seat) => selectedSeats[seat]
         );
-        const SeatsStr = seats.join(",");
-        console.log("seats", seats);
+        console.log("seatsArray", seatsArray);
+
+        const bookingPromises = seatsArray.map(async (seat) => {
+          await axios.put(
+            `http://localhost:8080/toggleSeat/${flightDetails.id}/${seat}`
+          );
+        });
+
+        await Promise.all(bookingPromises);
+        console.log("All seats booked successfully");
+        const SeatsStr = seatsArray.join(",");
         setStringSeats(SeatsStr);
       }
       const bookingDetails = {
@@ -248,7 +269,7 @@ const PaymentForm = () => {
   const handleSaveCardDetails = async () => {
     try {
       await axios.post(`http://localhost:8080/api/user/creditcard`, {
-        userId: userId,
+        id: userId,
         cardNumber: cardNumber,
         expiryDate: expiryDate,
         cvv: cvv,

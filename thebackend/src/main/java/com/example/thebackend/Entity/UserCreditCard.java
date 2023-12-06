@@ -1,4 +1,6 @@
 package com.example.thebackend.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -6,10 +8,7 @@ import jakarta.persistence.*;
 public class UserCreditCard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "user_id", insertable = false, updatable = false)
-    private Long userId; // User ID, not UserProfile ID
 
     private String cardNumber;
     private String expiryDate;
@@ -17,8 +16,11 @@ public class UserCreditCard {
     private String cardholderName;
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // Specify the foreign key column
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @MapsId
+    @JoinColumn(name = "id")
+    @JsonIgnore // Prevent serialization of the User object
+
     private User user;
 
     // Constructors, Getters and Setters
@@ -79,11 +81,11 @@ public class UserCreditCard {
     public User getUser() {
         return user;
     }
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(long id) {
+        this.id = id;
     }
-    public Long getUserId() {
-        return userId;
+    public void getId(long id) {
+        this.id = id;
     }
 
     

@@ -2425,9 +2425,9 @@ INSERT INTO IATA_Codes1 (iata) VALUES
 -- ('MIA'), -- Miami, USA
 -- ('MUC'), -- Munich, Germany
 ('JFK'), -- New York, USA
-('SFO'), -- San Francisco, USA
+-- ('SFO'), -- San Francisco, USA
 -- ('SYD'), -- Sydney, Australia
-('YYZ'), -- Toronto, Canada
+-- ('YYZ'), -- Toronto, Canada
 -- ('ZRH'),-- Zurich, Switzerland
 ('YYC');
 
@@ -2441,7 +2441,7 @@ CREATE TEMPORARY TABLE Dates (date DATE);
 INSERT INTO Dates (date)
 SELECT DATE_ADD('2023-12-04', INTERVAL n DAY)
 FROM (
-    SELECT a.N + b.N * 10 + c.N * 100 AS n
+    SELECT a.N + b.N * 10 + c.N * 1000 AS n
     FROM 
         (SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) a
         CROSS JOIN 
@@ -2449,7 +2449,7 @@ FROM (
         CROSS JOIN 
         (SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) c
 ) numbers
-WHERE DATE_ADD('2023-12-04', INTERVAL n DAY) <= DATE_ADD('2023-12-04', INTERVAL 3 MONTH);
+WHERE DATE_ADD('2023-12-04', INTERVAL n DAY) <= DATE_ADD('2023-12-04', INTERVAL 1 MONTH);
 
 -- Insert into Flights with random prices and plane type
 INSERT INTO `list_of_flights` (`iata1`, `iata2`, `departure_day`, `arrival_day`, `departure_time`, `arrival_time`, `ordinary_price`, `comfort_price`, `business_price`, `plane_type`)

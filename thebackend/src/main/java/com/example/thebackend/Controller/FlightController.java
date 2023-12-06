@@ -22,9 +22,11 @@ public class FlightController {
     public List<FlightListDTO> getFilteredFlightList(
         @RequestParam String iata1, 
         @RequestParam String iata2, 
-        @RequestParam String DepartureDay){
+        @RequestParam String DepartureDay,
+        @RequestParam String ReturnDay
+        ){
             
-        return flightService.getFilteredFlightList(iata1, iata2, DepartureDay);
+        return flightService.getFilteredFlightList(iata1, iata2, DepartureDay, ReturnDay);
     }
     @GetMapping(path = "/getFlight/{id}")
     public Flights getFlight(@PathVariable Long id){
