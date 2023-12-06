@@ -32,8 +32,6 @@ public class UserController {
     @Autowired
     private UserPreferencesService userPreferencesService;
 
-    @Autowired
-    private FlightService flightService;
 
     // Add/Edit UserProfile
     @PostMapping("/profile")
@@ -60,6 +58,11 @@ public class UserController {
         UserCreditCard updatedCreditCard = userCreditCardService.addOrUpdateUserCreditCard(creditCardDTO);
         return ResponseEntity.ok(updatedCreditCard);
         
+    }
+    @GetMapping("/creditcard/{id}")
+    public ResponseEntity<?> getUserCreditCard(@PathVariable Long id) {
+        UserCreditCard userCreditCard = userCreditCardService.getUserCreditCard(id);
+        return ResponseEntity.ok(userCreditCard);
     }
 
     // Delete UserCreditCard

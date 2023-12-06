@@ -159,6 +159,7 @@ const Search = () => {
       console.log("iata1: ", dataToSend.iataorigin);
       console.log("iata2: ", dataToSend.iatadest);
       console.log("DepartureDay: ", formatDate(userFlightData.depart));
+      console.log("ArrivalDay: ", formatDate(userFlightData.return));
 
       // Now the GET request
       const flightListResponse = await axios.get(
@@ -168,6 +169,7 @@ const Search = () => {
             iata1: dataToSend.iataorigin,
             iata2: dataToSend.iatadest,
             DepartureDay: formatDate(userFlightData.depart), // Ensure this formats the date correctly
+            ReturnDay: formatDate(userFlightData.return), // Ensure this formats the date correctly
           },
         }
       );

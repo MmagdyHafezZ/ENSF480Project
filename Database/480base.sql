@@ -14,9 +14,6 @@ CREATE TABLE IF NOT EXISTS users (
     membershipType ENUM('Basic', 'Bronze', 'Silver','Gold')
     
 );
-INSERT INTO users (email, password, first_name, last_name) VALUES 
-('johndoe@example.com', 'encrypted_password', 'John','Doe');
-
 
 CREATE TABLE IF NOT EXISTS user_profile (
     id BIGINT NOT NULL,
@@ -52,7 +49,6 @@ CREATE TABLE IF NOT EXISTS userPreferences (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );	
 
-DROP TABLE IF EXISTS managebooking;
 CREATE TABLE managebooking (
     user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     departure_airport VARCHAR(3),

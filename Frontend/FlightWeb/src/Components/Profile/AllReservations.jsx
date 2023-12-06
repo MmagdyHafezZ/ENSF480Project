@@ -95,9 +95,25 @@ const AllReservations = () => {
     try {
       fetchReservations();
       handleConfirmationEmail();
+      console.log("selectedSeats", selectedSeats);
+      toggleSeat(selectedSeats);
       handleCloseCancelDialog();
     } catch (error) {
       console.error("Error cancelling reservation:", error);
+    }
+  };
+  const toggleSeat = async (selectedSeats) => {
+    try {
+      const bookingPromises = selectedSeats.map(async (seat) => {
+        await axios.put(
+          `http://localhost:8080/toggleSeat/${flightDetails.id}/${seat}`
+        );
+      });
+
+      await Promise.all(bookingPromises);
+      console.log("All seats toggled successfully");
+    } catch (error) {
+      console.error("Error toggling seats:", error);
     }
   };
 

@@ -29,6 +29,7 @@ const FlightsList = ({ userFlightData, sendData }) => {
   };
 
   useEffect(() => {
+    console.log("userFlightData", userFlightData);
     setIsLoading(true);
     axios
       .get(`http://localhost:8080/getFilteredFlightList`, {
@@ -36,6 +37,7 @@ const FlightsList = ({ userFlightData, sendData }) => {
           iata1: userFlightData.leaving.iata,
           iata2: userFlightData.going.iata,
           DepartureDay: userFlightData.depart.toISOString().split("T")[0],
+          ReturnDay: userFlightData.return.toISOString().split("T")[0],
         },
       })
       .then((response) => {
@@ -127,7 +129,7 @@ const FlightsList = ({ userFlightData, sendData }) => {
                   </div>
                 </div>
               </div>
-              <div className="flight-details__price">
+              <div className="flight-details__price" style={{}}>
                 <div className="flight-price">
                   Ordinary: ${ordinaryPrice.toFixed(2)}
                 </div>

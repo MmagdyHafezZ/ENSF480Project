@@ -15,6 +15,7 @@ public class UserPreferences {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    
     private User user;
     // Constructors, Getters and Setters
     public UserPreferences(String mealPreference, String seatPreference, User user) {

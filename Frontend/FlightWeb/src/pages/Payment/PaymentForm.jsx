@@ -59,6 +59,13 @@ const PaymentForm = () => {
   const [paymentIsSuccessful, setPaymentIsSuccessful] = useState(false);
   const [stringSeats, setStringSeats] = useState("");
 
+  //Credit card constants
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [cardholderName, setCardholderName] = useState("");
+  const [address, setAddress] = useState("");
+
   useEffect(() => {
     const userId = parseInt(localStorage.getItem("id"));
 
@@ -79,6 +86,18 @@ const PaymentForm = () => {
         alert("Please create a profile before proceeding to payment");
         window.location.href = "/profile";
       });
+    axios.get(`http://localhost:8080/api/user/creditcard/${userId}`).then(
+      (response) => {
+        setCardNumber(response.data.cardNumber);
+        setExpiryDate(response.data.expiryDate);
+        setCvv(response.data.cvv);
+        setCardholderName(response.data.cardholderName);
+        setAddress(response.data.address);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }, []); // Add history to the dependency array
   console.log("price", price);
   console.log("flightDetails", flightDetails);
@@ -113,11 +132,20 @@ const PaymentForm = () => {
   const bookFlight = async () => {
     try {
       if (selectedSeats) {
-        const seats = Object.keys(selectedSeats).filter(
+        const seatsArray = Object.keys(selectedSeats).filter(
           (seat) => selectedSeats[seat]
         );
-        const SeatsStr = seats.join(",");
-        console.log("seats", seats);
+        console.log("seatsArray", seatsArray);
+
+        const bookingPromises = seatsArray.map(async (seat) => {
+          await axios.put(
+            `http://localhost:8080/toggleSeat/${flightDetails.id}/${seat}`
+          );
+        });
+
+        await Promise.all(bookingPromises);
+        console.log("All seats booked successfully");
+        const SeatsStr = seatsArray.join(",");
         setStringSeats(SeatsStr);
       }
       const bookingDetails = {
@@ -238,6 +266,32 @@ const PaymentForm = () => {
       console.error("Error sending email:", error);
     }
   };
+  const handleSaveCardDetails = async () => {
+    try {
+      await axios.post(`http://localhost:8080/api/user/creditcard`, {
+        id: userId,
+        cardNumber: cardNumber,
+        expiryDate: expiryDate,
+        cvv: cvv,
+        cardholderName: cardholderName,
+        address: address,
+      });
+      alert("Credit card details saved successfully");
+    } catch (error) {
+      console.error("Error saving credit card details:", error);
+    }
+  };
+  // Handle changes in credit card details input fields
+  const handleCardNumberChange = (event) => {
+    setCardNumber(event.target.value);
+  };
+  // Adjust the toggle function
+  const toggleSaveCardDetails = async (event) => {
+    setSaveCardDetails(event.target.checked);
+    if (event.target.checked) {
+      await handleSaveCardDetails();
+    }
+  };
 
   const RequestDiscountCode = async (discountCode) => {
     try {
@@ -281,23 +335,49 @@ const PaymentForm = () => {
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <TextField label="Card Number" fullWidth variant="outlined" />
+                  <TextField
+                    label="Card Number"
+                    fullWidth
+                    variant="outlined"
+                    value={cardNumber}
+                    onChange={handleCardNumberChange}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField label="Expiry Date" fullWidth variant="outlined" />
+                  <TextField
+                    label="Expiry Date"
+                    fullWidth
+                    variant="outlined"
+                    value={expiryDate}
+                    onChange={(e) => setExpiryDate(e.target.value)}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField label="CVV" fullWidth variant="outlined" />
+                  <TextField
+                    label="CVV"
+                    fullWidth
+                    variant="outlined"
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value)}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
                     label="Cardholder Name"
                     fullWidth
                     variant="outlined"
+                    value={cardholderName}
+                    onChange={(e) => setCardholderName(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField label="Address" fullWidth variant="outlined" />
+                  <TextField
+                    label="Address"
+                    fullWidth
+                    variant="outlined"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
                 </Grid>
                 {userProfile &&
                   ["Bronze", "Silver", "Gold"].includes(
@@ -353,7 +433,7 @@ const PaymentForm = () => {
                     control={
                       <Switch
                         checked={saveCardDetails}
-                        onChange={(e) => setSaveCardDetails(e.target.checked)}
+                        onChange={toggleSaveCardDetails}
                       />
                     }
                     label="Save Card Details for Future Use"

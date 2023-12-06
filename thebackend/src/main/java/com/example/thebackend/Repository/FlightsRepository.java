@@ -9,5 +9,8 @@ import com.example.thebackend.Entity.Flights;
 public interface FlightsRepository extends JpaRepository<Flights, Long> {
     List<Flights> findByIata1AndIata2AndDepartureDay(String iata1, String iata2, String DepartureDay);
 
+    List<Flights> findByIata1AndIata2AndDepartureDayAndArrivalDay(String iata1, String iata2, String departureDay,
+            String returnDay);
+
     
 }

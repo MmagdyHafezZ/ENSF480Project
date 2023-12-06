@@ -6,7 +6,7 @@
 }
 
 .flights-main-container {
-  width: 100%;
+  width: 80%;
   align-items: flex-start;
   padding: 1rem;
 }
@@ -75,7 +75,7 @@
 }
 .flights-main-container .flights-list__container .flight-details-container .flight-details__price .flight-price {
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 .flights-main-container .flights-list__container .flight-details-container .flight-details__price .view-details-button {
   background-color: transparent;
@@ -111,7 +111,7 @@
   display: block;
   margin: 20px auto;
   position: relative;
-  border: 3px solid #FFF;
+  border: 3px solid #fff;
   border-radius: 50%;
   box-sizing: border-box;
   animation: animloader 2s linear infinite;
@@ -121,7 +121,7 @@
   box-sizing: border-box;
   width: 6px;
   height: 24px;
-  background: #FFF;
+  background: #fff;
   transform: rotate(-45deg);
   position: absolute;
   bottom: -20px;
