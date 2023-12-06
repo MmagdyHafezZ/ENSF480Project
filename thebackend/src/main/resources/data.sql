@@ -2425,9 +2425,9 @@ INSERT INTO IATA_Codes1 (iata) VALUES
 -- ('MIA'), -- Miami, USA
 -- ('MUC'), -- Munich, Germany
 ('JFK'), -- New York, USA
--- ('SFO'), -- San Francisco, USA
+('SFO'), -- San Francisco, USA
 -- ('SYD'), -- Sydney, Australia
--- ('YYZ'), -- Toronto, Canada
+('YYZ'), -- Toronto, Canada
 -- ('ZRH'),-- Zurich, Switzerland
 ('YYC');
 

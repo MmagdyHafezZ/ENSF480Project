@@ -1,6 +1,10 @@
 .ticket-details-wrapper {
   padding: 10rem 1rem 0rem 0rem;
 }
+.ticket-details-wrapper.over {
+  overflow-y: hidden;
+  height: 100%;
+}
 .ticket-details-wrapper .ticket-details-container {
   padding: 1rem 3rem;
   background-color: rgb(236, 236, 236);
@@ -89,4 +93,69 @@
 .ticket-details-wrapper .seat-select-container .seat-select-container-body .final-details-container .price .total-price .price {
   padding: 1rem;
   width: 40%;
+}
+
+.ticket-details-popup {
+  position: absolute;
+  background-color: rgba(52, 52, 52, 0.578);
+  width: 100%;
+  height: 100vh;
+  z-index: 1001;
+  display: grid;
+  place-content: center;
+}
+.ticket-details-popup .checkmark-container {
+  background-color: white;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+}
+.ticket-details-popup .checkmark-container .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ticket-details-popup .checkmark-container .wrapper .checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #7ac142;
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.ticket-details-popup .checkmark-container .wrapper .checkmark {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 2;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  margin: 10% auto;
+  box-shadow: inset 0px 0px 0px #7ac142;
+  animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+}
+.ticket-details-popup .checkmark-container .wrapper .checkmark .checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #7ac142;
+  }
 }/*# sourceMappingURL=TicketDetails.css.map */

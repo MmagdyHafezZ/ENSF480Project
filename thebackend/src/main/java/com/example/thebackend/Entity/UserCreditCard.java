@@ -8,6 +8,8 @@ public class UserCreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private Long userId; // User ID, not UserProfile ID
 
     private String cardNumber;
     private String expiryDate;
@@ -77,6 +79,14 @@ public class UserCreditCard {
     public User getUser() {
         return user;
     }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    public Long getUserId() {
+        return userId;
+    }
+
+    
     
     
 }

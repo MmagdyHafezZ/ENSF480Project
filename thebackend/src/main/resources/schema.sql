@@ -36,8 +36,6 @@ CREATE TABLE IF NOT EXISTS user_credit_card (
 );
 
 
-
-   
 CREATE TABLE IF NOT EXISTS userPreferences (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
@@ -82,7 +80,6 @@ CREATE TABLE
         PRIMARY KEY(id)
     );
 
-DROP TABLE IF EXISTS airportlocation;
 
 CREATE TABLE 
     IF NOT EXISTS airportlocation (
@@ -103,10 +100,6 @@ CREATE TABLE
     PRIMARY KEY(id),
     FOREIGN KEY (userid) REFERENCES users(id)
 );
-
-DROP TABLE IF EXISTS flightlist;
-
-DROP TABLE IF EXISTS searchbooking;
 
 CREATE TABLE    
     IF NOT EXISTS searchbooking (

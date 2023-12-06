@@ -15,14 +15,17 @@ public class UserCreditCardService {
     private UserCreditCardRepository userCreditCardRepository;
 
 
+
     @Transactional
     public UserCreditCard addOrUpdateUserCreditCard(UserCreditCardDTO dto) {
-        long userId = dto.getId();
+        long userId = dto.getUserId();
 
         UserCreditCard creditCard = userCreditCardRepository.findByUserId(userId)
                 .orElse(new UserCreditCard());
 
+        
         // Set credit card details from DTO
+        creditCard.setUserId(userId);
         creditCard.setCardNumber(dto.getCardNumber());
         creditCard.setExpiryDate(dto.getExpiryDate());
         creditCard.setCvv(dto.getCvv());

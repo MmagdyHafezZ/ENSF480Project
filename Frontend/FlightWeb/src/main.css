@@ -28,7 +28,7 @@
 body {
   background-color: var(--whiteColor);
 }
-body.no-scroll{
+body.no-scroll {
   overflow: hidden;
   height: 100%;
 }

@@ -127,7 +127,7 @@ const FlightsList = ({ userFlightData, sendData }) => {
                   </div>
                 </div>
               </div>
-              <div className="flight-details__price">
+              <div className="flight-details__price" style={{}}>
                 <div className="flight-price">
                   Ordinary: ${ordinaryPrice.toFixed(2)}
                 </div>
